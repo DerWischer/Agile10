@@ -36,10 +36,6 @@ public class AddItemActivity extends AppCompatActivity {
             intent.putExtras(b); //Put your id to your next Intent
             startActivity(intent);
             finish();
-
-
-
-//            startActivity(new Intent(AddItemActivity.this, ShoppingListActivity.class));
         }
     };
 }

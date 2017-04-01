@@ -4,14 +4,17 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
 public class ShoppingListActivity extends Activity {
     ArrayList<ShoppingListEntryData> data;
+    ArrayAdapter<ShoppingListEntryData> adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,8 +33,9 @@ public class ShoppingListActivity extends Activity {
 
 
         ListView listView = (ListView) findViewById(R.id.ShoppingListView);
-        ArrayAdapter<ShoppingListEntryData> adapter = new ShoppingListAdapter(this, R.layout.shopping_list_entry_data_item, data);
+        adapter = new ShoppingListAdapter(this, R.layout.shopping_list_entry_data_item, data);
         listView.setAdapter(adapter);
+//        listView.setOnItemClickListener(listViewClickHandler);
 
         Button addButton = (Button) findViewById(R.id.addButton);
         addButton.setOnClickListener(addButtonClickHandler);
@@ -58,6 +62,16 @@ public class ShoppingListActivity extends Activity {
 
         return data;
     }
+
+ /*   AdapterView.OnItemClickListener listViewClickHandler = new AdapterView.OnItemClickListener() {
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            Toast.makeText(ShoppingListActivity.this, "" + position, Toast.LENGTH_SHORT).show();
+            if (view.getId() == R.id.deleteButton) {
+                data.remove(position);
+                adapter.notifyDataSetChanged();
+            }
+        }
+    };*/
 
     View.OnClickListener addButtonClickHandler = new View.OnClickListener() {
         public void onClick(View v) {
