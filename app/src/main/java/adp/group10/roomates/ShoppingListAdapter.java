@@ -23,45 +23,28 @@ import adp.group10.roomates.R;
 
 public class ShoppingListAdapter extends ArrayAdapter<ShoppingListEntryData> {
 
-    ShoppingListEntryData[] entries;
-    Context context;
-/*
     public ShoppingListAdapter(@NonNull Context context, @LayoutRes int resource,
-            @NonNull List<ShoppingListEntryData> entries) {
-        super(context, resource, entries);
-        this.context = context;
-        this.entries = entries;
-    }*/
-
-
-    public ShoppingListAdapter(@NonNull Context context, @LayoutRes int resource,
-            @NonNull ShoppingListEntryData[] entries) {
-        super(context, resource, entries);
-        this.context = context;
-        this.entries = entries;
-
-        System.out.println("constructer");
+            @NonNull List<ShoppingListEntryData> objects) {
+        super(context, resource, objects);
     }
 
-
-
-
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = (LayoutInflater) context
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    public View getView(int position, View view, ViewGroup parent) {
+        if (view == null){
+            view = LayoutInflater.from(getContext()).inflate(R.layout.shopping_list_entry_data_item, parent, false);
+        }
 
-        View rowView = inflater.inflate(R.layout.sample_shopping_list_entry, parent);
-        TextView amountView = (TextView) rowView.findViewById(R.id.entryAmount);
-        TextView nameView = (TextView) rowView.findViewById(R.id.entryName);
+        TextView tvName = (TextView) view.findViewById(R.id.entryName);
+        TextView tvAmount = (TextView) view.findViewById(R.id.entryAmount);
 
-        Button editButton = (Button) rowView.findViewById(R.id.editButton);
-        Button deleteButton = (Button) rowView.findViewById(R.id.deleteButton);
+        //Button editButton = (Button) view.findViewById(R.id.editButton);
+        //Button deleteButton = (Button) view.findViewById(R.id.deleteButton);
 
-        nameView.setText(entries[position].name);
-        amountView.setText(entries[position].amount);
+        ShoppingListEntryData item = getItem(position);
 
+        tvName.setText(item.getName());
+        tvAmount.setText(item.getAmount());
 
-        return rowView;
+        return view;
     }
 }
