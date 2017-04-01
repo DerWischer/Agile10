@@ -8,6 +8,8 @@ public class ShoppingListEntryData {
     private String name;
     private int amount;
     private double price;
+    private boolean blocked;
+    private String blockerName = "";
 
     public ShoppingListEntryData(String name, int amount) {
         this.name = name;
@@ -37,4 +39,12 @@ public class ShoppingListEntryData {
     public void setPrice(double price) {
         this.price = price;
     }
+
+    public boolean isBlocked() { return blocked; }
+
+    public void setBlocked(boolean blocked) { this.blocked = blocked; }
+
+    public String getBlockerName() { return blockerName; }
+
+    public void setBlockerName(String name) { this.blockerName = name; }
 }

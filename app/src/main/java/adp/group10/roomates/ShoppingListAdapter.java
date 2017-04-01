@@ -21,7 +21,8 @@ import adp.group10.roomates.R;
  * Created by Ninas Dator on 2017-03-31.
  */
 
-public class ShoppingListAdapter extends ArrayAdapter<ShoppingListEntryData> {
+public class ShoppingListAdapter extends ArrayAdapter<ShoppingListEntryData> implements
+        View.OnClickListener {
 
     public ShoppingListAdapter(@NonNull Context context, @LayoutRes int resource,
             @NonNull List<ShoppingListEntryData> objects) {
@@ -36,15 +37,25 @@ public class ShoppingListAdapter extends ArrayAdapter<ShoppingListEntryData> {
 
         TextView tvName = (TextView) view.findViewById(R.id.entryName);
         TextView tvAmount = (TextView) view.findViewById(R.id.entryAmount);
-
-        //Button editButton = (Button) view.findViewById(R.id.editButton);
-        //Button deleteButton = (Button) view.findViewById(R.id.deleteButton);
-
         ShoppingListEntryData item = getItem(position);
-
         tvName.setText(item.getName());
         tvAmount.setText(item.getAmount());
 
+
+        Button editButton = (Button) view.findViewById(R.id.editButton);
+        Button deleteButton = (Button) view.findViewById(R.id.deleteButton);
+        Button blockButton = (Button) view.findViewById(R.id.blockButton);
+        Button buyButton = (Button) view.findViewById(R.id.buyButton);
+        editButton.setOnClickListener(this);
+        deleteButton.setOnClickListener(this);
+        blockButton.setOnClickListener(this);
+        buyButton.setOnClickListener(this);
+
         return view;
+    }
+
+    @Override
+    public void onClick(View v) {
+
     }
 }
