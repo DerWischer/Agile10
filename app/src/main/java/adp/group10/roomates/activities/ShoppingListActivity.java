@@ -21,17 +21,19 @@ public class ShoppingListActivity extends Activity {
     public final static int ADD_SHOPPING_LIST_ENTRY = 0;
     public final static int EDIT_SHOPPING_LIST_ENTRY = 1;
 
-    ArrayList<ShoppingListEntry> data;
     ArrayAdapter<ShoppingListEntry> adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shopping_list);
-        data = getShoppingListEntries();
 
+        ArrayList<ShoppingListEntry> data = new ArrayList<>();
         ListView listView = (ListView) findViewById(R.id.ShoppingListView);
         adapter = new ShoppingListAdapter(this, R.layout.shopping_list_entry_data_item, data);
+
         listView.setAdapter(adapter);
+        ShoppingListStorage.getInstance().setAdapter(adapter);
 
         Button addButton = (Button) findViewById(R.id.addButton);
         addButton.setOnClickListener(new View.OnClickListener() {
@@ -40,12 +42,12 @@ public class ShoppingListActivity extends Activity {
                 startActivityForResult(addIntent, ADD_SHOPPING_LIST_ENTRY);
             }
         });
-
-        super.onCreate(savedInstanceState);
     }
 
-    private ArrayList<ShoppingListEntry> getShoppingListEntries() {
-        return ShoppingListStorage.getData();
+    @Override
+    protected void onStart() {
+
+        super.onStart();
     }
 
     @Override
@@ -55,14 +57,14 @@ public class ShoppingListActivity extends Activity {
                 ShoppingListEntry entry =
                         (ShoppingListEntry) data.getSerializableExtra(
                                 ShoppingListEntry.class.getSimpleName());
-                // TODO Add entry
+                ShoppingListStorage.getInstance().addEntry(entry);
             } else if (requestCode == EDIT_SHOPPING_LIST_ENTRY) {
                 ShoppingListEntry entry =
                         (ShoppingListEntry) data.getSerializableExtra(
                                 ShoppingListEntry.class.getSimpleName());
                 Toast.makeText(this, "Edit-> " + entry.getName() + ", " + entry.getAmount(),
                         Toast.LENGTH_SHORT).show();
-                // TODO Update entry
+                ShoppingListStorage.getInstance().updateEntry(entry);
             } else {
                 Log.d("Request", "?");
             }

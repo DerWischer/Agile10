@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.widget.ArrayAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -63,7 +64,7 @@ public class ShoppingListAdapter extends ArrayAdapter<ShoppingListEntry> {
                 deleteButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ShoppingListStorage.deleteEntry(entry.getName(), entry.getAmount());
+                        ShoppingListStorage.getInstance().deleteEntry(entry);
                         notifyDataSetChanged();
                     }
                 });
@@ -77,4 +78,5 @@ public class ShoppingListAdapter extends ArrayAdapter<ShoppingListEntry> {
         */
         return view;
     }
+
 }

@@ -10,6 +10,7 @@ import java.io.Serializable;
 
 public class ShoppingListEntry implements Serializable{
 
+    @Exclude
     private String key;
     private String name;
     private int amount;
@@ -24,10 +25,12 @@ public class ShoppingListEntry implements Serializable{
         this.amount = amount;
     }
 
+    @Exclude
     public String getKey() {
         return key;
     }
 
+    @Exclude
     public void setKey(String key) {
         this.key = key;
     }
