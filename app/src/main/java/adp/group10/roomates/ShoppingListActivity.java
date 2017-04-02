@@ -17,23 +17,11 @@ public class ShoppingListActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.activity_shopping_list);
-
         data = getShoppingListEntries();
-
-        Bundle b = getIntent().getExtras();
-        if(b != null) {
-            String name = b.getString("newItemName");
-            int amount = b.getInt("newItemAmount");
-            if (name != null && name != "" && amount > 0) {
-                addEntryToList(new ShoppingListEntryData(name, amount));
-            }
-        }
-
 
         ListView listView = (ListView) findViewById(R.id.ShoppingListView);
         adapter = new ShoppingListAdapter(this, R.layout.shopping_list_entry_data_item, data);
         listView.setAdapter(adapter);
-//        listView.setOnItemClickListener(listViewClickHandler);
 
         Button addButton = (Button) findViewById(R.id.addButton);
         addButton.setOnClickListener(addButtonClickHandler);
@@ -41,21 +29,13 @@ public class ShoppingListActivity extends Activity {
         super.onCreate(savedInstanceState);
     }
 
-    // DUMMY METHOD
-    // TODO IMPLEMENT
-    private void addEntryToList(ShoppingListEntryData newEntry) {
-        data.add(newEntry);
-    }
-
-    // DUMMY METHOD
-    // TODO IMPLEMENT
     private ArrayList<ShoppingListEntryData> getShoppingListEntries() {
         return EntryData.getData();
     }
 
     View.OnClickListener addButtonClickHandler = new View.OnClickListener() {
         public void onClick(View v) {
-            startActivity(new Intent(ShoppingListActivity.this, AddItemActivity.class));
+            startActivity(new Intent(ShoppingListActivity.this, AddEditItemActivity.class));
         }
     };
 }

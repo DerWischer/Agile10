@@ -21,6 +21,10 @@ public class EntryData {
         return data;
     }
 
+    public static void addEntry(String name, int amount) {
+        data.add(new ShoppingListEntryData(name, amount));
+    }
+
     public static void deleteEntry(String name, int amount) {
         for (int i = 0; i < data.size(); i++) {
             ShoppingListEntryData entry = data.get(i);
@@ -31,6 +35,12 @@ public class EntryData {
     }
 
     public static void editEntry(String oldName, int oldAmount, String newName, int newAmount) {
-
+        for (int i = 0; i < data.size(); i++) {
+            ShoppingListEntryData entry = data.get(i);
+            if (entry.getName() == oldName && Integer.parseInt(entry.getAmount()) == oldAmount) {
+                entry.setName(newName);
+                entry.setAmount(newAmount);
+            }
+        }
     }
 }

@@ -5,22 +5,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
-import android.view.ViewParent;
 import android.widget.ArrayAdapter;
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
-
-import adp.group10.roomates.R;
 
 /**
  * Created by Ninas Dator on 2017-03-31.
@@ -66,20 +60,12 @@ public class ShoppingListAdapter extends ArrayAdapter<ShoppingListEntryData> {
             String name = nameView.getText().toString();
             int amount = Integer.parseInt(amountView.getText().toString());
 
-            Toast.makeText(getContext(), "clicked edit " + name + " " + amount, Toast.LENGTH_SHORT).show();
-
-            Intent intent = new Intent(getContext(), AddItemActivity.class);
+            Intent intent = new Intent(getContext(), AddEditItemActivity.class);
             Bundle b = new Bundle();
             b.putString("oldName", name);
             b.putInt("oldAmount", amount);
             intent.putExtras(b);
             getContext().startActivity(intent);
-
-
-            // TODO rename AddItemActivity into AddEditItemActivity
-            // TODO change AddItemActivity so that it checks Bundle and sets it's content as default input
-            // TODO change AddItemActivity so that it returns old and new values if "edit" was clicked
-            // TODO change ShoppingListActivity so that it checks new bundle contents
         }
     };
 
