@@ -1,4 +1,4 @@
-package adp.group10.roomates;
+package adp.group10.roomates.activities;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -9,6 +9,11 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+
+import adp.group10.roomates.backend.EntryData;
+import adp.group10.roomates.R;
+import adp.group10.roomates.ShoppingListAdapter;
+import adp.group10.roomates.ShoppingListEntryData;
 
 public class ShoppingListActivity extends Activity {
     ArrayList<ShoppingListEntryData> data;

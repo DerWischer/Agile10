@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "752489356145",
+    "firebase_url": "https://agile10-768ca.firebaseio.com",
+    "project_id": "agile10-768ca",
+    "storage_bucket": "agile10-768ca.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:752489356145:android:e5ea5de021a51bea",
+        "android_client_info": {
+          "package_name": "adp.group10.roomates"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "752489356145-810q1o4jq1st8ibfbabrp83h85hhgm5a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBPwUONagZt7xB2t7kJVo05NeU-Nrw9-JM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

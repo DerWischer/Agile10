@@ -1,4 +1,4 @@
-package adp.group10.roomates;
+package adp.group10.roomates.activities;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -6,7 +6,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
+
+import adp.group10.roomates.backend.EntryData;
+import adp.group10.roomates.R;
 
 public class AddEditItemActivity extends AppCompatActivity {
 
@@ -55,7 +57,7 @@ public class AddEditItemActivity extends AppCompatActivity {
                 EntryData.addEntry(name, amount);
             }
 
-            startActivity(new Intent(AddEditItemActivity.this, ShoppingListActivity.class));
+            finish();
         }
     };
 }

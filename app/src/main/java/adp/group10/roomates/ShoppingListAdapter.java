@@ -12,9 +12,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
+
+import adp.group10.roomates.activities.AddEditItemActivity;
+import adp.group10.roomates.backend.EntryData;
 
 /**
  * Created by Ninas Dator on 2017-03-31.

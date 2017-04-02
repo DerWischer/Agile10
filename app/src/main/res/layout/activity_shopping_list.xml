@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="adp.group10.roomates.ShoppingListActivity">
+    tools:context="adp.group10.roomates.activities.ShoppingListActivity">
 
     <Button
         android:id="@+id/addButton"

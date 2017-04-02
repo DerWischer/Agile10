@@ -1,6 +1,8 @@
-package adp.group10.roomates;
+package adp.group10.roomates.backend;
 
 import java.util.ArrayList;
+
+import adp.group10.roomates.ShoppingListEntryData;
 
 /**
  * Created by fabian on 02.04.2017.
