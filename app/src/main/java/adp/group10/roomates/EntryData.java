@@ -28,7 +28,7 @@ public class EntryData {
     public static void deleteEntry(String name, int amount) {
         for (int i = 0; i < data.size(); i++) {
             ShoppingListEntryData entry = data.get(i);
-            if (entry.getName() == name && Integer.parseInt(entry.getAmount()) == amount) {
+            if (entry.getName().equals(name) && Integer.parseInt(entry.getAmount()) == amount) {
                 data.remove(i);
             }
         }
@@ -37,7 +37,7 @@ public class EntryData {
     public static void editEntry(String oldName, int oldAmount, String newName, int newAmount) {
         for (int i = 0; i < data.size(); i++) {
             ShoppingListEntryData entry = data.get(i);
-            if (entry.getName() == oldName && Integer.parseInt(entry.getAmount()) == oldAmount) {
+            if (entry.getName().equals(oldName) && Integer.parseInt(entry.getAmount()) == oldAmount) {
                 entry.setName(newName);
                 entry.setAmount(newAmount);
             }

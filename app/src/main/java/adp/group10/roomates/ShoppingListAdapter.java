@@ -66,6 +66,7 @@ public class ShoppingListAdapter extends ArrayAdapter<ShoppingListEntryData> {
             b.putInt("oldAmount", amount);
             intent.putExtras(b);
             getContext().startActivity(intent);
+            notifyDataSetChanged();
         }
     };
 
