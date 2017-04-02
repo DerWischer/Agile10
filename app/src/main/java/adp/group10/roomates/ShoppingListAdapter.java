@@ -91,9 +91,9 @@ public class ShoppingListAdapter extends ArrayAdapter<ShoppingListEntryData> {
             String name = nameView.getText().toString();
             int amount = Integer.parseInt(amountView.getText().toString());
 
-            Toast.makeText(getContext(), "clicked delete " + name + " " + amount, Toast.LENGTH_SHORT).show();
+            EntryData.deleteEntry(name, amount);
 
-            // TODO delete entry
+            notifyDataSetChanged();
         }
     };
 

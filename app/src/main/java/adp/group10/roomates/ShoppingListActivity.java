@@ -4,11 +4,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -52,26 +50,8 @@ public class ShoppingListActivity extends Activity {
     // DUMMY METHOD
     // TODO IMPLEMENT
     private ArrayList<ShoppingListEntryData> getShoppingListEntries() {
-        getSharedPreferences("shoppingListEntries", 0);
-
-        ArrayList<ShoppingListEntryData> data = new ArrayList<ShoppingListEntryData>();
-        data.add(new ShoppingListEntryData("cheese", 5));
-        data.add(new ShoppingListEntryData("tomatoes", 5));
-        data.add(new ShoppingListEntryData("toilet paper", 5));
-        data.add(new ShoppingListEntryData("fish", 2));
-
-        return data;
+        return EntryData.getData();
     }
-
- /*   AdapterView.OnItemClickListener listViewClickHandler = new AdapterView.OnItemClickListener() {
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            Toast.makeText(ShoppingListActivity.this, "" + position, Toast.LENGTH_SHORT).show();
-            if (view.getId() == R.id.deleteButton) {
-                data.remove(position);
-                adapter.notifyDataSetChanged();
-            }
-        }
-    };*/
 
     View.OnClickListener addButtonClickHandler = new View.OnClickListener() {
         public void onClick(View v) {
