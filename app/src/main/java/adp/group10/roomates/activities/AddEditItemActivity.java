@@ -7,57 +7,53 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import adp.group10.roomates.backend.EntryData;
+import adp.group10.roomates.backend.ShoppingListStorage;
 import adp.group10.roomates.R;
+import adp.group10.roomates.model.ShoppingListEntry;
 
 public class AddEditItemActivity extends AppCompatActivity {
-
-    EditText nameEditText;
-    EditText amountEditText;
-
-    boolean edit = false;
-    String oldName;
-    int oldAmount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_add_edit_item);
-
-        nameEditText = (EditText) findViewById(R.id.nameEditText);
-        amountEditText = (EditText) findViewById(R.id.amountEditText);
-
         Button addButton = (Button) findViewById(R.id.addButton2);
-        addButton.setOnClickListener(addButtonClickHandler);
-
+        final EditText nameEditText = (EditText) findViewById(R.id.nameEditText);
+        final EditText amountEditText = (EditText) findViewById(R.id.amountEditText);
 
         Intent intent = getIntent();
-        Bundle b = intent.getExtras();
-        if (b != null) {
-            oldName = b.getString("oldName");
-            oldAmount = b.getInt("oldAmount");
-        }
+        Bundle extra = intent.getExtras();
 
-        if (oldName != null && oldName != "" && oldAmount >= 0) {
-            edit = true;
-            nameEditText.setText(oldName);
-            amountEditText.setText("" + oldAmount);
+        final ShoppingListEntry entry;
+        if (extra != null) {
+            entry = (ShoppingListEntry) extra.getSerializable(
+                    ShoppingListStorage.class.getSimpleName());
+            nameEditText.setText(entry.getName());
+            amountEditText.setText("" + entry.getAmount());
             addButton.setText("Update");
+        } else {
+            entry = null;
         }
-    }
 
-    View.OnClickListener addButtonClickHandler = new View.OnClickListener() {
-        public void onClick(View v) {
-            String name = nameEditText.getText().toString();
-            int amount = Integer.parseInt(amountEditText.getText().toString());
-            if (edit) {
-                EntryData.editEntry(oldName, oldAmount, name, amount);
-            } else {
-                EntryData.addEntry(name, amount);
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String name = nameEditText.getText().toString();
+                int amount = Integer.parseInt(amountEditText.getText().toString());
+
+                Intent returnIntent = new Intent(getApplicationContext(), ShoppingListEntry.class);
+                if (entry != null) { // editing existing entry
+                    entry.setName(name);
+                    entry.setAmount(amount);
+                    returnIntent.putExtra(ShoppingListEntry.class.getSimpleName(), entry);
+                } else { // creating new entry
+                    ShoppingListEntry newEntry = new ShoppingListEntry(name, amount);
+                    returnIntent.putExtra(ShoppingListEntry.class.getSimpleName(), newEntry);
+                }
+
+                setResult(RESULT_OK, returnIntent);
+                finish();
             }
-
-            finish();
-        }
-    };
+        });
+    }
 }

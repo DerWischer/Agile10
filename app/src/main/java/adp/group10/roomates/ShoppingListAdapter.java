@@ -1,5 +1,6 @@
 package adp.group10.roomates;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,22 +11,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.List;
 
 import adp.group10.roomates.activities.AddEditItemActivity;
-import adp.group10.roomates.backend.EntryData;
+import adp.group10.roomates.activities.ShoppingListActivity;
+import adp.group10.roomates.backend.ShoppingListStorage;
+import adp.group10.roomates.model.ShoppingListEntry;
 
 /**
  * Created by Ninas Dator on 2017-03-31.
  */
 
-public class ShoppingListAdapter extends ArrayAdapter<ShoppingListEntryData> {
+public class ShoppingListAdapter extends ArrayAdapter<ShoppingListEntry> {
 
     public ShoppingListAdapter(@NonNull Context context, @LayoutRes int resource,
-            @NonNull List<ShoppingListEntryData> objects) {
+            @NonNull List<ShoppingListEntry> objects) {
         super(context, resource, objects);
     }
 
@@ -37,62 +39,42 @@ public class ShoppingListAdapter extends ArrayAdapter<ShoppingListEntryData> {
 
         TextView tvName = (TextView) view.findViewById(R.id.entryName);
         TextView tvAmount = (TextView) view.findViewById(R.id.entryAmount);
-        ShoppingListEntryData item = getItem(position);
-        tvName.setText(item.getName());
-        tvAmount.setText(item.getAmount());
+        
+        final ShoppingListEntry entry = getItem(position);
+        tvName.setText(entry.getName());
+        tvAmount.setText("" + entry.getAmount());
 
 
         Button editButton = (Button) view.findViewById(R.id.editButton);
-        Button deleteButton = (Button) view.findViewById(R.id.deleteButton);
-        Button blockButton = (Button) view.findViewById(R.id.blockButton);
-        Button buyButton = (Button) view.findViewById(R.id.buyButton);
-        editButton.setOnClickListener(editButtonClickHandler);
-        deleteButton.setOnClickListener(deleteButtonClickHandler );
-        blockButton.setOnClickListener(blockButtonClickHandler);
-        buyButton.setOnClickListener(buyButtonClickHandler);
+        editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), AddEditItemActivity.class);
+                Bundle extra = new Bundle();
+                extra.putSerializable(ShoppingListStorage.class.getSimpleName(), entry);
+                intent.putExtras(extra);
 
+                ((Activity)getContext()).startActivityForResult(intent, ShoppingListActivity.EDIT_SHOPPING_LIST_ENTRY);
+                notifyDataSetChanged();
+            }
+        });
+
+        Button deleteButton = (Button) view.findViewById(R.id.deleteButton);
+                deleteButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ShoppingListStorage.deleteEntry(entry.getName(), entry.getAmount());
+                        notifyDataSetChanged();
+                    }
+                });
+
+        /* TODO Implement Block and Buy listeners
+        Button blockButton = (Button) view.findViewById(R.id.blockButton);
+        blockButton.setOnClickListener(blockButtonClickHandler);
+
+        Button buyButton = (Button) view.findViewById(R.id.buyButton);
+        buyButton.setOnClickListener(buyButtonClickHandler);
+        */
         return view;
     }
-
-    View.OnClickListener editButtonClickHandler = new View.OnClickListener() {
-        public void onClick(View v) {
-            LinearLayout layout = (LinearLayout) v.getParent().getParent();
-            TextView nameView = (TextView) layout.findViewById(R.id.entryName);
-            TextView amountView = (TextView) layout.findViewById(R.id.entryAmount);
-            String name = nameView.getText().toString();
-            int amount = Integer.parseInt(amountView.getText().toString());
-
-            Intent intent = new Intent(getContext(), AddEditItemActivity.class);
-            Bundle b = new Bundle();
-            b.putString("oldName", name);
-            b.putInt("oldAmount", amount);
-            intent.putExtras(b);
-            getContext().startActivity(intent);
-            notifyDataSetChanged();
-        }
-    };
-
-    View.OnClickListener deleteButtonClickHandler = new View.OnClickListener() {
-        public void onClick(View v) {
-            LinearLayout layout = (LinearLayout) v.getParent().getParent();
-            TextView nameView = (TextView) layout.findViewById(R.id.entryName);
-            TextView amountView = (TextView) layout.findViewById(R.id.entryAmount);
-            String name = nameView.getText().toString();
-            int amount = Integer.parseInt(amountView.getText().toString());
-
-            EntryData.deleteEntry(name, amount);
-
-            notifyDataSetChanged();
-        }
-    };
-
-    View.OnClickListener blockButtonClickHandler = new View.OnClickListener() {
-        public void onClick(View v) {
-        }
-    };
-
-    View.OnClickListener buyButtonClickHandler = new View.OnClickListener() {
-        public void onClick(View v) {
-        }
-    };
 }
