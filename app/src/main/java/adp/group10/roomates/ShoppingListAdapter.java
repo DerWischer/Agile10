@@ -27,7 +27,7 @@ import adp.group10.roomates.model.ShoppingListEntry;
 
 public class ShoppingListAdapter extends ArrayAdapter<ShoppingListEntry> {
 
-    public ShoppingListAdapter(@NonNull Context context, @LayoutRes int resource,
+    public  ShoppingListAdapter(@NonNull Context context, @LayoutRes int resource,
             @NonNull List<ShoppingListEntry> objects) {
         super(context, resource, objects);
     }
