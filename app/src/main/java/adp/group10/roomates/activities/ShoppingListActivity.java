@@ -62,8 +62,6 @@ public class ShoppingListActivity extends Activity {
                 ShoppingListEntry entry =
                         (ShoppingListEntry) data.getSerializableExtra(
                                 ShoppingListEntry.class.getSimpleName());
-                Toast.makeText(this, "Edit-> " + entry.getName() + ", " + entry.getAmount(),
-                        Toast.LENGTH_SHORT).show();
                 ShoppingListStorage.getInstance().updateEntry(entry);
             } else {
                 Log.d("Request", "?");
