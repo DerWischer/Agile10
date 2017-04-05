@@ -35,10 +35,11 @@ public class ShoppingListActivity extends Activity {
         listView.setAdapter(adapter);
         ShoppingListStorage.getInstance().setAdapter(adapter);
 
-        Button addButton = (Button) findViewById(R.id.addButton);
+        final Button addButton = (Button) findViewById(R.id.addButton);
         addButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent addIntent = new Intent(ShoppingListActivity.this, AddEditItemActivity.class);
+                addIntent.putExtra(AddEditItemActivity.MODE, AddEditItemActivity.MODE_ADD);
                 startActivityForResult(addIntent, ADD_SHOPPING_LIST_ENTRY);
             }
         });
@@ -62,8 +63,6 @@ public class ShoppingListActivity extends Activity {
                 ShoppingListEntry entry =
                         (ShoppingListEntry) data.getSerializableExtra(
                                 ShoppingListEntry.class.getSimpleName());
-                Toast.makeText(this, "Edit-> " + entry.getName() + ", " + entry.getAmount(),
-                        Toast.LENGTH_SHORT).show();
                 ShoppingListStorage.getInstance().updateEntry(entry);
             } else {
                 Log.d("Request", "?");

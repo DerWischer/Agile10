@@ -14,38 +14,42 @@ import java.util.HashMap;
 import adp.group10.roomates.model.ShoppingListEntry;
 
 /**
+ * Backend for the shopping list.
+ *
  * Created by Joshua Jungen on 02.04.2017.
  */
 
 public class ShoppingListStorage {
 
     private static final String SHOPPING_LIST_KEY = "shopping-list";
-    private static ShoppingListStorage instance;
+    private static ShoppingListStorage mInstance;
 
     public static ShoppingListStorage getInstance() {
-        if (instance == null) {
-            instance = new ShoppingListStorage();
+        if (mInstance == null) {
+            mInstance = new ShoppingListStorage();
         }
-        return instance;
+        return mInstance;
     }
 
 
-    private final DatabaseReference storage;
-    private final HashMap<String, ShoppingListEntry> displayedEntries;
+    private final DatabaseReference mShoppingList;
+    /* Keeps track of all objects in the shopping list. It's required because firebase works with
+     the keys, the ListAdapter works with the actual objects */
+    private final HashMap<String, ShoppingListEntry> mDisplayedEntries;
 
     private ShoppingListStorage() {
-        storage = FirebaseDatabase.getInstance().getReference(SHOPPING_LIST_KEY);
-        displayedEntries = new HashMap<>();
+        mShoppingList = FirebaseDatabase.getInstance().getReference(SHOPPING_LIST_KEY);
+        mDisplayedEntries = new HashMap<>();
     }
 
     public void setAdapter(final ArrayAdapter<ShoppingListEntry> adapter) {
-        storage.addChildEventListener(new ChildEventListener() {
+        mShoppingList.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 ShoppingListEntry entry = dataSnapshot.getValue(ShoppingListEntry.class);
                 entry.setKey(dataSnapshot.getKey());
 
-                displayedEntries.put(entry.getKey(), entry);
+                mDisplayedEntries.put(entry.getKey(), entry);
                 adapter.add(entry);
             }
 
@@ -54,19 +58,19 @@ public class ShoppingListStorage {
                 ShoppingListEntry entry = dataSnapshot.getValue(ShoppingListEntry.class);
                 entry.setKey(dataSnapshot.getKey());
 
-                ShoppingListEntry displayEntry = displayedEntries.get(entry.getKey());
+                ShoppingListEntry displayEntry = mDisplayedEntries.get(entry.getKey());
                 int position = adapter.getPosition(displayEntry);
 
                 adapter.remove(adapter.getItem(position));
-                displayedEntries.put(entry.getKey(), entry);
+                mDisplayedEntries.put(entry.getKey(), entry);
                 adapter.insert(entry, position);
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-                ShoppingListEntry entry = displayedEntries.get(dataSnapshot.getKey());
+                ShoppingListEntry entry = mDisplayedEntries.get(dataSnapshot.getKey());
 
-                displayedEntries.remove(entry.getKey());
+                mDisplayedEntries.remove(entry.getKey());
                 adapter.remove(entry);
             }
 
@@ -83,18 +87,18 @@ public class ShoppingListStorage {
     }
 
     public void addEntry(ShoppingListEntry entry) {
-        DatabaseReference newEntryRef = storage.push();
+        DatabaseReference newEntryRef = mShoppingList.push();
         entry.setKey(newEntryRef.getKey());
         newEntryRef.setValue(entry);
     }
 
     public void updateEntry(ShoppingListEntry entry) {
         String key = entry.getKey();
-        storage.child(key).setValue(entry);
+        mShoppingList.child(key).setValue(entry);
     }
 
     public void deleteEntry(ShoppingListEntry entry) {
         String key = entry.getKey();
-        storage.child(key).removeValue();
+        mShoppingList.child(key).removeValue();
     }
 }
