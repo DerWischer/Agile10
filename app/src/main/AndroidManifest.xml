@@ -18,7 +18,7 @@
         </activity>
         <activity
             android:name=".activities.AddEditItemActivity"
-            android:parentActivityName=".activities.LoginActivity">
+            android:parentActivityName=".activities.ShoppingListActivity">
         </activity>
         <activity android:name=".activities.ShoppingListActivity">
         </activity>
