@@ -8,7 +8,7 @@
     tools:context="adp.group10.roomates.activities.ShoppingListActivity">
 
     <Button
-        android:id="@+id/addButton"
+        android:id="@+id/bAddItem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" android:layout_marginBottom="8dp"
         android:layout_marginEnd="148dp"
@@ -17,7 +17,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"/>
     <ListView
-        android:id="@+id/ShoppingListView"
+        android:id="@+id/lvShoppingList"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="16dp"
@@ -29,7 +29,7 @@
         android:dividerHeight="10.0sp"
         android:headerDividersEnabled="false"
         android:padding="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/addButton"
+        app:layout_constraintBottom_toTopOf="@+id/bAddItem"
         app:layout_constraintLeft_toLeftOf="parent" app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" app:layout_constraintVertical_bias="0.0"/>
 
