@@ -8,7 +8,7 @@
     tools:context="adp.group10.roomates.activities.AddEditItemActivity">
 
     <EditText
-        android:id="@+id/nameEditText"
+        android:id="@+id/etName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="32dp"
@@ -20,7 +20,7 @@
         app:layout_constraintLeft_toLeftOf="parent" app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
     <EditText
-        android:id="@+id/amountEditText"
+        android:id="@+id/etAmount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="32dp"
@@ -29,9 +29,10 @@
         android:ems="10"
         android:hint="Amount" android:inputType="number"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" app:layout_constraintTop_toBottomOf="@+id/nameEditText"/>
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etName"/>
     <Button
-        android:id="@+id/addButton2"
+        android:id="@+id/bAdd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" android:layout_marginBottom="8dp"
         android:layout_marginLeft="8dp"
@@ -39,7 +40,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent" app:layout_constraintRight_toRightOf="parent"/>
     <EditText
-        android:id="@+id/priceEditText"
+        android:id="@+id/etPrice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="32dp"
@@ -47,8 +48,7 @@
         android:layout_marginTop="15dp" android:ems="10"
         android:hint="Price"
         android:inputType="numberDecimal"
-        android:singleLine="true"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/amountEditText"/>
+        app:layout_constraintTop_toBottomOf="@+id/etAmount"/>
 </android.support.constraint.ConstraintLayout>
