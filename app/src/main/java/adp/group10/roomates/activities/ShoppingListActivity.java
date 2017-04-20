@@ -8,14 +8,13 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
 import adp.group10.roomates.backend.ShoppingListStorage;
 import adp.group10.roomates.R;
 import adp.group10.roomates.ShoppingListAdapter;
-import adp.group10.roomates.model.ShoppingListEntry;
+import adp.group10.roomates.backend.model.ShoppingListEntry;
 
 public class ShoppingListActivity extends Activity {
     public final static int ADD_SHOPPING_LIST_ENTRY = 0;

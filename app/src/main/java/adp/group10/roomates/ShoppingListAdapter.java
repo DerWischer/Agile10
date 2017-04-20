@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.widget.ArrayAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,14 +13,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 import java.util.List;
 
 import adp.group10.roomates.activities.AddEditItemActivity;
 import adp.group10.roomates.activities.ShoppingListActivity;
 import adp.group10.roomates.backend.ShoppingListStorage;
-import adp.group10.roomates.model.ShoppingListEntry;
+import adp.group10.roomates.backend.model.ShoppingListEntry;
 
 /**
  * Created by Ninas Dator on 2017-03-31.

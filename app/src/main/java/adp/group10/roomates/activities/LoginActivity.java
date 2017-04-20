@@ -2,25 +2,14 @@ package adp.group10.roomates.activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
 import android.widget.EditText;
-import android.widget.Toast;
 import android.view.View;
-import android.content.Context;
 
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 //import com.google.firebase.database.ValueEventListener;
 
 import adp.group10.roomates.R;
-import adp.group10.roomates.model.ShoppingListEntry;
 
 public class LoginActivity extends AppCompatActivity {
 

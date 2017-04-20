@@ -11,7 +11,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
 
-import adp.group10.roomates.model.ShoppingListEntry;
+import adp.group10.roomates.backend.model.ShoppingListEntry;
 
 /**
  * Backend for the shopping list.

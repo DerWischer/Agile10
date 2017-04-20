@@ -10,7 +10,7 @@ import android.widget.Toast;
 
 import adp.group10.roomates.backend.ShoppingListStorage;
 import adp.group10.roomates.R;
-import adp.group10.roomates.model.ShoppingListEntry;
+import adp.group10.roomates.backend.model.ShoppingListEntry;
 
 public class AddEditItemActivity extends AppCompatActivity {
 

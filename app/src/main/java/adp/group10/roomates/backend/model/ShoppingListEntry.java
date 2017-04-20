@@ -1,4 +1,4 @@
-package adp.group10.roomates.model;
+package adp.group10.roomates.backend.model;
 
 import com.google.firebase.database.Exclude;
 
