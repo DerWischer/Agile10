@@ -17,8 +17,11 @@ import java.util.List;
 
 import adp.group10.roomates.activities.AddEditItemActivity;
 import adp.group10.roomates.activities.ShoppingListActivity;
+import adp.group10.roomates.backend.IStorageHandler;
 import adp.group10.roomates.backend.ShoppingListStorage;
+import adp.group10.roomates.backend.model.Group;
 import adp.group10.roomates.backend.model.ShoppingListEntry;
+import adp.group10.roomates.backend.model.User;
 
 /**
  * Created by Ninas Dator on 2017-03-31.
