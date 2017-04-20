@@ -20,7 +20,7 @@ public class ShoppingListActivity extends Activity {
     public final static int ADD_SHOPPING_LIST_ENTRY = 0;
     public final static int EDIT_SHOPPING_LIST_ENTRY = 1;
 
-    ArrayAdapter<ShoppingListEntry> adapter;
+    ArrayAdapter<ShoppingListEntry> shoppingListAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,14 +28,14 @@ public class ShoppingListActivity extends Activity {
         setContentView(R.layout.activity_shopping_list);
 
         ArrayList<ShoppingListEntry> data = new ArrayList<>();
-        ListView listView = (ListView) findViewById(R.id.ShoppingListView);
-        adapter = new ShoppingListAdapter(this, R.layout.shopping_list_entry_data_item, data);
+        ListView lvShoppingList = (ListView) findViewById(R.id.lvShoppingList);
+        shoppingListAdapter = new ShoppingListAdapter(this, R.layout.shopping_list_entry_data_item, data);
 
-        listView.setAdapter(adapter);
-        ShoppingListStorage.getInstance().setAdapter(adapter);
+        lvShoppingList.setAdapter(shoppingListAdapter);
+        ShoppingListStorage.getInstance().setAdapter(shoppingListAdapter);
 
-        final Button addButton = (Button) findViewById(R.id.addButton);
-        addButton.setOnClickListener(new View.OnClickListener() {
+        final Button bAddItem = (Button) findViewById(R.id.bAddItem);
+        bAddItem.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent addIntent = new Intent(ShoppingListActivity.this, AddEditItemActivity.class);
                 addIntent.putExtra(AddEditItemActivity.MODE, AddEditItemActivity.MODE_ADD);
