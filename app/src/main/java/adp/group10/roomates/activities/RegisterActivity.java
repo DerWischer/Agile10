@@ -57,43 +57,43 @@ public class RegisterActivity extends AppCompatActivity {
 
 
             public void onClick(View v) {
-                EditText vusername;
-                EditText vemail;
-                EditText vphone;
-                EditText vpassword;
-                EditText vpassconf;
+                EditText etUsername;
+                EditText etEmail;
+                EditText etPhone;
+                EditText etPassword;
+                EditText etPassconf;
 
 
-                vusername   = (EditText)findViewById(R.id.etUsername);
-                vemail   = (EditText)findViewById(R.id.etEmail);
-                vphone  = (EditText)findViewById(R.id.etPhoneNumber);
-                vpassword   = (EditText)findViewById(R.id.etPassword);
-                vpassconf  = (EditText)findViewById(R.id.etPassConf);
+                etUsername   = (EditText)findViewById(R.id.etUsername);
+                etEmail   = (EditText)findViewById(R.id.etEmail);
+                etPhone  = (EditText)findViewById(R.id.etPhoneNumber);
+                etPassword   = (EditText)findViewById(R.id.etPassword);
+                etPassconf  = (EditText)findViewById(R.id.etPassConf);
 
-                if(vusername.getText().toString().length()==0){
-                    vusername.setError("User name is required");
-                    vusername.requestFocus();
+                if(etUsername.getText().toString().length()==0){
+                    etUsername.setError("User name is required");
+                    etUsername.requestFocus();
                 }
-                else if (vpassword.getText().toString().length()==0){
-                    vpassword.setError("Password is not entered");
-                    vpassword.requestFocus();
+                else if (etPassword.getText().toString().length()==0){
+                    etPassword.setError("Password is not entered");
+                    etPassword.requestFocus();
                 }
-                else if(vphone.getText().toString().length()==0){
-                    vphone.setError("Phone is required");
-                    vphone.requestFocus();
+                else if(etPhone.getText().toString().length()==0){
+                    etPhone.setError("Phone is required");
+                    etPhone.requestFocus();
                 }
 
-                else if (!vpassword.getText().toString().equals(vpassconf.getText().toString())){
-                    vpassconf.setError("Password Not matched");
-                    vpassconf.requestFocus();
+                else if (!etPassword.getText().toString().equals(etPassconf.getText().toString())){
+                    etPassconf.setError("Password Not matched");
+                    etPassconf.requestFocus();
                 }
-                else if (vpassconf.getText().toString().length()==0){
-                    vpassconf.setError("Please confirm password");
-                    vpassconf.requestFocus();
+                else if (etPassconf.getText().toString().length()==0){
+                    etPassconf.setError("Please confirm password");
+                    etPassconf.requestFocus();
                 }
-                else if(vemail.getText().toString().length()==0){
-                    vemail.setError("Email is required");
-                    vemail.requestFocus();
+                else if(etEmail.getText().toString().length()==0){
+                    etEmail.setError("Email is required");
+                    etEmail.requestFocus();
                 }
 
                 else
@@ -102,8 +102,8 @@ public class RegisterActivity extends AppCompatActivity {
                 DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference().child("users");
 
                 Map<String, User> users = new HashMap<String, User>();
-                User vuser = new User(vemail.getText().toString(),vphone.getText().toString(),vpassword.getText().toString());
-                    usersRef.child(vusername.getText().toString()).setValue(vuser);
+                User vuser = new User(etEmail.getText().toString(),etPhone.getText().toString(),etPassword.getText().toString());
+                    usersRef.child(etUsername.getText().toString()).setValue(vuser);
 
                 startActivity(new Intent(RegisterActivity.this, ShoppingListActivity.class));}
 
