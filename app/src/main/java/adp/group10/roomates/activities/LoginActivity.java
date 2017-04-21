@@ -22,16 +22,16 @@ public class LoginActivity extends AppCompatActivity {
         Button loginButton = (Button) findViewById(R.id.bLogin);
         loginButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                EditText vusername;
-                EditText vpassword;
-                vusername   = (EditText)findViewById(R.id.etUserName);
-                vpassword  = (EditText)findViewById(R.id.etPassword);
-                if (vusername.getText().toString().length() ==0 )
-                 {    vusername.setError("User name is required");
-                     vusername.requestFocus(); }
-                else if ( vpassword.getText().toString().length()==0 )
-                 {   vpassword.setError("Password is required");
-                     vpassword.requestFocus();  }
+                EditText etUsername;
+                EditText etPassword;
+                etUsername   = (EditText)findViewById(R.id.etUserName);
+                etPassword  = (EditText)findViewById(R.id.etPassword);
+                if (etUsername.getText().toString().length() ==0 )
+                 {    etUsername.setError("User name is required");
+                     etUsername.requestFocus(); }
+                else if ( etPassword.getText().toString().length()==0 )
+                 {   etPassword.setError("Password is required");
+                     etPassword.requestFocus();  }
                 else
                 {
                     //DatabaseReference mTemplateRef= FirebaseDatabase.getInstance().getReference().child("users");

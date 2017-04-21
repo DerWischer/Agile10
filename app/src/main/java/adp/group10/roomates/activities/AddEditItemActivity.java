@@ -24,10 +24,10 @@ public class AddEditItemActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_edit_item);
-        Button addButton = (Button) findViewById(R.id.addButton2);
-        final EditText nameEditText = (EditText) findViewById(R.id.nameEditText);
-        final EditText amountEditText = (EditText) findViewById(R.id.amountEditText);
-        final EditText priceEditText = (EditText) findViewById(R.id.priceEditText);
+        Button addButton = (Button) findViewById(R.id.bAdd);
+        final EditText etName = (EditText) findViewById(R.id.etName);
+        final EditText etAmount = (EditText) findViewById(R.id.etAmount);
+        final EditText etPrice = (EditText) findViewById(R.id.etPrice);
 
         Intent intent = getIntent();
         Bundle extra = intent.getExtras();
@@ -45,20 +45,20 @@ public class AddEditItemActivity extends AppCompatActivity {
 
         switch (mode) {
             case MODE_ADD:
-                priceEditText.setEnabled(false);
+                etPrice.setEnabled(false);
                 break;
             case MODE_EDIT:
                 // TODO if entry == null -> exception
-                nameEditText.setText(entry.getName());
-                amountEditText.setText("" + entry.getAmount());
+                etName.setText(entry.getName());
+                etAmount.setText("" + entry.getAmount());
                 addButton.setText("Update");
-                priceEditText.setEnabled(false);
+                etPrice.setEnabled(false);
                 break;
             case MODE_BUY:
                 // TODO if entry == null -> exception
-                nameEditText.setText(entry.getName());
-                amountEditText.setText("" + entry.getAmount());
-                priceEditText.setEnabled(true);
+                etName.setText(entry.getName());
+                etAmount.setText("" + entry.getAmount());
+                etPrice.setEnabled(true);
                 addButton.setText("Buy");
                 break;
         }
@@ -66,8 +66,8 @@ public class AddEditItemActivity extends AppCompatActivity {
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String name = nameEditText.getText().toString().trim();
-                int amount = Integer.parseInt(amountEditText.getText().toString());
+                String name = etName.getText().toString().trim();
+                int amount = Integer.parseInt(etAmount.getText().toString());
 
 
                 Intent returnIntent = new Intent(getApplicationContext(), ShoppingListEntry.class);
@@ -76,10 +76,11 @@ public class AddEditItemActivity extends AppCompatActivity {
                     entry.setAmount(amount);
                     if (mode.equals(MODE_BUY)) {
                         try {
-                            double price = Double.parseDouble(priceEditText.getText().toString());
+                            double price = Double.parseDouble(etPrice.getText().toString());
                             entry.setPrice(price);
-                        } catch(NumberFormatException e){
-                            Toast.makeText(getApplicationContext(), "Please enter the price", Toast.LENGTH_SHORT).show();
+                        } catch (NumberFormatException e) {
+                            Toast.makeText(getApplicationContext(), "Please enter the price",
+                                    Toast.LENGTH_SHORT).show();
                             return;
                         }
 
