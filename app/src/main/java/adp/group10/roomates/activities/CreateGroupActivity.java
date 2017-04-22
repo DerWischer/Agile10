@@ -59,7 +59,8 @@ public class CreateGroupActivity extends AppCompatActivity {
                     etGroupdesc.getText().toString());
             groupsRef.child(etGroupname.getText().toString()).setValue(vgroup);
             //groupsRef.child(etGroupname.getText().toString()).getValue(vgroup);
-            startActivity(new Intent(CreateGroupActivity.this, JoinGroupActivity.class));
+
+            finish();
         }
     }
 }

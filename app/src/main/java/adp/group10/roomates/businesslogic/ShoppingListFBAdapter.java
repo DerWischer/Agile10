@@ -13,8 +13,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
 import adp.group10.roomates.R;
-import adp.group10.roomates.activities.AddEditItemActivity;
-import adp.group10.roomates.activities.ShoppingListActivity;
 import adp.group10.roomates.backend.model.ShoppingListEntry;
 
 /**
@@ -41,57 +39,9 @@ public class ShoppingListFBAdapter extends FirebaseListAdapter<ShoppingListEntry
         TextView tvAmount = (TextView) view.findViewById(R.id.entryAmount);
         TextView tvPrice = (TextView) view.findViewById(R.id.entryPrice);
 
-        final ShoppingListEntry entry = getItem(position);
+        ShoppingListEntry entry = getItem(position);
         tvName.setText(entry.getName());
         tvAmount.setText("" + entry.getAmount());
         tvPrice.setText("" + entry.getPrice());
-
-        Button editButton = (Button) view.findViewById(R.id.editButton);
-        editButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(mActivity, AddEditItemActivity.class);
-                Bundle extra = new Bundle();
-                entry.setKey(getRef(position).getKey());
-                extra.putSerializable(ShoppingListEntry.class.getSimpleName(), entry);
-                extra.putString(AddEditItemActivity.MODE, AddEditItemActivity.MODE_EDIT);
-                intent.putExtras(extra);
-
-                mActivity.startActivityForResult(intent,
-                        ShoppingListActivity.EDIT_SHOPPING_LIST_ENTRY);
-                notifyDataSetChanged();
-            }
-        });
-
-        Button deleteButton = (Button) view.findViewById(R.id.deleteButton);
-        deleteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //ShoppingListStorage.getInstance().deleteEntry(entry);
-                FirebaseDatabase.getInstance().getReference("shopping-list").child(getRef(position).getKey()).removeValue();
-            }
-        });
-
-                /* TODO Implement Block listener
-                Button blockButton = (Button) view.findViewById(R.id.blockButton);
-                blockButton.setOnClickListener(blockButtonClickHandler);
-                */
-
-        Button buyButton = (Button) view.findViewById(R.id.buyButton);
-        buyButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(mActivity, AddEditItemActivity.class);
-                Bundle extra = new Bundle();
-                entry.setKey(getRef(position).getKey());
-                extra.putSerializable(ShoppingListEntry.class.getSimpleName(), entry);
-                extra.putString(AddEditItemActivity.MODE, AddEditItemActivity.MODE_BUY);
-                intent.putExtras(extra);
-
-                mActivity.startActivityForResult(intent,
-                        ShoppingListActivity.EDIT_SHOPPING_LIST_ENTRY);
-                notifyDataSetChanged();
-            }
-        });
     }
 }

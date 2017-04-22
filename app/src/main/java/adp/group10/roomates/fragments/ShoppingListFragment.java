@@ -14,16 +14,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
-import android.widget.PopupMenu;
+
+import com.firebase.ui.database.FirebaseListAdapter;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import adp.group10.roomates.R;
 import adp.group10.roomates.backend.model.ShoppingListEntry;
+import adp.group10.roomates.businesslogic.ShoppingListFBAdapter;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -38,7 +40,7 @@ public class ShoppingListFragment extends Fragment implements AbsListView.MultiC
     private OnFragmentInteractionListener mListener;
 
     private GridView gvList;
-    private ArrayAdapter<String> adapter;
+    private FirebaseListAdapter<ShoppingListEntry> fbAdapter;
 
     public ShoppingListFragment() { // Required empty public constructor
     }
@@ -59,19 +61,11 @@ public class ShoppingListFragment extends Fragment implements AbsListView.MultiC
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
         gvList = (GridView) getView().findViewById(R.id.gvTest);
 
-
-        ArrayList<String> items = new ArrayList<String>();
-        items.add("Item 1");
-        items.add("Item 2");
-        items.add("Item 3");
-        items.add("Item 4");
-        items.add("Item 5");
-
-        adapter = new ArrayAdapter<String>(getActivity(), R.layout.test_gv_simple_item, items);
-        gvList.setAdapter(adapter);
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("shopping-list");
+        fbAdapter = new ShoppingListFBAdapter(getActivity(), ref);
+        gvList.setAdapter(fbAdapter);
 
         gvList.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE_MODAL);
         gvList.setMultiChoiceModeListener(this);
@@ -117,14 +111,21 @@ public class ShoppingListFragment extends Fragment implements AbsListView.MultiC
     }
 
 
+    private ArrayList<Integer> selectedPositions = new ArrayList<>();
+
     @Override
     public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
-        // TODO Keep track of which items are selected
+        if (checked) {
+            selectedPositions.add(position);
+        } else {
+            selectedPositions.remove(selectedPositions.indexOf(position));
+        }
+        mode.setTitle(selectedPositions.size() + " selected");
     }
 
     @Override
     public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-        MenuInflater inflater = mode.getMenuInflater();
+        MenuInflater inflater = getActivity().getMenuInflater();
         inflater.inflate(R.menu.shopping_list_item_selected, menu);
         return true;
     }
@@ -139,34 +140,48 @@ public class ShoppingListFragment extends Fragment implements AbsListView.MultiC
         String snackMsg = "empty";
         switch (item.getItemId()) {
             case R.id.menu_delete:
-                // TODO
-                snackMsg = "Delete";
+                delete();
                 break;
             case R.id.menu_block:
-                // TODO
-                snackMsg = "Block";
+                block();
                 break;
             case R.id.menu_edit:
-                // TODO
-                snackMsg = "Edit";
+                edit();
                 break;
             case R.id.menu_buy:
-                // TODO
-                snackMsg = "Buy";
+                buy();
                 break;
             default:
                 return false;
         }
         mode.finish();
-
-        Snackbar.make(getView(), snackMsg, Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
         return true;
     }
 
     @Override
     public void onDestroyActionMode(ActionMode mode) {
 
+    }
+
+    private void delete() {
+        for (int position : selectedPositions) {
+            fbAdapter.getRef(position).removeValue();
+        }
+    }
+
+    private void block() {
+        Snackbar.make(getView(), "Block Item", Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show();
+    }
+
+    private void edit() {
+        Snackbar.make(getView(), "Edit Item", Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show();
+    }
+
+    private void buy() {
+        Snackbar.make(getView(), "Buy Item", Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show();
     }
 
 

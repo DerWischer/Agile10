@@ -14,7 +14,7 @@ import android.widget.TextView;
  * Created by Joshua Jungen on 22.04.2017.
  */
 
-public class CheckableShoppingListItemLayout extends android.support.v7.widget.AppCompatTextView implements Checkable {
+public class CheckableShoppingListItemLayout extends FrameLayout implements Checkable {
 
     private boolean checked = false;
     private static final int[] CHECKED_STATE_SET = {android.R.attr.state_checked};

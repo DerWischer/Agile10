@@ -77,6 +77,8 @@ public class JoinGroupActivity extends AppCompatActivity {
             JoinGroupActivity.GROUPUSER vguser1 = new JoinGroupActivity.GROUPUSER("0", "0");
             groupsRef.child(etGroupname.getText().toString()).child(
                     etUserName.getText().toString()).setValue(vguser1);
+
+            finish();
         }
     }
 }

@@ -105,6 +105,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                     //startActivity(new Intent(RegisterActivity.this, ShoppingListActivity.class))
 
+                    finish();
                     startActivity(new Intent(RegisterActivity.this, MainActivity.class));
                 }
 
