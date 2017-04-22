@@ -52,10 +52,7 @@ public class LoginActivity extends AppCompatActivity {
         Button registerButton = (Button) findViewById(R.id.bRegister);
         registerButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
-
                     startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
-
             }
         });
         }

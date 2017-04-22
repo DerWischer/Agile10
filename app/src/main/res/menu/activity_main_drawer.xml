@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="Your groups">
+        <menu>
+            <!-- TODO remove and load dynamically -->
+            <item
+                android:icon="@android:drawable/sym_def_app_icon"
+                android:title="Group 1 (Dummy)"/>
+            <item
+                android:icon="@android:drawable/sym_def_app_icon"
+                android:title="Group 2 (Dummy)"/>
+        </menu>
+    </item>
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_settings"
+
+            android:icon="@android:drawable/ic_menu_preferences" android:title="Settings"/>
+    </group>
+
+
+
+</menu>
