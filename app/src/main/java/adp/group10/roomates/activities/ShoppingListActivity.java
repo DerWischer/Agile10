@@ -18,9 +18,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
-import adp.group10.roomates.backend.ShoppingListStorage;
 import adp.group10.roomates.R;
-import adp.group10.roomates.ShoppingListAdapter;
 import adp.group10.roomates.backend.model.ShoppingListEntry;
 import adp.group10.roomates.businesslogic.ShoppingListFBAdapter;
 
@@ -37,15 +35,10 @@ public class ShoppingListActivity extends Activity {
 
         ArrayList<ShoppingListEntry> data = new ArrayList<>();
         GridView gvShoppingList = (GridView) findViewById(R.id.gvShoppingList);
-        shoppingListAdapter = new ShoppingListAdapter(this, R.layout.shopping_list_entry_data_item,
-                data);
-        /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+        // TODO Refactor: Use constant for 'shopping-list'
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("shopping-list");
         FirebaseListAdapter fbAdapter = new ShoppingListFBAdapter(this, ref);
         gvShoppingList.setAdapter(fbAdapter);
-        /* ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
-        //gvShoppingList.setAdapter(shoppingListAdapter);
-        //ShoppingListStorage.getInstance().setAdapter(shoppingListAdapter);
 
         final Button bAddItem = (Button) findViewById(R.id.bAddItem);
         bAddItem.setOnClickListener(new View.OnClickListener() {

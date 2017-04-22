@@ -8,7 +8,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import adp.group10.roomates.backend.ShoppingListStorage;
 import adp.group10.roomates.R;
 import adp.group10.roomates.backend.model.ShoppingListEntry;
 
@@ -40,7 +39,7 @@ public class AddEditItemActivity extends AppCompatActivity {
         } else {
             mode = extra.getString(MODE, MODE_ADD);
             entry = (ShoppingListEntry) extra.getSerializable(
-                    ShoppingListStorage.class.getSimpleName());
+                    ShoppingListEntry.class.getSimpleName());
         }
 
         switch (mode) {

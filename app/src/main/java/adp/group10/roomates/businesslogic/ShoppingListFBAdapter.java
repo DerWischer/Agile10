@@ -15,7 +15,6 @@ import com.google.firebase.database.Query;
 import adp.group10.roomates.R;
 import adp.group10.roomates.activities.AddEditItemActivity;
 import adp.group10.roomates.activities.ShoppingListActivity;
-import adp.group10.roomates.backend.ShoppingListStorage;
 import adp.group10.roomates.backend.model.ShoppingListEntry;
 
 /**
@@ -54,7 +53,7 @@ public class ShoppingListFBAdapter extends FirebaseListAdapter<ShoppingListEntry
                 Intent intent = new Intent(mActivity, AddEditItemActivity.class);
                 Bundle extra = new Bundle();
                 entry.setKey(getRef(position).getKey());
-                extra.putSerializable(ShoppingListStorage.class.getSimpleName(), entry);
+                extra.putSerializable(ShoppingListEntry.class.getSimpleName(), entry);
                 extra.putString(AddEditItemActivity.MODE, AddEditItemActivity.MODE_EDIT);
                 intent.putExtras(extra);
 
@@ -85,7 +84,7 @@ public class ShoppingListFBAdapter extends FirebaseListAdapter<ShoppingListEntry
                 Intent intent = new Intent(mActivity, AddEditItemActivity.class);
                 Bundle extra = new Bundle();
                 entry.setKey(getRef(position).getKey());
-                extra.putSerializable(ShoppingListStorage.class.getSimpleName(), entry);
+                extra.putSerializable(ShoppingListEntry.class.getSimpleName(), entry);
                 extra.putString(AddEditItemActivity.MODE, AddEditItemActivity.MODE_BUY);
                 intent.putExtras(extra);
 
