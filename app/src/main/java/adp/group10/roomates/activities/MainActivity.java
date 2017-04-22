@@ -1,5 +1,6 @@
 package adp.group10.roomates.activities;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -59,10 +60,18 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         int id = item.getItemId();
-        if (id == R.id.nav_settings) {
-            // TODO Open settings
-            Snackbar.make(drawer, "Open Settings", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
+        switch (item.getItemId()) {
+            case R.id.nav_settings:
+                // TODO Open setting
+                Snackbar.make(drawer, "Open Settings", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+                break;
+            case R.id.nav_group_join:
+                startActivity(new Intent(this, JoinGroupActivity.class));
+                break;
+            case R.id.nav_group_create:
+                startActivity(new Intent(this, CreateGroupActivity.class));
+                break;
         }
 
         drawer.closeDrawer(GravityCompat.START);

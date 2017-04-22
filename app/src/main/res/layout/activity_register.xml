@@ -1,62 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+
+
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="32dp"
     tools:context="adp.group10.roomates.activities.RegisterActivity"
-    tools:layout_editor_absoluteY="81dp" tools:layout_editor_absoluteX="0dp">>
+    tools:layout_editor_absoluteX="2dp"
+    tools:layout_editor_absoluteY="6dp">
+    <EditText
+        android:id="@+id/etUsername"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.30"
+        android:ems="10"
+        android:hint="User name"
+        android:inputType="textPersonName"/>
+    <EditText
+        android:id="@+id/etEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.26"
+        android:ems="10" android:hint="Email"
+        android:inputType="textEmailAddress"/>
+    <EditText
+        android:id="@+id/etPhoneNumber"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.47"
+        android:ems="10"
+        android:hint="Phone number" android:inputType="phone"/>
 
-    <LinearLayout
-        android:layout_width="380dp"
-        android:layout_height="373dp"
-        android:orientation="vertical" tools:layout_editor_absoluteX="2dp"
-        tools:layout_editor_absoluteY="6dp">
-        <EditText
-            android:id="@+id/etUsername"
-            android:layout_width="380dp"
-            android:layout_height="53dp"
-            android:layout_weight="0.30"
-            android:ems="10"
-            android:hint="User name"
-            android:inputType="textPersonName"/>
-        <EditText
-            android:id="@+id/etEmail"
-            android:layout_width="380dp"
-            android:layout_height="53dp"
-            android:layout_weight="0.26"
-            android:ems="10" android:hint="Email"
-            android:inputType="textEmailAddress"/>
-        <EditText
-            android:id="@+id/etPhoneNumber"
-            android:layout_width="380dp"
-            android:layout_height="53dp"
-            android:layout_weight="0.47"
-            android:hint="Phone number"
-            android:ems="10" android:inputType="phone"/>
-
-        <EditText
-            android:id="@+id/etPassword"
-            android:layout_width="380dp"
-            android:layout_height="53dp"
-            android:layout_weight="0.50"
-            android:ems="10"
-            android:hint="Password"
-            android:inputType="textPassword"/>
-        <EditText
-            android:id="@+id/etPassConf"
-            android:layout_width="380dp"
-            android:layout_height="53dp"
-            android:layout_weight="0.50"
-            android:ems="10"
-            android:hint="Confirm Password"
-            android:inputType="textPassword"/>
-        <Button
-            android:id="@+id/bCreateUser"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Create User"/>
-    </LinearLayout>
-</android.support.constraint.ConstraintLayout>
+    <EditText
+        android:id="@+id/etPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.50"
+        android:ems="10"
+        android:hint="Password"
+        android:inputType="textPassword"/>
+    <EditText
+        android:id="@+id/etPassConf"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.50"
+        android:ems="10"
+        android:hint="Confirm Password"
+        android:inputType="textPassword"/>
+    <Button
+        android:id="@+id/bCreateUser"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1" android:text="Create User"/>
+</LinearLayout>
