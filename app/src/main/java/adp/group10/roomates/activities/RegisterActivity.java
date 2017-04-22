@@ -1,5 +1,6 @@
 package adp.group10.roomates.activities;
 
+import android.graphics.Path;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Button;
@@ -52,8 +53,8 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        Button createUser = (Button) findViewById(R.id.bCreateUser);
-        createUser.setOnClickListener(new View.OnClickListener() {
+        Button bCreateUser = (Button) findViewById(R.id.bCreateUser);
+        bCreateUser.setOnClickListener(new View.OnClickListener() {
 
 
             public void onClick(View v) {
@@ -105,7 +106,9 @@ public class RegisterActivity extends AppCompatActivity {
                 User vuser = new User(etEmail.getText().toString(),etPhone.getText().toString(),etPassword.getText().toString());
                     usersRef.child(etUsername.getText().toString()).setValue(vuser);
 
-                startActivity(new Intent(RegisterActivity.this, ShoppingListActivity.class));}
+                //startActivity(new Intent(RegisterActivity.this, ShoppingListActivity.class))
+
+                 startActivity(new Intent(RegisterActivity.this, OptionsActivity.class));}
 
             }
 
