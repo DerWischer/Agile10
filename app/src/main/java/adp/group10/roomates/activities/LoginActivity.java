@@ -36,6 +36,7 @@ public class LoginActivity extends AppCompatActivity {
                     //DatabaseReference mTemplateRef= FirebaseDatabase.getInstance().getReference
                     // ().child("users");
                     // TODO Authenticate
+                    finish();
                     startActivity(new Intent(LoginActivity.this, MainActivity.class));
                 }
             }
