@@ -19,8 +19,8 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
 
-        Button loginButton = (Button) findViewById(R.id.bLogin);
-        loginButton.setOnClickListener(new View.OnClickListener() {
+        Button bUserLogin = (Button) findViewById(R.id.bLogin);
+        bUserLogin.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 EditText etUsername;
                 EditText etPassword;
@@ -35,7 +35,7 @@ public class LoginActivity extends AppCompatActivity {
                 else
                 {
                     //DatabaseReference mTemplateRef= FirebaseDatabase.getInstance().getReference().child("users");
-                    startActivity(new Intent(LoginActivity.this, ShoppingListActivity.class));
+                    startActivity(new Intent(LoginActivity.this, OptionsActivity.class));
 
                 }
 

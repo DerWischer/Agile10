@@ -9,6 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity android:name=".activities.LoginActivity">
             <!-- TODO Uncomment and remove from MainActivity
             <intent-filter>
@@ -18,25 +19,25 @@
             </intent-filter>
             -->
         </activity>
-        <activity
-            android:name=".activities.AddEditItemActivity"
-            android:parentActivityName=".activities.ShoppingListActivity">
-        </activity>
-        <activity android:name=".activities.ShoppingListActivity">
-        </activity>
-        <activity android:name=".activities.RegisterActivity">
-        </activity>
-        <activity
-            android:name=".activities.MainActivity"
-            android:label="@string/title_activity_main"
-            android:theme="@style/AppTheme.NoActionBar">
-            <!-- TODO Remove intent filter-->
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
 
+        <activity android:name=".activities.AddEditItemActivity"
+                  android:parentActivityName=".activities.ShoppingListActivity">
+        </activity>
+        <activity android:name=".activities.CreateGroupActivity"/>
+        <activity android:name=".activities.JoinGroupActivity"/>
+        <activity android:name=".activities.MainActivity"
+                  android:label="@string/title_activity_main"
+                  android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <!-- TODO Remove intent filter-->
+                <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <activity android:name=".activities.OptionsActivity"/>
+        <activity android:name=".activities.RegisterActivity"/>
+        <activity android:name=".activities.ShoppingListActivity"/>
+
     </application>
 
 </manifest>
