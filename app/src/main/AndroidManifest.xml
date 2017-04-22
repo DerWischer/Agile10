@@ -22,6 +22,9 @@
         </activity>
         <activity android:name=".activities.ShoppingListActivity">
         </activity>
+        <activity android:name=".activities.OptionsActivity"></activity>
+        <activity android:name=".activities.CreateGroupActivity"></activity>
+        <activity android:name=".activities.JoinGroupActivity"></activity>
         <activity android:name=".activities.RegisterActivity">
         </activity>
     </application>
