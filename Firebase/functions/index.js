@@ -53,6 +53,7 @@ exports.updadeBalance = functions.database.ref('/GROUPUSER/{groupName}/{userName
             } else {
               balance = balance - changeInPrice;
             }
+            setBalance(keys[i], groupId, balance);
             console.log("user = " + keys[i] + " new balance = " + balance);
           }
       });
@@ -91,12 +92,21 @@ float getBalance(int userId, int groupId){
     //return the balance of the user in the group
 
     return 0;
-}
-void setBalance(int userId, int groupId, int newPrice){
-
+}*/
+function setBalance(userId, groupId, newBalance){
+    admin.database().ref("/GROUPUSER/" + groupId + "/" + userId).update({
+      BALANCE : newBalance
+    });
     //set the balance of the user in the group to newPrice
-}
-
+}/*
+function writeUserData(userId, name, email, imageUrl) {
+  firebase.database().ref('users/' + userId).set({
+    username: name,
+    email: email,
+    profile_picture : imageUrl
+  });
+}*/
+/*
 user[] getGroupMembers(int groupId){
 
     // return the members of group
