@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.GridView;
 
@@ -27,6 +28,7 @@ import java.util.ArrayList;
 
 import adp.group10.roomates.R;
 import adp.group10.roomates.backend.FirebaseHandler;
+import adp.group10.roomates.backend.model.AvailableItem;
 import adp.group10.roomates.backend.model.ShoppingListEntry;
 import adp.group10.roomates.businesslogic.ShoppingListFBAdapter;
 
@@ -38,7 +40,8 @@ import adp.group10.roomates.businesslogic.ShoppingListFBAdapter;
  * Use the {@link ShoppingListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ShoppingListFragment extends Fragment implements AbsListView.MultiChoiceModeListener {
+public class ShoppingListFragment extends Fragment implements AbsListView.MultiChoiceModeListener, AddItemsFragment.OnFragmentInterActionListener,
+        AdapterView.OnItemClickListener {
 
     private OnFragmentInteractionListener mListener;
 
@@ -139,7 +142,6 @@ public class ShoppingListFragment extends Fragment implements AbsListView.MultiC
 
     @Override
     public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-        String snackMsg = "empty";
         switch (item.getItemId()) {
             case R.id.menu_delete:
                 delete();
@@ -223,7 +225,7 @@ public class ShoppingListFragment extends Fragment implements AbsListView.MultiC
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
 
-                    String name = etName.getText().toString();
+                    String name = etName.getText().toString().trim();
                     int amount = Integer.parseInt(etAmount.getText().toString());
 
                     entry.setName(name);
@@ -288,5 +290,15 @@ public class ShoppingListFragment extends Fragment implements AbsListView.MultiC
         return true;
     }
 
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        // TODO Decrease amount, if 0 remove item
+    }
 
+    @Override
+    public void onClickAvailableItem(AvailableItem item) {
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(FirebaseHandler.KEY_SHOPPING_LIST);
+        ShoppingListEntry entry = new ShoppingListEntry(item.getName(), 1);
+        ref.push().setValue(entry); // TODO Increase amount if already in shopping list
+    }
 }

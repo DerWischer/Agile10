@@ -30,8 +30,7 @@ import adp.group10.roomates.fragments.ShoppingListFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-        ShoppingListFragment.OnFragmentInteractionListener,
-        AddItemsFragment.OnFragmentInteractionListener {
+        ShoppingListFragment.OnFragmentInteractionListener, AddItemsFragment.OnFragmentInterActionListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,7 +98,7 @@ public class MainActivity extends AppCompatActivity
     public void onClick_fabAddCustomItem(View view) {
         LayoutInflater inflater = getLayoutInflater();
         final View dialogView = inflater.inflate(R.layout.dialog_add_item, null);
-        
+
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setView(dialogView);
         builder.setTitle("Custom Item");
@@ -125,5 +124,12 @@ public class MainActivity extends AppCompatActivity
         builder.show();
 
 
+    }
+
+    @Override
+    public void onClickAvailableItem(AvailableItem item) {
+        // TODO Increment in ShoppingListFragment
+        ShoppingListFragment fragment = (ShoppingListFragment) getSupportFragmentManager().findFragmentById(R.id.fShoppingList);
+        fragment.onClickAvailableItem(item);
     }
 }
