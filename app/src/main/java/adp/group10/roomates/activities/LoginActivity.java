@@ -23,6 +23,7 @@ import adp.group10.roomates.R;
 
 public class LoginActivity extends AppCompatActivity {
 
+    public static String currentuser;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,7 +62,8 @@ public class LoginActivity extends AppCompatActivity {
                                 {   etUsername.setError("Username / Password combination does not exist");
                                 etUsername.requestFocus();}
                                 else
-                                {   finish();
+                                {   currentuser = etUsername.getText().toString();
+                                    finish();
                                 startActivity(new Intent(LoginActivity.this, MainActivity.class)); }
                                 }
                         }
