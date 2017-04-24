@@ -110,8 +110,13 @@ public class MainActivity extends AppCompatActivity
         dialogSubmitButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                AvailableItem item = new AvailableItem(dialogResults.getText().toString());
-                ShoppingListEntry shoppingListItem = new ShoppingListEntry(dialogResults.getText().toString(), 1);
+                if(dialogResults.getText().toString().trim().equals("")){
+                    dialogAddItem.cancel();
+                    return;
+                }
+
+                AvailableItem item = new AvailableItem(dialogResults.getText().toString().trim());
+                ShoppingListEntry shoppingListItem = new ShoppingListEntry(dialogResults.getText().toString().trim(), 1);
 
                 DatabaseReference availableItemsRef = FirebaseDatabase.getInstance().getReference("available-items");
                 availableItemsRef.push().setValue(item);
