@@ -1,5 +1,6 @@
 package adp.group10.roomates.activities;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,12 +14,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.EditText;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import adp.group10.roomates.R;
 import adp.group10.roomates.backend.FirebaseHandler;
+import adp.group10.roomates.backend.model.AvailableItem;
 import adp.group10.roomates.backend.model.ShoppingListEntry;
 import adp.group10.roomates.fragments.AddItemsFragment;
 import adp.group10.roomates.fragments.ShoppingListFragment;
@@ -93,12 +97,32 @@ public class MainActivity extends AppCompatActivity
      */
     public void onClick_fabAddCustomItem(View view) {
         // TODO Open dialog
+        //Snackbar.make(view, "Open AddItem Dialog", Snackbar.LENGTH_LONG)
+        //        .setAction("Action", null).show();
+        final Dialog dialogAddItem = new Dialog(MainActivity.this);
+        dialogAddItem.setTitle("Custom Item");
+        dialogAddItem.setContentView(R.layout.dialog_add_item);
+        dialogAddItem.show();
 
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(
-                FirebaseHandler.KEY_SHOPPING_LIST);
-        ShoppingListEntry entry = new ShoppingListEntry("Dummy", 1);
-        ref.push().setValue(entry);
-        Snackbar.make(view, "Dummy added", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+        final EditText dialogResults = (EditText) dialogAddItem.findViewById(R.id.et_NewItem);
+        Button dialogSubmitButton = (Button) dialogAddItem.findViewById(R.id.b_NewITem);
+
+        dialogSubmitButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                AvailableItem item = new AvailableItem(dialogResults.getText().toString());
+                ShoppingListEntry shoppingListItem = new ShoppingListEntry(dialogResults.getText().toString(), 1);
+
+                DatabaseReference availableItemsRef = FirebaseDatabase.getInstance().getReference("available-items");
+                availableItemsRef.push().setValue(item);
+
+                DatabaseReference shoppingListRef = FirebaseDatabase.getInstance().getReference("shopping-list");
+                shoppingListRef.push().setValue(shoppingListItem);
+
+                dialogAddItem.cancel();
+            }
+
+        });
 
 
     }
