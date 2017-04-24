@@ -57,7 +57,7 @@ public class CreateGroupActivity extends AppCompatActivity {
 
             CreateGroupActivity.Group vgroup = new CreateGroupActivity.Group(
                     etGroupdesc.getText().toString());
-            groupsRef.child(etGroupname.getText().toString()).setValue(vgroup);
+            groupsRef.child(etGroupname.getText().toString()).setValue(vgroup); // TODO This will override an existing group
             //groupsRef.child(etGroupname.getText().toString()).getValue(vgroup);
 
             finish();

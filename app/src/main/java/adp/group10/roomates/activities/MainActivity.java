@@ -14,7 +14,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import adp.group10.roomates.R;
+import adp.group10.roomates.backend.FirebaseHandler;
+import adp.group10.roomates.backend.model.ShoppingListEntry;
 import adp.group10.roomates.fragments.AddItemsFragment;
 import adp.group10.roomates.fragments.ShoppingListFragment;
 
@@ -80,7 +85,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onFragmentInteraction(Uri uri) {
-        // TODO Method required by both both fragments. Check if necessary and what to do with it.
+        // TODO Implement interaction between ShoppingListFragment and AddItemsFragment
     }
 
     /**
@@ -88,7 +93,13 @@ public class MainActivity extends AppCompatActivity
      */
     public void onClick_fabAddCustomItem(View view) {
         // TODO Open dialog
-        Snackbar.make(view, "Open AddItem Dialog", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
+
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(
+                FirebaseHandler.KEY_SHOPPING_LIST);
+        ShoppingListEntry entry = new ShoppingListEntry("Dummy", 1);
+        ref.push().setValue(entry);
+        Snackbar.make(view, "Dummy added", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+
+
     }
 }

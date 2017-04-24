@@ -3,6 +3,7 @@ package adp.group10.roomates.fragments;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -14,16 +15,19 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
-import android.widget.ArrayAdapter;
 import android.widget.GridView;
 
 import com.firebase.ui.database.FirebaseListAdapter;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
 import adp.group10.roomates.R;
+import adp.group10.roomates.backend.FirebaseHandler;
 import adp.group10.roomates.backend.model.ShoppingListEntry;
 import adp.group10.roomates.businesslogic.ShoppingListFBAdapter;
 
@@ -163,25 +167,105 @@ public class ShoppingListFragment extends Fragment implements AbsListView.MultiC
 
     }
 
+    /**
+     * Deletes all selected items in the shopping list
+     */
     private void delete() {
         for (int position : selectedPositions) {
             fbAdapter.getRef(position).removeValue();
         }
+        selectedPositions.clear();
     }
 
+    /**
+     * Blocks all selected items in the shopping list
+     */
     private void block() {
-        Snackbar.make(getView(), "Block Item", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
+        String user = "dummy"; // TODO Get current user
+
+        for (int position : selectedPositions) {
+            ShoppingListEntry entry = fbAdapter.getItem(position);
+
+            if (!entry.isBlocked()) {
+                entry.setBlockedBy(user);
+            } else {
+                String blockedBy = entry.getBlockedBy();
+                if (blockedBy.equals(user)) {
+                    entry.setBlockedBy(null); // Unblock item
+                }
+            }
+
+            fbAdapter.getRef(position).setValue(entry);
+        }
+        selectedPositions.clear();
     }
 
+    /**
+     * Opens a dialog to edit one selected item in the shopping list
+     */
     private void edit() {
-        Snackbar.make(getView(), "Edit Item", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
+        if (selectedPositions.size() != 1) {
+            Snackbar.make(getView(), "Too many items selected.", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+        } else {
+            int position = selectedPositions.get(0);
+            ShoppingListEntry entry = fbAdapter.getItem(position);
+            Snackbar.make(getView(), "Open Edit Dialog for: " + entry.getName(),
+                    Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+        }
+        selectedPositions.clear();
     }
 
+    /**
+     * Opens a dialog to buy all selected items in the shpopping list
+     */
     private void buy() {
-        Snackbar.make(getView(), "Buy Item", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
+        // TODO Get price from a dialog
+        double price = 0;
+
+        // TODO Get current user and group
+        String user = "dummy";
+        String group = "dummyGroup";
+
+        if (isAllowedToBuy(user)) {
+            Snackbar.make(getView(), "Open Buy Item(s) dialog", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+
+
+            DatabaseReference transactionReference = FirebaseDatabase.getInstance().getReference(
+                    FirebaseHandler.KEY_GROUPUSER + "/" + group + "/" + user + "/"
+                            + FirebaseHandler.KEY_TRANSACTIONS);
+            transactionReference.push().setValue(price);
+            delete();
+        } else {
+            Snackbar.make(getView(), "You must block all selected items first",
+                    Snackbar.LENGTH_LONG).show();
+        }
+        selectedPositions.clear();
+    }
+
+    /**
+     * Checks if the specified user is allowed to buy the currently selected items.
+     *
+     * @param user Current user
+     * @return True if user may buy, False otherwise
+     */
+    private boolean isAllowedToBuy(String user) {
+        for (int position : selectedPositions) {
+            ShoppingListEntry entry = fbAdapter.getItem(position);
+
+            if (entry.isBlocked()) {
+                String blockedBy = entry.getBlockedBy();
+                if (!blockedBy.equals(user)) {
+                    return false;
+                }
+            } else {
+                return false; // Item not blocked
+            }
+        }
+
+        return true;
     }
 
 

@@ -8,31 +8,20 @@ import java.io.Serializable;
  * Created by Ninas Dator on 2017-03-31.
  */
 
-public class ShoppingListEntry implements Serializable{
+public class ShoppingListEntry implements Serializable {
 
-    @Exclude
-    private String key;
     private String name;
     private int amount;
-    private double price;
+    private String blockedBy;
 
-    public ShoppingListEntry(){
+    public ShoppingListEntry() {
         // Default constructor is required by Firebase
     }
 
     public ShoppingListEntry(String name, int amount) {
         this.name = name;
         this.amount = amount;
-    }
-
-    @Exclude
-    public String getKey() {
-        return key;
-    }
-
-    @Exclude
-    public void setKey(String key) {
-        this.key = key;
+        this.blockedBy = "";
     }
 
     public String getName() {
@@ -51,12 +40,21 @@ public class ShoppingListEntry implements Serializable{
         this.amount = amount;
     }
 
-    public double getPrice() {
-        return price;
+    public String getBlockedBy() {
+        return blockedBy;
     }
 
-    public void setPrice(double price) {
-        this.price = price;
+    public void setBlockedBy(String blockedBy) {
+        this.blockedBy = blockedBy;
+    }
+
+    @Exclude
+    public boolean isBlocked() {
+        if (blockedBy == null){
+            return false;
+        } else {
+            return blockedBy.length() > 0;
+        }
     }
 }
 
