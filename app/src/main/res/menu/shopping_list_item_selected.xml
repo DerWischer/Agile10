@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_block"
+        android:icon="@android:drawable/ic_menu_myplaces"
+        android:title="Block"
+        app:showAsAction="always"
+    />
+
+    <item
+        android:id="@+id/menu_buy"
+        android:icon="@android:drawable/checkbox_on_background"
+        android:title="Buy"
+        app:showAsAction="always"
+    />
+    <item
+        app:showAsAction="always"
+        android:id="@+id/menu_edit"
+        android:icon="@android:drawable/ic_menu_edit"
+        android:title="Edit"
+    />
+
+
+    <item
+        app:showAsAction="always"
+        android:id="@+id/menu_delete"
+        android:icon="@android:drawable/ic_menu_delete"
+        android:title="Delete"
+    />
+</menu>

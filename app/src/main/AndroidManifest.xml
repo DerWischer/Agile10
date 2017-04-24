@@ -9,26 +9,28 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity android:name=".activities.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity
-            android:name=".activities.AddEditItemActivity"
-            android:parentActivityName=".activities.ShoppingListActivity">
+        <activity android:name=".activities.CreateGroupActivity"
+                  android:parentActivityName=".activities.MainActivity"/>
+        <activity android:name=".activities.JoinGroupActivity"
+                  android:parentActivityName=".activities.MainActivity"/>
+        <activity android:name=".activities.MainActivity"
+                  android:label="@string/title_activity_main"
+                  android:theme="@style/AppTheme.NoActionBar">
         </activity>
-        <activity android:name=".activities.ShoppingListActivity">
-        </activity>
-        <activity android:name=".activities.RegisterActivity">
-        </activity>
-        <activity android:name=".activities.CreateGroupActivity">
-        </activity>
-        <activity android:name=".activities.JoinGroupActivity">
-        </activity>
-        <activity android:name=".activities.OptionsActivity">
+        <activity android:name=".activities.RegisterActivity"
+                  android:parentActivityName=".activities.LoginActivity"/>
+
+
+        <activity android:name=".activities.ShoppingListActivity"/>
+        <activity android:name=".activities.AddEditItemActivity"
+                  android:parentActivityName=".activities.ShoppingListActivity">
         </activity>
     </application>
 

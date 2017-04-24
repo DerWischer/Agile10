@@ -22,7 +22,8 @@ public class JoinGroupActivity extends AppCompatActivity {
         public String balance;
         public String transactions;
 
-        public GROUPUSER(String pGroupName,String pusername, String pbalance, String transactions) {
+        public GROUPUSER(String pGroupName, String pusername, String pbalance,
+                String transactions) {
             this.Groupname = pGroupName;
             this.username = pusername;
             this.balance = pbalance;
@@ -34,57 +35,50 @@ public class JoinGroupActivity extends AppCompatActivity {
             this.balance = pbalance;
             this.transactions = transactions;
         }
+
         public GROUPUSER(String pusername) {
             this.username = pusername;
 
         }
+
         public GROUPUSER(String pbalance, String transactions) {
             this.balance = pbalance;
             this.transactions = transactions;
 
         }
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_join_group);
+    }
 
+    public void onClick_AddUser(View view) {
+        EditText etGroupname = (EditText) findViewById(R.id.etGroupName);
+        EditText etUserName = (EditText) findViewById(R.id.etUserName);
 
-        Button bGUser = (Button) findViewById(R.id.bAddUser);
+        if (etUserName.getText().toString().length() == 0) {
+            etUserName.setError("User name is required");
+            etUserName.requestFocus();
+        }
+        if (etGroupname.getText().toString().length() == 0) {
+            etGroupname.setError("Group name is required");
+            etGroupname.requestFocus();
+        } else {
+            final FirebaseDatabase database = FirebaseDatabase.getInstance();
 
-        bGUser.setOnClickListener(new View.OnClickListener() {
+            DatabaseReference groupsRef = FirebaseDatabase.getInstance().getReference().child(
+                    "GROUPUSER");
 
+            Map<String, JoinGroupActivity.GROUPUSER> GROUPUSER =
+                    new HashMap<String, JoinGroupActivity.GROUPUSER>();
 
-            public void onClick(View v) {
-                EditText etGroupname;
-                EditText etUsreName;
+            JoinGroupActivity.GROUPUSER vguser1 = new JoinGroupActivity.GROUPUSER("0", "0");
+            groupsRef.child(etGroupname.getText().toString()).child(
+                    etUserName.getText().toString()).setValue(vguser1);
 
-                etGroupname   = (EditText)findViewById(R.id.etGroupName);
-                etUsreName   = (EditText)findViewById(R.id.etUserName);
-
-                if(etUsreName.getText().toString().length()==0){
-                    etUsreName.setError("User name is required");
-                    etUsreName.requestFocus();
-                }
-                if(etGroupname.getText().toString().length()==0){
-                    etGroupname.setError("Group name is required");
-                    etGroupname.requestFocus();
-                }
-
-                else
-                {final FirebaseDatabase database = FirebaseDatabase.getInstance();
-
-                    DatabaseReference groupsRef = FirebaseDatabase.getInstance().getReference().child("GROUPUSER");
-
-                    Map<String, JoinGroupActivity.GROUPUSER> GROUPUSER = new HashMap<String, JoinGroupActivity.GROUPUSER>();
-
-                    JoinGroupActivity.GROUPUSER vguser1 = new JoinGroupActivity.GROUPUSER("0","0");
-                    groupsRef.child(etGroupname.getText().toString()).child(etUsreName.getText().toString()).setValue(vguser1);
-                }
-
-            }
-
-
-        });
+            finish();
+        }
     }
 }

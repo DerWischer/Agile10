@@ -1,15 +1,11 @@
-var functions = require('firebase-functions');
+//var functions = require('firebase-functions');
+const functions = require('firebase-functions');
 
-// // Create and Deploy Your First Cloud Functions
-// // https://firebase.google.com/docs/functions/write-firebase-functions
-//
-// exports.helloWorld = functions.https.onRequest((request, response) => {
-//  response.send("Hello from Firebase!");
-// });
+const admin = require('firebase-admin');
+//const firebase = require('firebase');
+admin.initializeApp(functions.config().firebase);
 
-
-
-var functions = require('firebase-functions');
+//var database = firebase.database();
 
 // // Create and Deploy Your First Cloud Functions
 // // https://firebase.google.com/docs/functions/write-firebase-functionshttps://codepad.remoteinterview.io/UCRXYNWFGM
@@ -19,60 +15,103 @@ var functions = require('firebase-functions');
 // });
 
 
-exports.uptadeBalance = functions.database.ref('agile10-768ca/GroupsAndUsers/').onWrite(event => {
-    /*
+exports.updadeBalance = functions.database.ref('/GROUPUSER/{groupName}/{userName}/TRANSACTIONS/{transactionId}').onWrite(event =>
+{
 
-    TODO:
-    get path of event, from Path, get Group and User
-    creat e
+//    var data : functions.database.DeltaSnapshot = event.data;
+//    var adminRef : admin.database.Reference = data.adminRef;    // reference to the database location
 
-    */
+    var groupId = event.params.groupName;
+    var userId = event.params.userName;
+    var transactionId = event.params.transactionId;
+    var price = event.data.val();
+    var changeInPrice;
 
-    var data : functions.database.DeltaSnapshot = event.data;
-    var adminRef : admin.database.Reference = data.adminRef;    // reference to the database location
+    console.log(groupId + " " + userId + " " + transactionId + " " + price);
+    if (price != null) {
+      var database = admin.database();
 
-    var groupId = 0; // TODO: get group ID from event
-//    var price = 0; // TODO: get price from event
-    var userId = 0; // TODO: get price from event
-    var groupmembers[] = getGroupMembers(groupId);
-/*    foreach (groupMember in groupmembers) {
-        var records[[]] = []; // TODO: get records
-        var balance = 0;
-        foreach (record in records) {
-            balance += record.amount;
-        }
+      database.ref('/GROUPUSER/' + groupId).once('value').then(function(snapshot) {
+          var userList = snapshot.val();      // userList = all data about this group's users
+//          console.log(JSON.stringify(userList));
 
-        // notify every concerned phone
-    }*/
-    for(int i = 0; i< groupmembers.lenght(); i++){
-        var balance = 0;
+          var keys = Object.keys(userList);   // keys = list of user names
+          for (var i = 0; i < keys.length; i++) {
+//            console.log(keys[i]);
+            var user = userList[keys[i]];     // user = all info about 1 user
+            var balance = user["BALANCE"];
+            console.log("user = " + keys[i]  + " old balance = " + balance);
 
-        balance += sum(records[i])/groupmembers.length();
-        for(int j = 0; j < groupmembers.lenght(); j++){
-            if(!(j == i)){
-                 balance -= sum(records[j])/groupmembers.length();
+            if(keys.length == 0){  // 0 check!
+                changeInPrice = 0;
+            } else {
+                changeInPrice = (price/keys.length);
             }
-        }
-        // update balance in database
-        groupmembers[i].setBalance(balance);
+            console.log("user = " + keys[i] + " userId = " + userId);
+            if (keys[i] == userId) {
+              balance = balance - changeInPrice + price;
+            } else {
+              balance = balance - changeInPrice;
+            }
+            setBalance(keys[i], groupId, balance);
+            console.log("user = " + keys[i] + " new balance = " + balance);
+          }
+      });
     }
 
+/*    var groupmembers[] = getGroupMembers(groupId);
+
+    if(groupmembers.length() == 0){  // 0 check!
+        changeInPrice = 0;
+    }else{
+        changeInPrice = (price/groupmembers.length());
+    }
+
+    var member;
+    for(member of groupmembers){
+        if(member.Id == userId){
+            var newPrice = getBalance(userId,groupId) - changeInPrice + price;
+        }
+        else{
+            var newPrice = getBalance(userId,groupId) - changeInPrice;
+        }
+        setBalance(userId,groupId,newPrice);
+    }*/
+
 
 });
 
-
+/*
 exports.calculateTransaction = functions.database.ref('agile10-768ca/GroupsAndUsers/').onRequest((request, response) => {
 
-
+    // TODO!
 });
 
+float getBalance(int userId, int groupId){
 
-transaction[] solvetransactions(users[user]){
+    //return the balance of the user in the group
 
-    var solvedTransactions<transaction>[list];
+    return 0;
+}*/
+function setBalance(userId, groupId, newBalance){
+    admin.database().ref("/GROUPUSER/" + groupId + "/" + userId).update({
+      BALANCE : newBalance
+    });
+    //set the balance of the user in the group to newPrice
+}/*
+function writeUserData(userId, name, email, imageUrl) {
+  firebase.database().ref('users/' + userId).set({
+    username: name,
+    email: email,
+    profile_picture : imageUrl
+  });
+}*/
+/*
+user[] getGroupMembers(int groupId){
 
-
-
+    // return the members of group
+    return [];
+}*/
 
 
 /*
@@ -80,17 +119,8 @@ transaction[] solvetransactions(users[user]){
     //functions needed: getGroupMembers(groupId) , getBalance(userId,groupId) , setBalance(userId,newPrice,groupId)
 
     var groupmembers<user>[] = getGroupMembers(groupId);
-    var changeInPrice = (price/groupmembers.length()); // May be 0, caution!
 
-    foreach(member in groupmembers){
-        if(member.Id == userId){
-            var newPrice = getBalance(userId,groupId) - changeInPrice + price;
-        }
-        else{
-            var newPrice = getBalance(userId,groupId) - changeInPrice;
-        }
-        setBalance(userId,newPrice,groupId);
-    }
+
 
 
 
