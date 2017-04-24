@@ -4,8 +4,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="100dp"
-    android:layout_height="100dp"
+    android:layout_width="@dimen/item_tile_width"
+    android:layout_height="@dimen/item_tile_height"
     android:background="@drawable/selected_shopping_list_item_background">
 
     <TableLayout
@@ -24,7 +24,7 @@
                 android:gravity="center_horizontal"
                 android:text="Name"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:textStyle="bold"/>
+            />
         </TableRow>
 
         <TableRow android:layout_width="match_parent" android:layout_height="wrap_content"
@@ -53,7 +53,7 @@
                 android:id="@+id/etBlockedBy"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-            android:hint="No one"/>
+                android:hint="No one"/>
         </TableRow>
     </TableLayout>
 </adp.group10.roomates.CheckableShoppingListItemLayout>

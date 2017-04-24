@@ -4,30 +4,14 @@
               android:layout_height="match_parent"
               android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" android:text="Add New Item"
-        android:textAlignment="center"/>
     <EditText
-        android:id="@+id/et_NewItem"
+        android:id="@+id/etNewItem"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="5dp"
         android:ems="10"
         android:hint="Your Item"
-        android:inputType="textPersonName" android:selectAllOnFocus="false"
+        android:inputType="textPersonName"
+        android:selectAllOnFocus="false"
         android:textAlignment="center"/>
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <Button
-            android:id="@+id/b_NewITem"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:text="Add" android:textAllCaps="false"
-        />
-        <Button
-            android:id="@+id/button5"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:text="Button"/>
-    </TableRow>
 </LinearLayout>

@@ -46,24 +46,28 @@ public class LoginActivity extends AppCompatActivity {
                     //DatabaseReference mTemplateRef= FirebaseDatabase.getInstance().getReference
                     // ().child("users");
                     // TODO Authenticate
-                    DatabaseReference mTemplateRef= FirebaseDatabase.getInstance().getReference("users").child(etUsername.getText().toString()).child("password");
-                    mTemplateRef.addListenerForSingleValueEvent(new ValueEventListener(){
+                    DatabaseReference mTemplateRef = FirebaseDatabase.getInstance().getReference(
+                            "users").child(etUsername.getText().toString()).child("password");
+                    mTemplateRef.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
 
                             if (dataSnapshot.getValue() == null) {
-                                etUsername.setError("Username / Password combination does not exist");
-                            }
-                            else {
-                                String Password =  dataSnapshot.getValue(String.class).toString();
+                                etUsername.setError(
+                                        "Username / Password combination does not exist");
+                            } else {
+                                String Password = dataSnapshot.getValue(String.class).toString();
 
-                                if ( !Password.equals(etPassword.getText().toString()))
-                                {   etUsername.setError("Username / Password combination does not exist");
-                                etUsername.requestFocus();}
-                                else
-                                {   finish();
-                                startActivity(new Intent(LoginActivity.this, MainActivity.class)); }
+                                if (!Password.equals(etPassword.getText().toString())) {
+                                    etUsername.setError(
+                                            "Username / Password combination does not exist");
+                                    etUsername.requestFocus();
+                                } else {
+                                    finish();
+                                    startActivity(
+                                            new Intent(LoginActivity.this, MainActivity.class));
                                 }
+                            }
                         }
 
                         @Override
@@ -81,6 +85,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void onClick_Register(View view) {
+        finish();
         startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
     }
 

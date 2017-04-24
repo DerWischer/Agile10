@@ -1,10 +1,13 @@
 package adp.group10.roomates.activities;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -12,7 +15,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,7 +23,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import adp.group10.roomates.R;
-import adp.group10.roomates.backend.FirebaseHandler;
 import adp.group10.roomates.backend.model.AvailableItem;
 import adp.group10.roomates.backend.model.ShoppingListEntry;
 import adp.group10.roomates.fragments.AddItemsFragment;
@@ -96,33 +97,32 @@ public class MainActivity extends AppCompatActivity
      * Opens a dialog to add a new item to the shopping list
      */
     public void onClick_fabAddCustomItem(View view) {
-        // TODO Open dialog
-        //Snackbar.make(view, "Open AddItem Dialog", Snackbar.LENGTH_LONG)
-        //        .setAction("Action", null).show();
-        final Dialog dialogAddItem = new Dialog(MainActivity.this);
-        dialogAddItem.setTitle("Custom Item");
-        dialogAddItem.setContentView(R.layout.dialog_add_item);
-        dialogAddItem.show();
+        LayoutInflater inflater = getLayoutInflater();
+        final View dialogView = inflater.inflate(R.layout.dialog_add_item, null);
 
-        final EditText dialogResults = (EditText) dialogAddItem.findViewById(R.id.et_NewItem);
-        Button dialogSubmitButton = (Button) dialogAddItem.findViewById(R.id.b_NewITem);
-
-        dialogSubmitButton.setOnClickListener(new View.OnClickListener(){
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setView(dialogView);
+        builder.setTitle("Custom Item");
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(View v){
-                AvailableItem item = new AvailableItem(dialogResults.getText().toString());
-                ShoppingListEntry shoppingListItem = new ShoppingListEntry(dialogResults.getText().toString(), 1);
+            public void onClick(DialogInterface dialog, int which) {
+                EditText etNewItem = (EditText) dialogView.findViewById(R.id.etNewItem);
+                String name = etNewItem.getText().toString().trim(); // TODO Check for length==0
+                AvailableItem item = new AvailableItem(name);
+                ShoppingListEntry shoppingListItem = new ShoppingListEntry(name,
+                        1); // TODO check for duplicate
 
-                DatabaseReference availableItemsRef = FirebaseDatabase.getInstance().getReference("available-items");
+                DatabaseReference availableItemsRef = FirebaseDatabase.getInstance().getReference(
+                        "available-items");
                 availableItemsRef.push().setValue(item);
 
-                DatabaseReference shoppingListRef = FirebaseDatabase.getInstance().getReference("shopping-list");
+                DatabaseReference shoppingListRef = FirebaseDatabase.getInstance().getReference(
+                        "shopping-list");
                 shoppingListRef.push().setValue(shoppingListItem);
-
-                dialogAddItem.cancel();
             }
-
         });
+
+        builder.show();
 
 
     }

@@ -5,7 +5,7 @@
              tools:context="adp.group10.roomates.fragments.ShoppingListFragment">
 
     <GridView
-        android:id="@+id/gvTest"
+        android:id="@+id/gvList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:columnWidth="100dp"
@@ -13,6 +13,7 @@
         android:numColumns="auto_fit"
         android:padding="16dp"
         android:stretchMode="spacingWidthUniform"
-        android:verticalSpacing="5dp"/>
+        android:verticalSpacing="5dp"
+    android:drawSelectorOnTop="true"/>
 
 </FrameLayout>

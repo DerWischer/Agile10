@@ -1,9 +1,10 @@
 package adp.group10.roomates.fragments;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -15,12 +16,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.EditText;
 import android.widget.GridView;
 
 import com.firebase.ui.database.FirebaseListAdapter;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -51,8 +50,6 @@ public class ShoppingListFragment extends Fragment implements AbsListView.MultiC
 
     public static ShoppingListFragment newInstance() {
         ShoppingListFragment fragment = new ShoppingListFragment();
-        //Bundle args = new Bundle();
-        //fragment.setArguments(args);
         return fragment;
     }
 
@@ -65,7 +62,7 @@ public class ShoppingListFragment extends Fragment implements AbsListView.MultiC
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        gvList = (GridView) getView().findViewById(R.id.gvTest);
+        gvList = (GridView) getView().findViewById(R.id.gvList);
 
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("shopping-list");
         fbAdapter = new ShoppingListFBAdapter(getActivity(), ref);
@@ -129,8 +126,9 @@ public class ShoppingListFragment extends Fragment implements AbsListView.MultiC
 
     @Override
     public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-        MenuInflater inflater = getActivity().getMenuInflater();
+        MenuInflater inflater = mode.getMenuInflater();
         inflater.inflate(R.menu.shopping_list_item_selected, menu);
+        selectedPositions.clear();
         return true;
     }
 
@@ -208,11 +206,33 @@ public class ShoppingListFragment extends Fragment implements AbsListView.MultiC
             Snackbar.make(getView(), "Too many items selected.", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
         } else {
-            int position = selectedPositions.get(0);
-            ShoppingListEntry entry = fbAdapter.getItem(position);
-            Snackbar.make(getView(), "Open Edit Dialog for: " + entry.getName(),
-                    Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
+            final int position = selectedPositions.get(0);
+            final ShoppingListEntry entry = fbAdapter.getItem(position);
+
+            LayoutInflater inflater = getActivity().getLayoutInflater();
+            final View dialogView = inflater.inflate(R.layout.dialog_edit_item, null);
+            final EditText etName = (EditText) dialogView.findViewById(R.id.etName);
+            final EditText etAmount = (EditText) dialogView.findViewById(R.id.etAmount);
+            etName.setText(entry.getName());
+            etAmount.setText("" + entry.getAmount());
+
+            final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setView(dialogView);
+            builder.setTitle("Edit Item");
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    String name = etName.getText().toString();
+                    int amount = Integer.parseInt(etAmount.getText().toString());
+
+                    entry.setName(name);
+                    entry.setAmount(amount);
+                    fbAdapter.getRef(position).setValue(entry);
+                }
+            });
+            builder.show();
+
         }
         selectedPositions.clear();
     }
