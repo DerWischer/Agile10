@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity
     public void onClick_fabAddCustomItem(View view) {
         LayoutInflater inflater = getLayoutInflater();
         final View dialogView = inflater.inflate(R.layout.dialog_add_item, null);
-
+        
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setView(dialogView);
         builder.setTitle("Custom Item");
