@@ -50,13 +50,20 @@ public class LoginActivity extends AppCompatActivity {
                     mTemplateRef.addListenerForSingleValueEvent(new ValueEventListener(){
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
-                            String Password =  dataSnapshot.getValue(String.class).toString();
-                            if ( !Password.equals(etPassword.getText().toString()))
-                            {  etUsername.setError("Username / Password combination does not exist");
+
+                            if (dataSnapshot.getValue() == null) {
+                                etUsername.setError("Username / Password combination does not exist");
+                            }
+                            else {
+                                String Password =  dataSnapshot.getValue(String.class).toString();
+
+                                if ( !Password.equals(etPassword.getText().toString()))
+                                {   etUsername.setError("Username / Password combination does not exist");
                                 etUsername.requestFocus();}
-                            else
-                            {   finish();
+                                else
+                                {   finish();
                                 startActivity(new Intent(LoginActivity.this, MainActivity.class)); }
+                                }
                         }
 
                         @Override
