@@ -27,8 +27,3 @@ android:
 jdk: oraclejdk8
 os:
   - linux
-My build.gradle:
-
-android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
