@@ -29,6 +29,7 @@ import java.util.ArrayList;
 
 import adp.group10.roomates.R;
 import adp.group10.roomates.activities.LoginActivity;
+import adp.group10.roomates.activities.MainActivity;
 import adp.group10.roomates.backend.FirebaseHandler;
 import adp.group10.roomates.backend.model.AvailableItem;
 import adp.group10.roomates.backend.model.ShoppingListEntry;
@@ -74,7 +75,7 @@ public class ShoppingListFragment extends Fragment implements AbsListView.MultiC
                 FirebaseHandler.KEY_SHOPPING_LIST + "/" + LoginActivity.currentGroup);
         fbAdapter = new ShoppingListFBAdapter(getActivity(), ref);
         gvList.setAdapter(fbAdapter);
-
+        gvList.setOnItemClickListener(this);
         gvList.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE_MODAL);
         gvList.setMultiChoiceModeListener(this);
     }
@@ -288,6 +289,7 @@ public class ShoppingListFragment extends Fragment implements AbsListView.MultiC
                 String blockedBy = entry.getBlockedBy();
                 if (!blockedBy.equals(LoginActivity.currentuser)) {
                     return false;
+
                 }
             } else {
                 return false; // Item not blocked
@@ -299,14 +301,23 @@ public class ShoppingListFragment extends Fragment implements AbsListView.MultiC
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        MainActivity currentActivity = (MainActivity) getActivity();
+        currentActivity.incrementShoppingCartItem(fbAdapter.getItem(position).getName(), -1);
         // TODO Decrease amount, if 0 remove item
     }
 
     @Override
     public void onClickAvailableItem(AvailableItem item) {
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(
-                FirebaseHandler.KEY_SHOPPING_LIST);
-        ShoppingListEntry entry = new ShoppingListEntry(item.getName(), 1);
-        //ref.push().setValue(entry); // TODO Increase amount if already in shopping list
+
+        MainActivity currentActivity = (MainActivity) getActivity();
+
+        if (!currentActivity.isDuplicateName(item.getName(), currentActivity.latestShoppingListSnapshot))
+            FirebaseDatabase.getInstance().getReference(
+            FirebaseHandler.KEY_SHOPPING_LIST
+            + "/"
+            + LoginActivity.currentGroup).push().setValue(new ShoppingListEntry(item.getName(), 1));
+        else
+            currentActivity.incrementShoppingCartItem(item.getName(), 1);
+
     }
 }

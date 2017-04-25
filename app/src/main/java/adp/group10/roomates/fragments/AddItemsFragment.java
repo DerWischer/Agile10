@@ -58,6 +58,7 @@ public class AddItemsFragment extends Fragment implements AbsListView.MultiChoic
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
+
         return inflater.inflate(R.layout.fragment_shopping_list, container, false);
     }
 
@@ -190,7 +191,9 @@ public class AddItemsFragment extends Fragment implements AbsListView.MultiChoic
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         AvailableItem item = fbAdapter.getItem(position);
+        Log.v("Iteration", "clicked3");
         mListener.onClickAvailableItem(item);
+
     }
 
     /**
@@ -205,5 +208,6 @@ public class AddItemsFragment extends Fragment implements AbsListView.MultiChoic
      */
     public interface OnFragmentInterActionListener {
         void onClickAvailableItem(AvailableItem item);
+
     }
 }
