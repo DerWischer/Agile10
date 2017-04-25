@@ -40,8 +40,8 @@ public class MainActivity extends AppCompatActivity
         AddItemsFragment.OnFragmentInterActionListener {
 
 
-    private DataSnapshot latestAvailableItemSnapshot;
-    private DataSnapshot latestShoppingListSnapshot;
+    public DataSnapshot latestAvailableItemSnapshot;
+    public DataSnapshot latestShoppingListSnapshot;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -186,13 +186,14 @@ public class MainActivity extends AppCompatActivity
                 DatabaseReference availableItemsRef = FirebaseDatabase.getInstance().getReference(
                         FirebaseHandler.KEY_AVAILABLE_LIST + "/" + LoginActivity.currentGroup);
 
-                if (isDuplicateName(item)) {
-                    incrementShoppingCartItem(item.getName());
-                    onClickAvailableItem(item);
-                } else {
+
+                if(!isDuplicateName(item.getName(), latestShoppingListSnapshot))
                     shoppingListRef.push().setValue(shoppingListItem);
+                else
+                    incrementShoppingCartItem(item.getName(), 1);
+
+                if(!isDuplicateName(item.getName(), latestAvailableItemSnapshot))
                     availableItemsRef.push().setValue(item);
-                }
 
 
             }
@@ -204,12 +205,12 @@ public class MainActivity extends AppCompatActivity
     }
 
     //For AvailableItems only
-    private boolean isDuplicateName(AvailableItem item) {
+    public boolean isDuplicateName(String item, DataSnapshot snapShot) {
 
 
-        for (DataSnapshot snap : latestAvailableItemSnapshot.getChildren()) {
+        for (DataSnapshot snap : snapShot.getChildren()) {
             String currentIteratingItem = snap.getValue(AvailableItem.class).getName();
-            if (currentIteratingItem.equals(item.getName())) {
+            if (currentIteratingItem.equals(item)) {
                 return true;
             }
 
@@ -218,14 +219,12 @@ public class MainActivity extends AppCompatActivity
         return false;
     }
 
-    private void incrementShoppingCartItem(String Name) {
+    public void incrementShoppingCartItem(String Name, int increment) {
         for (DataSnapshot snap : latestShoppingListSnapshot.getChildren()) {
             ShoppingListEntry currentIteratingItem = snap.getValue(ShoppingListEntry.class);
             Log.v("Iteration", currentIteratingItem.getName());
             if (currentIteratingItem.getName().equals(Name)) {
-                Log.v("Duplicate1", Integer.toString(currentIteratingItem.getAmount()));
-                currentIteratingItem.setAmount(currentIteratingItem.getAmount() + 1);
-                Log.v("Duplicate2", Integer.toString(currentIteratingItem.getAmount()));
+                currentIteratingItem.setAmount(currentIteratingItem.getAmount() + increment);
                 snap.getRef().setValue(currentIteratingItem);
                 return;
             }
@@ -233,6 +232,7 @@ public class MainActivity extends AppCompatActivity
         }
         return;
     }
+
 
     @Override
     public void onClickAvailableItem(AvailableItem item) {
