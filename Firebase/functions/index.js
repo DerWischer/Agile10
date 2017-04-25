@@ -1,5 +1,4 @@
 const functions = require('firebase-functions');
-
 const admin = require('firebase-admin');
 admin.initializeApp(functions.config().firebase);
 
@@ -9,6 +8,14 @@ admin.initializeApp(functions.config().firebase);
 // exports.helloWorld = functions.https.onRequest((request, response) => {
 //  response.send("Hello from Firebase!");
 // });
+
+class Transaction {
+  constructor(sender, receiver, amount) {
+    this.sender = sender;
+    this.receiver = receiver;
+    this.amount = amount;
+  }
+}
 
 
 exports.updadeBalance = functions.database.ref('/GROUPUSER/{groupName}/{userName}/TRANSACTIONS/{transactionId}').onWrite(event =>
@@ -53,7 +60,8 @@ exports.updadeBalance = functions.database.ref('/GROUPUSER/{groupName}/{userName
 exports.requestSettlements = functions.https.onRequest((request, response) => {
     var groupId = request.get('groupId');
 
-    solveSettlements(groupId);
+    var transactions = solveSettlement(groupId);
+    console.log("transactions = " + transactions);
     end();
 });
 
@@ -65,7 +73,7 @@ function setBalance(userId, groupId, newBalance){
     //set the balance of the user in the group to newBalance
 }
 
-function solveSettlements(groupId){
+function solveSettlement(groupId){
     var database = admin.database();
     database.ref('/GROUPUSER/' + groupId).once('value').then(function(snapshot) {
         var userList = snapshot.val();      // userList = all data about this group's users
@@ -82,22 +90,32 @@ function solveSettlements(groupId){
 
         var solvedTransactions = [];
 
+        for (var j = 0; j < userBalances.length; j++) {
+          if (userBalances[j] == 0) {
+            userBalances.splice(j, 1);
+            users.splice(j, 1);
+          }
+        }
 
         for (var j = 0; j < userBalances.length; j++){    // check for users with same absolute balance to minimize transactions
           var jBalance = userBalances[j];
           for(var i = 0; i < userBalances.length; i++){
             var iBalance = userBalances[i];
-            if(Math.abs(jBalance) == Math.abs(iBalance) && !(j == i) && !(jBalance == 0)){
+            if(Math.abs(jBalance) == Math.abs(iBalance) && !(j == i) && !(jBalance == 0) && jBalance != iBalance){
                 if(jBalance > iBalance){
-//                    solvedTransactions[solvedTransactions.length + 1] = new transaction(users[i], users[j], jBalance);
-                    solvedTransactions.push(new transaction(users[i], users[j], jBalance));
-                    userBalances[i] = 0;
-                    userBalances[j] = 0;
+//                    solvedTransactions[solvedTransactions.length + 1] = new Transaction(users[i], users[j], jBalance);
+                    solvedTransactions.push(new Transaction(users[i], users[j], jBalance));
+                    userBalances.splice(i, 1);
+                    userBalances.splice(j, 1);
+                    users.splice(i, 1);
+                    users.splice(j, 1);
                 } else if (iBalance > jBalance) {
-//                    solvedTransactions[solvedTransactions.length + 1] = new transaction(users[j], users[i], jBalance);
-                    solvedTransactions.push(new transaction(users[j], users[i], iBalance));
-                    userBalances[i] = 0;
-                    userBalances[j] = 0;
+//                    solvedTransactions[solvedTransactions.length + 1] = new Transaction(users[j], users[i], jBalance);
+                    solvedTransactions.push(new Transaction(users[j], users[i], iBalance));
+                    userBalances.splice(i, 1);
+                    userBalances.splice(j, 1);
+                    users.splice(i, 1);
+                    users.splice(j, 1);
                 }
             }
           }
@@ -116,7 +134,7 @@ function solveSettlements(groupId){
 
           var transactionAmount = Math.min(max, Math.abs(min));
 
-          solvedTransactions.push(new transaction(users[minIndex], users[maxIndex], transactionAmount));
+          solvedTransactions.push(new Transaction(users[minIndex], users[maxIndex], transactionAmount));
           userBalances[minIndex] += transactionAmount;
           userBalances[maxIndex] -= transactionAmount;
 
@@ -129,11 +147,12 @@ function solveSettlements(groupId){
             users.splice(maxIndex, 1);
           }
         }
+        return solvedTransactions;
 /*        for (var j = 0; j < userBalances.length; j++){
           if(userBalances[j] == Math.min.apply(Math, userBalances)){
             for (var i = 0; i < userBalances.length; i++){
                 if(userBalances[i] == Math.max.apply(Math, userBalances) && !(j == i) && !(jBalance == 0)){
-                    solvedTransactions[solvedTransactions.length + 1] = new transaction(users[j], users[i], jBalance);
+                    solvedTransactions[solvedTransactions.length + 1] = new Transaction(users[j], users[i], jBalance);
                     userBalances[i] = 0;
                     userBalances[j] = 0;
                 }
