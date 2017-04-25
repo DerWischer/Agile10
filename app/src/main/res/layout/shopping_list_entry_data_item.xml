@@ -6,54 +6,46 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="@dimen/item_tile_width"
     android:layout_height="@dimen/item_tile_height"
-    android:background="@drawable/selected_shopping_list_item_background">
+    android:background="@drawable/selected_shopping_list_item_background"
+    >
 
-    <TableLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical" android:padding="5dp">
+    <android.support.constraint.ConstraintLayout android:layout_width="match_parent"
+                                                 android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/etName"
+            android:layout_width="84dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_span="2"
+            android:elegantTextHeight="false"
+            android:gravity="center_horizontal"
+            android:hint="Item Name"
+            android:textAppearance="@android:style/TextAppearance.Material.Medium"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent" app:layout_constraintTop_toTopOf="parent"/>
 
-        <TableRow android:layout_width="match_parent" android:layout_height="wrap_content"
-                  android:layout_marginBottom="5dp">
-            <TextView
-                android:id="@+id/etName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_span="2"
-                android:elegantTextHeight="false"
-                android:gravity="center_horizontal"
-                android:text="Name"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            />
-        </TableRow>
+        <TextView
+            android:id="@+id/etAmount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp" android:text="1"
+            app:layout_constraintRight_toRightOf="parent" app:layout_constraintTop_toTopOf="parent"/>
 
-        <TableRow android:layout_width="match_parent" android:layout_height="wrap_content"
-                  android:layout_marginBottom="5dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Amount:"/>
-            <TextView
-                android:id="@+id/etAmount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Amount"/>
-        </TableRow>
+        <TextView
+            android:id="@+id/etBlockedBy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            android:drawablePadding="5dp"
+            android:text="blockedBy"
+            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintLeft_toLeftOf="parent"/>
+    </android.support.constraint.ConstraintLayout>
 
-        <TableRow android:layout_width="match_parent" android:layout_height="wrap_content">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Blocked by:"/>
-        </TableRow>
 
-        <TableRow android:layout_width="match_parent" android:layout_height="wrap_content"
-                  android:layout_marginBottom="5dp">
-            <TextView
-                android:id="@+id/etBlockedBy"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="No one"/>
-        </TableRow>
-    </TableLayout>
 </adp.group10.roomates.CheckableShoppingListItemLayout>

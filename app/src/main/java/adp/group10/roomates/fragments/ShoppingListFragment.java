@@ -124,7 +124,7 @@ public class ShoppingListFragment extends Fragment implements AbsListView.MultiC
         } else {
             selectedPositions.remove(selectedPositions.indexOf(position));
         }
-        mode.setTitle(selectedPositions.size() + " selected");
+        //mode.setTitle("" + selectedPositions.size());
     }
 
     @Override
