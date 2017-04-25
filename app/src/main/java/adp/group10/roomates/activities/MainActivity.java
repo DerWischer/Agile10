@@ -19,6 +19,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -35,7 +36,8 @@ import adp.group10.roomates.fragments.ShoppingListFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-        ShoppingListFragment.OnFragmentInteractionListener, AddItemsFragment.OnFragmentInterActionListener{
+        ShoppingListFragment.OnFragmentInteractionListener,
+        AddItemsFragment.OnFragmentInterActionListener {
 
 
     private DataSnapshot latestAvailableItemSnapshot;
@@ -60,11 +62,35 @@ public class MainActivity extends AppCompatActivity
         // Navigation View
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        View header = navigationView.getHeaderView(0);
+        TextView tvUserName = (TextView) header.findViewById(R.id.tvUserName);
+        TextView tvGroupName = (TextView) header.findViewById(R.id.tvGroupName);
+        final TextView tvUserBalance = (TextView) header.findViewById(R.id.tvUserBalance);
+        tvUserName.setText(LoginActivity.currentuser);
+        tvGroupName.setText(LoginActivity.currentGroup);
+
+        DatabaseReference balanceRef = FirebaseDatabase.getInstance().getReference(
+                FirebaseHandler.KEY_GROUPUSER + "/" + LoginActivity.currentGroup + "/"
+                        + LoginActivity.currentuser + "/" + "BALANCE");
+        balanceRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Object balance = dataSnapshot.getValue();
+                tvUserBalance.setText("" + balance);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
 
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference availableItemRef = database.getReference(FirebaseHandler.KEY_AVAILABLE_LIST + "/" + LoginActivity.currentGroup);
-        DatabaseReference shoppingListRef = database.getReference(FirebaseHandler.KEY_SHOPPING_LIST + "/" + LoginActivity.currentGroup);
+        DatabaseReference availableItemRef = database.getReference(
+                FirebaseHandler.KEY_AVAILABLE_LIST + "/" + LoginActivity.currentGroup);
+        DatabaseReference shoppingListRef = database.getReference(
+                FirebaseHandler.KEY_SHOPPING_LIST + "/" + LoginActivity.currentGroup);
 
         availableItemRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -160,18 +186,13 @@ public class MainActivity extends AppCompatActivity
                 DatabaseReference availableItemsRef = FirebaseDatabase.getInstance().getReference(
                         FirebaseHandler.KEY_AVAILABLE_LIST + "/" + LoginActivity.currentGroup);
 
-                if (isDuplicateName(item))
-                {
+                if (isDuplicateName(item)) {
                     incrementShoppingCartItem(item.getName());
                     onClickAvailableItem(item);
-                }
-                else
-                {
+                } else {
                     shoppingListRef.push().setValue(shoppingListItem);
                     availableItemsRef.push().setValue(item);
                 }
-
-
 
 
             }
@@ -183,20 +204,21 @@ public class MainActivity extends AppCompatActivity
     }
 
     //For AvailableItems only
-    private boolean isDuplicateName(AvailableItem item){
+    private boolean isDuplicateName(AvailableItem item) {
 
 
         for (DataSnapshot snap : latestAvailableItemSnapshot.getChildren()) {
             String currentIteratingItem = snap.getValue(AvailableItem.class).getName();
-            if (currentIteratingItem.equals(item.getName()))
-                return  true;
+            if (currentIteratingItem.equals(item.getName())) {
+                return true;
+            }
 
         }
 
-        return  false;
+        return false;
     }
 
-    private void incrementShoppingCartItem(String Name){
+    private void incrementShoppingCartItem(String Name) {
         for (DataSnapshot snap : latestShoppingListSnapshot.getChildren()) {
             ShoppingListEntry currentIteratingItem = snap.getValue(ShoppingListEntry.class);
             Log.v("Iteration", currentIteratingItem.getName());
@@ -215,7 +237,9 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onClickAvailableItem(AvailableItem item) {
         // TODO Increment in ShoppingListFragment
-        ShoppingListFragment fragment = (ShoppingListFragment) getSupportFragmentManager().findFragmentById(R.id.fShoppingList);
+        ShoppingListFragment fragment =
+                (ShoppingListFragment) getSupportFragmentManager().findFragmentById(
+                        R.id.fShoppingList);
         fragment.onClickAvailableItem(item);
     }
 }
