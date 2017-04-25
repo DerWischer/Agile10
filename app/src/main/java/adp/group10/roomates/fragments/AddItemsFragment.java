@@ -190,7 +190,9 @@ public class AddItemsFragment extends Fragment implements AbsListView.MultiChoic
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         AvailableItem item = fbAdapter.getItem(position);
+
         mListener.onClickAvailableItem(item);
+
     }
 
     /**
@@ -205,5 +207,6 @@ public class AddItemsFragment extends Fragment implements AbsListView.MultiChoic
      */
     public interface OnFragmentInterActionListener {
         void onClickAvailableItem(AvailableItem item);
+
     }
 }
