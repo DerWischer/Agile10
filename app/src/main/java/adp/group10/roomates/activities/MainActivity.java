@@ -27,6 +27,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import adp.group10.roomates.R;
+import adp.group10.roomates.backend.FirebaseHandler;
 import adp.group10.roomates.backend.model.AvailableItem;
 import adp.group10.roomates.backend.model.ShoppingListEntry;
 import adp.group10.roomates.fragments.AddItemsFragment;
@@ -62,13 +63,8 @@ public class MainActivity extends AppCompatActivity
 
 
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference availableItemRef = database.getReference("available-items");
-        DatabaseReference shoppingListRef = database.getReference("shopping-list");
-        // Attach a listener to read the data at our posts reference
-
-
-        //Log.v("test2", mostRecentSnapshot.toString());
-
+        DatabaseReference availableItemRef = database.getReference(FirebaseHandler.KEY_AVAILABLE_LIST + "/" + LoginActivity.currentGroup);
+        DatabaseReference shoppingListRef = database.getReference(FirebaseHandler.KEY_SHOPPING_LIST + "/" + LoginActivity.currentGroup);
 
         availableItemRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -159,10 +155,10 @@ public class MainActivity extends AppCompatActivity
                         1); // TODO check for duplicate
 
                 DatabaseReference shoppingListRef = FirebaseDatabase.getInstance().getReference(
-                        "shopping-list");
+                        FirebaseHandler.KEY_SHOPPING_LIST + "/" + LoginActivity.currentGroup);
 
                 DatabaseReference availableItemsRef = FirebaseDatabase.getInstance().getReference(
-                        "available-items");
+                        FirebaseHandler.KEY_AVAILABLE_LIST + "/" + LoginActivity.currentGroup);
 
                 if (isDuplicateName(item))
                 {

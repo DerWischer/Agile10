@@ -90,7 +90,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void onClick_Register(View view) {
-        finish();
         startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
     }
 

@@ -19,6 +19,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import org.w3c.dom.Text;
 
 import adp.group10.roomates.R;
+import adp.group10.roomates.backend.FirebaseHandler;
 import adp.group10.roomates.backend.model.Transaction;
 
 public class SettlementActivity extends AppCompatActivity {
@@ -36,8 +37,7 @@ public class SettlementActivity extends AppCompatActivity {
         super.onStart();
         final ListView lvSettlement = (ListView) findViewById(R.id.lvSettlements);
 
-        // TODO Update key to currentGroup
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("transactions/dummyGroup2");
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(FirebaseHandler.KEY_TRANSACTIONS + "/" + LoginActivity.currentGroup);
         FirebaseListAdapter fbAdapter = new FirebaseListAdapter<Transaction>(this, Transaction.class, R.layout.settlement_list_item, ref) {
             @Override
             protected void populateView(View view, Transaction model, final int position) {

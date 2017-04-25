@@ -3,21 +3,21 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical"
-android:padding="32dp">
+              android:padding="32dp">
     <EditText
         android:id="@+id/etName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:hint="Item name"
         android:inputType="text"
-        android:maxLines="1"
-        android:hint="Item name"/>
+        android:maxLines="1"/>
 
     <EditText
         android:id="@+id/etAmount"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:hint="Item name"
         android:inputType="number"
-        android:maxLines="1"
-        android:hint="Item name"/>
+        android:maxLines="1"/>
 
 </LinearLayout>
