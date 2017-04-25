@@ -51,6 +51,8 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
+
         // App Drawer
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -224,7 +226,14 @@ public class MainActivity extends AppCompatActivity
             ShoppingListEntry currentIteratingItem = snap.getValue(ShoppingListEntry.class);
             Log.v("Iteration", currentIteratingItem.getName());
             if (currentIteratingItem.getName().equals(Name)) {
-                currentIteratingItem.setAmount(currentIteratingItem.getAmount() + increment);
+                if (currentIteratingItem.getAmount() + increment <= 0){
+                    //TODO delete current node
+                }
+                else{
+                    currentIteratingItem.setAmount(currentIteratingItem.getAmount() + increment);
+                    snap.getRef().setValue(currentIteratingItem);
+                }
+
                 snap.getRef().setValue(currentIteratingItem);
                 return;
             }

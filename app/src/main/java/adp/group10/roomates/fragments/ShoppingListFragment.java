@@ -75,7 +75,7 @@ public class ShoppingListFragment extends Fragment implements AbsListView.MultiC
                 FirebaseHandler.KEY_SHOPPING_LIST + "/" + LoginActivity.currentGroup);
         fbAdapter = new ShoppingListFBAdapter(getActivity(), ref);
         gvList.setAdapter(fbAdapter);
-
+        gvList.setOnItemClickListener(this);
         gvList.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE_MODAL);
         gvList.setMultiChoiceModeListener(this);
     }
