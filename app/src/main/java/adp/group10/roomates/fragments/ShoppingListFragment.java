@@ -299,6 +299,6 @@ public class ShoppingListFragment extends Fragment implements AbsListView.MultiC
     public void onClickAvailableItem(AvailableItem item) {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference(FirebaseHandler.KEY_SHOPPING_LIST);
         ShoppingListEntry entry = new ShoppingListEntry(item.getName(), 1);
-        ref.push().setValue(entry); // TODO Increase amount if already in shopping list
+        //ref.push().setValue(entry); // TODO Increase amount if already in shopping list
     }
 }
