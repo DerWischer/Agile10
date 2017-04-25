@@ -81,6 +81,9 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_group_create:
                 startActivity(new Intent(this, CreateGroupActivity.class));
                 break;
+            case R.id.nav_settlement_request:
+                startActivity(new Intent(this, SettlementActivity.class));
+                break;
         }
 
         drawer.closeDrawer(GravityCompat.START);
