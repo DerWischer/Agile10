@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -19,10 +20,14 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import adp.group10.roomates.R;
+import adp.group10.roomates.backend.FirebaseHandler;
 import adp.group10.roomates.backend.model.AvailableItem;
 import adp.group10.roomates.backend.model.ShoppingListEntry;
 import adp.group10.roomates.fragments.AddItemsFragment;
@@ -31,6 +36,10 @@ import adp.group10.roomates.fragments.ShoppingListFragment;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         ShoppingListFragment.OnFragmentInteractionListener, AddItemsFragment.OnFragmentInterActionListener{
+
+
+    private DataSnapshot latestAvailableItemSnapshot;
+    private DataSnapshot latestShoppingListSnapshot;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +60,37 @@ public class MainActivity extends AppCompatActivity
         // Navigation View
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference availableItemRef = database.getReference(FirebaseHandler.KEY_AVAILABLE_LIST + "/" + LoginActivity.currentGroup);
+        DatabaseReference shoppingListRef = database.getReference(FirebaseHandler.KEY_SHOPPING_LIST + "/" + LoginActivity.currentGroup);
+
+        availableItemRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                latestAvailableItemSnapshot = dataSnapshot;
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
+
+        shoppingListRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                latestShoppingListSnapshot = dataSnapshot;
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
     }
 
     @Override
@@ -80,6 +120,9 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.nav_group_create:
                 startActivity(new Intent(this, CreateGroupActivity.class));
+                break;
+            case R.id.nav_settlement_request:
+                startActivity(new Intent(this, SettlementActivity.class));
                 break;
         }
 
@@ -111,19 +154,62 @@ public class MainActivity extends AppCompatActivity
                 ShoppingListEntry shoppingListItem = new ShoppingListEntry(name,
                         1); // TODO check for duplicate
 
-                DatabaseReference availableItemsRef = FirebaseDatabase.getInstance().getReference(
-                        "available-items");
-                availableItemsRef.push().setValue(item);
-
                 DatabaseReference shoppingListRef = FirebaseDatabase.getInstance().getReference(
-                        "shopping-list");
-                shoppingListRef.push().setValue(shoppingListItem);
+                        FirebaseHandler.KEY_SHOPPING_LIST + "/" + LoginActivity.currentGroup);
+
+                DatabaseReference availableItemsRef = FirebaseDatabase.getInstance().getReference(
+                        FirebaseHandler.KEY_AVAILABLE_LIST + "/" + LoginActivity.currentGroup);
+
+                if (isDuplicateName(item))
+                {
+                    incrementShoppingCartItem(item.getName());
+                    onClickAvailableItem(item);
+                }
+                else
+                {
+                    shoppingListRef.push().setValue(shoppingListItem);
+                    availableItemsRef.push().setValue(item);
+                }
+
+
+
+
             }
         });
 
         builder.show();
 
 
+    }
+
+    //For AvailableItems only
+    private boolean isDuplicateName(AvailableItem item){
+
+
+        for (DataSnapshot snap : latestAvailableItemSnapshot.getChildren()) {
+            String currentIteratingItem = snap.getValue(AvailableItem.class).getName();
+            if (currentIteratingItem.equals(item.getName()))
+                return  true;
+
+        }
+
+        return  false;
+    }
+
+    private void incrementShoppingCartItem(String Name){
+        for (DataSnapshot snap : latestShoppingListSnapshot.getChildren()) {
+            ShoppingListEntry currentIteratingItem = snap.getValue(ShoppingListEntry.class);
+            Log.v("Iteration", currentIteratingItem.getName());
+            if (currentIteratingItem.getName().equals(Name)) {
+                Log.v("Duplicate1", Integer.toString(currentIteratingItem.getAmount()));
+                currentIteratingItem.setAmount(currentIteratingItem.getAmount() + 1);
+                Log.v("Duplicate2", Integer.toString(currentIteratingItem.getAmount()));
+                snap.getRef().setValue(currentIteratingItem);
+                return;
+            }
+
+        }
+        return;
     }
 
     @Override
