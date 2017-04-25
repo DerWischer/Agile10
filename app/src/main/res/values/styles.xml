@@ -14,7 +14,6 @@
         <item name="windowActionModeOverlay">true</item>
         <item name="actionModeStyle">@style/ActionModeTheme</item>
         <item name="actionModeCloseButtonStyle">@style/ActionModeText</item>
-
     </style>
 
     <style name="ActionModeTheme" parent="@style/Widget.AppCompat.ActionMode">
