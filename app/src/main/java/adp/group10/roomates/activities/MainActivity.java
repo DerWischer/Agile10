@@ -227,14 +227,14 @@ public class MainActivity extends AppCompatActivity
             Log.v("Iteration", currentIteratingItem.getName());
             if (currentIteratingItem.getName().equals(Name)) {
                 if (currentIteratingItem.getAmount() + increment <= 0){
-                    //TODO delete current node
+                    snap.getRef().removeValue();
                 }
                 else{
                     currentIteratingItem.setAmount(currentIteratingItem.getAmount() + increment);
                     snap.getRef().setValue(currentIteratingItem);
                 }
 
-                snap.getRef().setValue(currentIteratingItem);
+
                 return;
             }
 
