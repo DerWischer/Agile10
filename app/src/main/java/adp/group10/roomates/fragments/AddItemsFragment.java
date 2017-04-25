@@ -1,85 +1,88 @@
 package adp.group10.roomates.fragments;
 
+import android.app.AlertDialog;
 import android.content.Context;
-import android.net.Uri;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AdapterView;
+import android.widget.EditText;
+import android.widget.GridView;
+import android.widget.TextView;
+
+import com.firebase.ui.database.FirebaseListAdapter;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.ArrayList;
 
 import adp.group10.roomates.R;
+import adp.group10.roomates.backend.FirebaseHandler;
+import adp.group10.roomates.backend.model.AvailableItem;
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link AddItemsFragment.OnFragmentInteractionListener} interface
+ * {@link AddItemsFragment.OnFragmentInterActionListener} interface
  * to handle interaction events.
  * Use the {@link AddItemsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AddItemsFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+public class AddItemsFragment extends Fragment implements AbsListView.MultiChoiceModeListener,
+        AdapterView.OnItemClickListener {
+    private OnFragmentInterActionListener mListener;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private GridView gvList;
+    private FirebaseListAdapter<AvailableItem> fbAdapter;
 
-    private OnFragmentInteractionListener mListener;
-
-    public AddItemsFragment() {
-        // Required empty public constructor
+    public AddItemsFragment() { // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment AddItemsFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static AddItemsFragment newInstance(String param1, String param2) {
+    public static AddItemsFragment newInstance() {
         AddItemsFragment fragment = new AddItemsFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
         return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_add_items, container, false);
+        return inflater.inflate(R.layout.fragment_shopping_list, container, false);
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        gvList = (GridView) getView().findViewById(R.id.gvList);
+
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(FirebaseHandler.KEY_AVAILABLE_LIST);
+        fbAdapter = new FirebaseListAdapter<AvailableItem>(getActivity(), AvailableItem.class, R.layout.available_list_item, ref) {
+            @Override
+            protected void populateView(View view, AvailableItem model, int position) {
+                TextView tvItemName = (TextView) view.findViewById(R.id.tvItemName);
+                tvItemName.setText(model.getName());
+            }
+        };
+        gvList.setAdapter(fbAdapter);
+        gvList.setOnItemClickListener(this);
+        gvList.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE_MODAL);
+        gvList.setMultiChoiceModeListener(this);
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+        if (context instanceof OnFragmentInterActionListener) {
+            mListener = (OnFragmentInterActionListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -92,6 +95,102 @@ public class AddItemsFragment extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
+        if (checked) {
+            selectedPositions.add(position);
+        } else {
+            selectedPositions.remove(selectedPositions.indexOf(position));
+        }
+        mode.setTitle(selectedPositions.size() + " selected");
+    }
+
+    private ArrayList<Integer> selectedPositions = new ArrayList<>();
+
+
+    @Override
+    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+        MenuInflater inflater = mode.getMenuInflater();
+        inflater.inflate(R.menu.available_list_item_selected, menu);
+        selectedPositions.clear();
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+        return false;
+    }
+
+    @Override
+    public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_delete:
+                delete();
+                break;
+            case R.id.menu_edit:
+                edit();
+                break;
+            default:
+                return false;
+        }
+        mode.finish();
+        return true;
+    }
+
+    @Override
+    public void onDestroyActionMode(ActionMode mode) {
+
+    }
+
+    /**
+     * Deletes all selected items in the available list
+     */
+    private void delete() {
+        for (int position : selectedPositions) {
+            fbAdapter.getRef(position).removeValue();
+        }
+        selectedPositions.clear();
+    }
+
+    /**
+     * Opens a dialog to edit one selected item in the shopping list
+     */
+    private void edit() {
+        if (selectedPositions.size() != 1) {
+            Snackbar.make(getView(), "Too many items selected.", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+        } else {
+            final int position = selectedPositions.get(0);
+            final AvailableItem item = fbAdapter.getItem(position);
+
+            LayoutInflater inflater = getActivity().getLayoutInflater();
+            final View dialogView = inflater.inflate(R.layout.dialog_add_item, null);
+            final EditText etName = (EditText) dialogView.findViewById(R.id.etNewItem);
+            etName.setText(item.getName());
+
+            final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setView(dialogView);
+            builder.setTitle("Edit Item");
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    String name = etName.getText().toString().trim();
+                    item.setName(name);
+                    fbAdapter.getRef(position).setValue(item);
+                }
+            });
+            builder.show();
+
+        }
+        selectedPositions.clear();
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        AvailableItem item = fbAdapter.getItem(position);
+        mListener.onClickAvailableItem(item);
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -102,8 +201,7 @@ public class AddItemsFragment extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+    public interface OnFragmentInterActionListener {
+        void onClickAvailableItem(AvailableItem item);
     }
 }

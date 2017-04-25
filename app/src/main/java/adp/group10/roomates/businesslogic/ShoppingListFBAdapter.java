@@ -1,15 +1,10 @@
 package adp.group10.roomates.businesslogic;
 
 import android.app.Activity;
-import android.content.Intent;
-import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseListAdapter;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
 import adp.group10.roomates.R;
@@ -35,13 +30,13 @@ public class ShoppingListFBAdapter extends FirebaseListAdapter<ShoppingListEntry
 
     @Override
     protected void populateView(View view, ShoppingListEntry model, final int position) {
-        TextView tvName = (TextView) view.findViewById(R.id.entryName);
-        TextView tvAmount = (TextView) view.findViewById(R.id.entryAmount);
-        TextView tvPrice = (TextView) view.findViewById(R.id.entryPrice);
+        TextView tvName = (TextView) view.findViewById(R.id.etName);
+        TextView tvAmount = (TextView) view.findViewById(R.id.etAmount);
+        TextView tvBlockedBy = (TextView) view.findViewById(R.id.etBlockedBy);
 
         ShoppingListEntry entry = getItem(position);
         tvName.setText(entry.getName());
         tvAmount.setText("" + entry.getAmount());
-        tvPrice.setText("" + entry.getPrice());
+        tvBlockedBy.setText(entry.getBlockedBy());
     }
 }

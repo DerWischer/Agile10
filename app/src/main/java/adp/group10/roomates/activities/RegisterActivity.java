@@ -101,7 +101,8 @@ public class RegisterActivity extends AppCompatActivity {
                     Map<String, User> users = new HashMap<String, User>();
                     User vuser = new User(etEmail.getText().toString(),
                             etPhone.getText().toString(), etPassword.getText().toString());
-                    usersRef.child(etUsername.getText().toString()).setValue(vuser);
+                    usersRef.child(etUsername.getText().toString()).setValue(vuser); // TODO This will override an exisiting user
+
 
                     //startActivity(new Intent(RegisterActivity.this, ShoppingListActivity.class))
 

@@ -1,6 +1,8 @@
 package adp.group10.roomates.fragments;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,7 +16,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
-import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.GridView;
 
 import com.firebase.ui.database.FirebaseListAdapter;
@@ -24,6 +27,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 
 import adp.group10.roomates.R;
+import adp.group10.roomates.backend.FirebaseHandler;
+import adp.group10.roomates.backend.model.AvailableItem;
 import adp.group10.roomates.backend.model.ShoppingListEntry;
 import adp.group10.roomates.businesslogic.ShoppingListFBAdapter;
 
@@ -35,7 +40,8 @@ import adp.group10.roomates.businesslogic.ShoppingListFBAdapter;
  * Use the {@link ShoppingListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ShoppingListFragment extends Fragment implements AbsListView.MultiChoiceModeListener {
+public class ShoppingListFragment extends Fragment implements AbsListView.MultiChoiceModeListener, AddItemsFragment.OnFragmentInterActionListener,
+        AdapterView.OnItemClickListener {
 
     private OnFragmentInteractionListener mListener;
 
@@ -47,8 +53,6 @@ public class ShoppingListFragment extends Fragment implements AbsListView.MultiC
 
     public static ShoppingListFragment newInstance() {
         ShoppingListFragment fragment = new ShoppingListFragment();
-        //Bundle args = new Bundle();
-        //fragment.setArguments(args);
         return fragment;
     }
 
@@ -61,7 +65,7 @@ public class ShoppingListFragment extends Fragment implements AbsListView.MultiC
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        gvList = (GridView) getView().findViewById(R.id.gvTest);
+        gvList = (GridView) getView().findViewById(R.id.gvList);
 
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("shopping-list");
         fbAdapter = new ShoppingListFBAdapter(getActivity(), ref);
@@ -125,8 +129,9 @@ public class ShoppingListFragment extends Fragment implements AbsListView.MultiC
 
     @Override
     public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-        MenuInflater inflater = getActivity().getMenuInflater();
+        MenuInflater inflater = mode.getMenuInflater();
         inflater.inflate(R.menu.shopping_list_item_selected, menu);
+        selectedPositions.clear();
         return true;
     }
 
@@ -137,7 +142,6 @@ public class ShoppingListFragment extends Fragment implements AbsListView.MultiC
 
     @Override
     public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-        String snackMsg = "empty";
         switch (item.getItemId()) {
             case R.id.menu_delete:
                 delete();
@@ -163,26 +167,138 @@ public class ShoppingListFragment extends Fragment implements AbsListView.MultiC
 
     }
 
+    /**
+     * Deletes all selected items in the shopping list
+     */
     private void delete() {
         for (int position : selectedPositions) {
             fbAdapter.getRef(position).removeValue();
         }
+        selectedPositions.clear();
     }
 
+    /**
+     * Blocks all selected items in the shopping list
+     */
     private void block() {
-        Snackbar.make(getView(), "Block Item", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
+        String user = "dummy"; // TODO Get current user
+
+        for (int position : selectedPositions) {
+            ShoppingListEntry entry = fbAdapter.getItem(position);
+
+            if (!entry.isBlocked()) {
+                entry.setBlockedBy(user);
+            } else {
+                String blockedBy = entry.getBlockedBy();
+                if (blockedBy.equals(user)) {
+                    entry.setBlockedBy(null); // Unblock item
+                }
+            }
+
+            fbAdapter.getRef(position).setValue(entry);
+        }
+        selectedPositions.clear();
     }
 
+    /**
+     * Opens a dialog to edit one selected item in the shopping list
+     */
     private void edit() {
-        Snackbar.make(getView(), "Edit Item", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
+        if (selectedPositions.size() != 1) {
+            Snackbar.make(getView(), "Too many items selected.", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+        } else {
+            final int position = selectedPositions.get(0);
+            final ShoppingListEntry entry = fbAdapter.getItem(position);
+
+            LayoutInflater inflater = getActivity().getLayoutInflater();
+            final View dialogView = inflater.inflate(R.layout.dialog_edit_item, null);
+            final EditText etName = (EditText) dialogView.findViewById(R.id.etName);
+            final EditText etAmount = (EditText) dialogView.findViewById(R.id.etAmount);
+            etName.setText(entry.getName());
+            etAmount.setText("" + entry.getAmount());
+
+            final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setView(dialogView);
+            builder.setTitle("Edit Item");
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    String name = etName.getText().toString().trim();
+                    int amount = Integer.parseInt(etAmount.getText().toString());
+
+                    entry.setName(name);
+                    entry.setAmount(amount);
+                    fbAdapter.getRef(position).setValue(entry);
+                }
+            });
+            builder.show();
+
+        }
+        selectedPositions.clear();
     }
 
+    /**
+     * Opens a dialog to buy all selected items in the shpopping list
+     */
     private void buy() {
-        Snackbar.make(getView(), "Buy Item", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
+        // TODO Get price from a dialog
+        double price = 0;
+
+        // TODO Get current user and group
+        String user = "dummy";
+        String group = "dummyGroup";
+
+        if (isAllowedToBuy(user)) {
+            Snackbar.make(getView(), "Open Buy Item(s) dialog", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+
+
+            DatabaseReference transactionReference = FirebaseDatabase.getInstance().getReference(
+                    FirebaseHandler.KEY_GROUPUSER + "/" + group + "/" + user + "/"
+                            + FirebaseHandler.KEY_TRANSACTIONS);
+            transactionReference.push().setValue(price);
+            delete();
+        } else {
+            Snackbar.make(getView(), "You must block all selected items first",
+                    Snackbar.LENGTH_LONG).show();
+        }
+        selectedPositions.clear();
     }
 
+    /**
+     * Checks if the specified user is allowed to buy the currently selected items.
+     *
+     * @param user Current user
+     * @return True if user may buy, False otherwise
+     */
+    private boolean isAllowedToBuy(String user) {
+        for (int position : selectedPositions) {
+            ShoppingListEntry entry = fbAdapter.getItem(position);
 
+            if (entry.isBlocked()) {
+                String blockedBy = entry.getBlockedBy();
+                if (!blockedBy.equals(user)) {
+                    return false;
+                }
+            } else {
+                return false; // Item not blocked
+            }
+        }
+
+        return true;
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        // TODO Decrease amount, if 0 remove item
+    }
+
+    @Override
+    public void onClickAvailableItem(AvailableItem item) {
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(FirebaseHandler.KEY_SHOPPING_LIST);
+        ShoppingListEntry entry = new ShoppingListEntry(item.getName(), 1);
+        ref.push().setValue(entry); // TODO Increase amount if already in shopping list
+    }
 }

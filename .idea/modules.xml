@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Agile10.iml" filepath="$PROJECT_DIR$/Agile10.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Agile10New.iml" filepath="$PROJECT_DIR$/Agile10New.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

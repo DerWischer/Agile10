@@ -26,12 +26,6 @@
         </activity>
         <activity android:name=".activities.RegisterActivity"
                   android:parentActivityName=".activities.LoginActivity"/>
-
-
-        <activity android:name=".activities.ShoppingListActivity"/>
-        <activity android:name=".activities.AddEditItemActivity"
-                  android:parentActivityName=".activities.ShoppingListActivity">
-        </activity>
     </application>
 
 </manifest>
