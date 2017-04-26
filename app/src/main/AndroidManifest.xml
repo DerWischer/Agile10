@@ -9,7 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:label="Sign In" android:name=".activities.LoginActivity">
+        <activity
+            android:name=".activities.LoginActivity"
+            android:label="Sign In">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -17,12 +19,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:label="Create Group"
             android:name=".activities.CreateGroupActivity"
+            android:label="Create Group"
             android:parentActivityName=".activities.MainActivity"/>
         <activity
-            android:label="Join Group"
             android:name=".activities.JoinGroupActivity"
+            android:label="Join Group"
             android:parentActivityName=".activities.MainActivity"/>
         <activity
             android:name=".activities.MainActivity"
@@ -30,8 +32,8 @@
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
-            android:label="Sign Up"
             android:name=".activities.RegisterActivity"
+            android:label="Sign Up"
             android:parentActivityName=".activities.LoginActivity"/>
         <activity
             android:name=".activities.SettlementActivity"
@@ -40,6 +42,8 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="adp.group10.roomates.activities.MainActivity"/>
+        </activity>
+        <activity android:name=".activities.SelectGroupActivity">
         </activity>
     </application>
 

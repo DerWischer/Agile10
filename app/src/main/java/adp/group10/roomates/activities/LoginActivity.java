@@ -70,7 +70,7 @@ public class LoginActivity extends AppCompatActivity {
                                     currentuser = etUsername.getText().toString();
                                     finish();
                                     startActivity(
-                                            new Intent(LoginActivity.this, MainActivity.class));
+                                            new Intent(LoginActivity.this, SelectGroupActivity.class));
                                 }
                             }
                         }

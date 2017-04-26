@@ -32,6 +32,7 @@ public class RegisterActivity extends AppCompatActivity {
         public String email;
         public String phone;
         public String password;
+        public String usergroup;
 
         public User(String pemail, String pphone, String ppassword) {
             this.email = pemail;
@@ -46,7 +47,9 @@ public class RegisterActivity extends AppCompatActivity {
             this.password = ppassword;
         }
 
-
+        public User(String pusergroup) {
+            this.usergroup = pusergroup;
+        }
     }
 
 
