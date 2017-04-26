@@ -88,7 +88,7 @@ public class JoinGroupActivity extends AppCompatActivity {
                     new HashMap<String, RegisterActivity.User>();
 
             RegisterActivity.User user1 = new RegisterActivity.User(etGroupname.getText().toString());
-            userRef.child(etUserName.getText().toString()).child("groups").setValue(user1);
+            userRef.child(etUserName.getText().toString()).child("groups").push().setValue(user1);
 
 
             finish();
