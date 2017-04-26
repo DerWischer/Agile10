@@ -79,7 +79,20 @@ public class JoinGroupActivity extends AppCompatActivity {
             groupsRef.child(etGroupname.getText().toString()).child(
                     etUserName.getText().toString()).setValue(vguser1);
 
+
+            /////
+            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference().child(
+                    "users");
+
+            Map<String, RegisterActivity.User> User =
+                    new HashMap<String, RegisterActivity.User>();
+
+            RegisterActivity.User user1 = new RegisterActivity.User(etGroupname.getText().toString());
+            userRef.child(etUserName.getText().toString()).child("groups").setValue(user1);
+
+
             finish();
         }
     }
 }
+
