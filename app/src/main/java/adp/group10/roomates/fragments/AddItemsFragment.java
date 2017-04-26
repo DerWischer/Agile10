@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -27,6 +28,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 
 import adp.group10.roomates.R;
+import adp.group10.roomates.activities.LoginActivity;
 import adp.group10.roomates.backend.FirebaseHandler;
 import adp.group10.roomates.backend.model.AvailableItem;
 
@@ -56,6 +58,7 @@ public class AddItemsFragment extends Fragment implements AbsListView.MultiChoic
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
+
         return inflater.inflate(R.layout.fragment_shopping_list, container, false);
     }
 
@@ -64,7 +67,7 @@ public class AddItemsFragment extends Fragment implements AbsListView.MultiChoic
         super.onActivityCreated(savedInstanceState);
         gvList = (GridView) getView().findViewById(R.id.gvList);
 
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(FirebaseHandler.KEY_AVAILABLE_LIST);
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(FirebaseHandler.KEY_AVAILABLE_LIST + "/" + LoginActivity.currentGroup);
         fbAdapter = new FirebaseListAdapter<AvailableItem>(getActivity(), AvailableItem.class, R.layout.available_list_item, ref) {
             @Override
             protected void populateView(View view, AvailableItem model, int position) {
@@ -188,7 +191,9 @@ public class AddItemsFragment extends Fragment implements AbsListView.MultiChoic
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         AvailableItem item = fbAdapter.getItem(position);
+        Log.v("Iteration", "clicked3");
         mListener.onClickAvailableItem(item);
+
     }
 
     /**
@@ -203,5 +208,6 @@ public class AddItemsFragment extends Fragment implements AbsListView.MultiChoic
      */
     public interface OnFragmentInterActionListener {
         void onClickAvailableItem(AvailableItem item);
+
     }
 }

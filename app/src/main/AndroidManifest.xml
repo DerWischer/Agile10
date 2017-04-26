@@ -9,23 +9,38 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-        <activity android:name=".activities.LoginActivity">
+        <activity android:label="Sign In" android:name=".activities.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
+
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".activities.CreateGroupActivity"
-                  android:parentActivityName=".activities.MainActivity"/>
-        <activity android:name=".activities.JoinGroupActivity"
-                  android:parentActivityName=".activities.MainActivity"/>
-        <activity android:name=".activities.MainActivity"
-                  android:label="@string/title_activity_main"
-                  android:theme="@style/AppTheme.NoActionBar">
+        <activity
+            android:label="Create Group"
+            android:name=".activities.CreateGroupActivity"
+            android:parentActivityName=".activities.MainActivity"/>
+        <activity
+            android:label="Join Group"
+            android:name=".activities.JoinGroupActivity"
+            android:parentActivityName=".activities.MainActivity"/>
+        <activity
+            android:name=".activities.MainActivity"
+            android:label="Shopping List"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
-        <activity android:name=".activities.RegisterActivity"
-                  android:parentActivityName=".activities.LoginActivity"/>
+        <activity
+            android:label="Sign Up"
+            android:name=".activities.RegisterActivity"
+            android:parentActivityName=".activities.LoginActivity"/>
+        <activity
+            android:name=".activities.SettlementActivity"
+            android:label="@string/title_activity_settlement"
+            android:parentActivityName=".activities.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="adp.group10.roomates.activities.MainActivity"/>
+        </activity>
     </application>
 
 </manifest>

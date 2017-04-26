@@ -1,6 +1,7 @@
 package adp.group10.roomates.businesslogic;
 
 import android.app.Activity;
+import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.TextView;
 
@@ -25,7 +26,6 @@ public class ShoppingListFBAdapter extends FirebaseListAdapter<ShoppingListEntry
      */
     public ShoppingListFBAdapter(Activity activity, Query ref) {
         super(activity, ShoppingListEntry.class, R.layout.shopping_list_entry_data_item, ref);
-
     }
 
     @Override
@@ -37,6 +37,14 @@ public class ShoppingListFBAdapter extends FirebaseListAdapter<ShoppingListEntry
         ShoppingListEntry entry = getItem(position);
         tvName.setText(entry.getName());
         tvAmount.setText("" + entry.getAmount());
-        tvBlockedBy.setText(entry.getBlockedBy());
+        if (entry.isBlocked()){
+            tvBlockedBy.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_lock_outline_black_24dp, 0, 0, 0);
+            tvBlockedBy.setText(entry.getBlockedBy());
+        } else {
+            tvBlockedBy.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+            tvBlockedBy.setText("");
+
+        }
+
     }
 }

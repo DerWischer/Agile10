@@ -24,6 +24,7 @@ import adp.group10.roomates.R;
 public class LoginActivity extends AppCompatActivity {
 
     public static String currentuser;
+    public static String currentGroup = "dummyGroup";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,7 +90,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void onClick_Register(View view) {
-        finish();
         startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
     }
 

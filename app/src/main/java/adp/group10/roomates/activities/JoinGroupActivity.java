@@ -15,6 +15,7 @@ import java.util.Map;
 import adp.group10.roomates.R;
 
 public class JoinGroupActivity extends AppCompatActivity {
+
     public static class GROUPUSER {
 
         public String username;
