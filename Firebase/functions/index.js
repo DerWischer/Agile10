@@ -38,6 +38,9 @@ exports.updadeBalance = functions.database.ref('/GROUPUSER/{groupName}/{userName
           for (var i = 0; i < keys.length; i++) {
             var user = userList[keys[i]];     // user = all info about 1 user
             var balance = user["BALANCE"];
+            if (balance == null || isNaN(balance)) {
+              balance = 0;
+            }
             console.log("user = " + keys[i]  + " old balance = " + balance);
 
             if(keys.length == 0){  // 0 check!
@@ -92,6 +95,10 @@ function solveSettlement(groupId){
         for (var i = 0; i < keys.length; i++) {
             var user = userList[keys[i]];
             var balance = user["BALANCE"];
+            if (balance == null || isNaN(balance)) {
+              user["BALANCE"] = 0;
+              balance = 0;
+            }
             if (Math.abs(balance) > 0.01) {
                 users.push(keys[i]);
                 userBalances.push(balance);
