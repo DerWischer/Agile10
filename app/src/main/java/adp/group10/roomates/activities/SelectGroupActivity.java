@@ -26,7 +26,7 @@ import adp.group10.roomates.R;
 
 public class SelectGroupActivity extends AppCompatActivity  {
     
-    public static String currentgroup;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +69,7 @@ public class SelectGroupActivity extends AppCompatActivity  {
             public void onItemSelected(AdapterView<?> parent, View view,
                     int position, long id) {
 
-                currentgroup = parent.getItemAtPosition(position).toString().trim();
+                LoginActivity.currentGroup   = (String) parent.getItemAtPosition(position).toString() ;
 
             }
 
