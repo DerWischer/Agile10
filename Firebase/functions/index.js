@@ -61,8 +61,13 @@ exports.updadeBalance = functions.database.ref('/GROUPUSER/{groupName}/{userName
     }
 });
 
-exports.requestSettlements = functions.https.onRequest((request, response) => {
-    var groupId = request.query.groupId;
+exports.requestSettlements = functions.database.ref('/updateTransactions').onWrite(event => {
+//exports.requestSettlements = functions.https.onRequest((request, response) => {
+    var groupId = event.data.val();
+    if (groupId == null || groupId == "null" || groupId == "false") {
+      return;
+    }
+//    var groupId = request.query.groupId;
 //    console.log("groupId = " + groupId);
     if (groupId != null) {
       solveSettlement(groupId);
@@ -70,7 +75,7 @@ exports.requestSettlements = functions.https.onRequest((request, response) => {
 //      console.log("transactions = " + transactions);
     }
 
-    response.end();
+//    response.end();
 });
 
 
