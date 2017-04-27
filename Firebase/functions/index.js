@@ -12,7 +12,7 @@ admin.initializeApp(functions.config().firebase);
 class Transaction {
   constructor(fromUser, toUser, amount) {
     this.fromUser = fromUser;
-    this.fromUser = fromUser;
+    this.toUser = toUser;
     this.amount = amount;
     this.settled = false;
   }
@@ -109,6 +109,7 @@ function solveSettlement(groupId){
                 userBalances.push(balance);
 //                console.log("adding " + keys[i] + " with balance " + balance);
             }
+            console.log("user = " + user + "  balance = " + balance);
         }
 
         var solvedTransactions = [];
