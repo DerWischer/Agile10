@@ -110,7 +110,7 @@ public class RegisterActivity extends AppCompatActivity {
                     //startActivity(new Intent(RegisterActivity.this, ShoppingListActivity.class))
                     LoginActivity.currentuser = etUsername.getText().toString().trim();
                     finish();
-                    startActivity(new Intent(RegisterActivity.this, MainActivity.class));
+                    startActivity(new Intent(RegisterActivity.this, SelectGroupActivity.class));
                 }
 
             }
