@@ -64,18 +64,13 @@ exports.updadeBalance = functions.database.ref('/GROUPUSER/{groupName}/{userName
 exports.requestSettlements = functions.database.ref('/updateTransactions').onWrite(event => {
 //exports.requestSettlements = functions.https.onRequest((request, response) => {
     var groupId = event.data.val();
-    if (groupId == null || groupId == "null" || groupId == "false") {
+    if (groupId == null || groupId == "null" || groupId == "false" || groupId == "none") {
       return;
     }
-//    var groupId = request.query.groupId;
-//    console.log("groupId = " + groupId);
     if (groupId != null) {
       solveSettlement(groupId);
-//      var transactions = solveSettlement(groupId);
-//      console.log("transactions = " + transactions);
     }
-
-//    response.end();
+    admin.database().ref().update({updateTransactions : "none"});
 });
 
 
