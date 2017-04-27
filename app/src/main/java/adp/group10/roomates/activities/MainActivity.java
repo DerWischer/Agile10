@@ -70,7 +70,6 @@ public class MainActivity extends AppCompatActivity
         final TextView tvUserBalance = (TextView) header.findViewById(R.id.tvUserBalance);
         tvUserName.setText(LoginActivity.currentuser);
         tvGroupName.setText(LoginActivity.currentGroup);
-
         DatabaseReference balanceRef = FirebaseDatabase.getInstance().getReference(
                 FirebaseHandler.KEY_GROUPUSER + "/" + LoginActivity.currentGroup + "/"
                         + LoginActivity.currentuser + "/" + "BALANCE");
