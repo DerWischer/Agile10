@@ -76,10 +76,18 @@ public class RegisterActivity extends AppCompatActivity {
                 etPassword = (EditText) findViewById(R.id.etPassword);
                 etPassconf = (EditText) findViewById(R.id.etPassConf);
 
+                String emailRegistration = etEmail.getText().toString().trim();
+
                 if (etUsername.getText().toString().length() == 0) {
                     etUsername.setError("User name is required");
                     etUsername.requestFocus();
-                } else if (etPassword.getText().toString().length() == 0) {
+                }
+                else if (!emailRegistration.matches("[a-zA-Z0-9._-]+@[a-z]+.[a-z]+")) {
+
+                    etEmail.setError("Invalid Email Address");
+
+                }
+                else if (etPassword.getText().toString().length() == 0) {
                     etPassword.setError("Password is not entered");
                     etPassword.requestFocus();
                 } else if (etPhone.getText().toString().length() == 0) {
