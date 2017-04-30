@@ -89,7 +89,7 @@ public class SelectGroupActivity extends AppCompatActivity  {
 
                 Intent intent = new Intent(SelectGroupActivity.this, MainActivity.class);
                 startActivity(intent);
-
+                finish();
 
             }
 
