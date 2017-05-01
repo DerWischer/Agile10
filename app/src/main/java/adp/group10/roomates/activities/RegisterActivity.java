@@ -32,6 +32,7 @@ public class RegisterActivity extends AppCompatActivity {
         public String email;
         public String phone;
         public String password;
+        public String usergroup;
 
         public User(String pemail, String pphone, String ppassword) {
             this.email = pemail;
@@ -46,7 +47,9 @@ public class RegisterActivity extends AppCompatActivity {
             this.password = ppassword;
         }
 
-
+        public User(String pusergroup) {
+            this.usergroup = pusergroup;
+        }
     }
 
 
@@ -73,10 +76,18 @@ public class RegisterActivity extends AppCompatActivity {
                 etPassword = (EditText) findViewById(R.id.etPassword);
                 etPassconf = (EditText) findViewById(R.id.etPassConf);
 
+                String emailRegistration = etEmail.getText().toString().trim();
+
                 if (etUsername.getText().toString().length() == 0) {
                     etUsername.setError("User name is required");
                     etUsername.requestFocus();
-                } else if (etPassword.getText().toString().length() == 0) {
+                }
+                else if (!emailRegistration.matches("[a-zA-Z0-9._-]+@[a-z]+.[a-z]+")) {
+
+                    etEmail.setError("Invalid Email Address");
+
+                }
+                else if (etPassword.getText().toString().length() == 0) {
                     etPassword.setError("Password is not entered");
                     etPassword.requestFocus();
                 } else if (etPhone.getText().toString().length() == 0) {
@@ -107,7 +118,7 @@ public class RegisterActivity extends AppCompatActivity {
                     //startActivity(new Intent(RegisterActivity.this, ShoppingListActivity.class))
                     LoginActivity.currentuser = etUsername.getText().toString().trim();
                     finish();
-                    startActivity(new Intent(RegisterActivity.this, MainActivity.class));
+                    startActivity(new Intent(RegisterActivity.this, SelectGroupActivity.class));
                 }
 
             }

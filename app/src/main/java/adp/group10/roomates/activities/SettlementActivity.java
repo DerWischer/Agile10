@@ -35,8 +35,10 @@ public class SettlementActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        final ListView lvSettlement = (ListView) findViewById(R.id.lvSettlements);
+        DatabaseReference ref0 = FirebaseDatabase.getInstance().getReference("updateTransactions");
+        ref0.setValue(LoginActivity.currentGroup);
 
+        final ListView lvSettlement = (ListView) findViewById(R.id.lvSettlements);
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference(FirebaseHandler.KEY_TRANSACTIONS + "/" + LoginActivity.currentGroup);
         FirebaseListAdapter fbAdapter = new FirebaseListAdapter<Transaction>(this, Transaction.class, R.layout.settlement_list_item, ref) {
             @Override

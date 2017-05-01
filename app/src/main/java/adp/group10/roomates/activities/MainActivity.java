@@ -70,7 +70,6 @@ public class MainActivity extends AppCompatActivity
         final TextView tvUserBalance = (TextView) header.findViewById(R.id.tvUserBalance);
         tvUserName.setText(LoginActivity.currentuser);
         tvGroupName.setText(LoginActivity.currentGroup);
-
         DatabaseReference balanceRef = FirebaseDatabase.getInstance().getReference(
                 FirebaseHandler.KEY_GROUPUSER + "/" + LoginActivity.currentGroup + "/"
                         + LoginActivity.currentuser + "/" + "BALANCE");
@@ -145,6 +144,9 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.nav_group_join:
                 startActivity(new Intent(this, JoinGroupActivity.class));
+                break;
+            case R.id.nav_group_choose:
+                startActivity(new Intent(this, SelectGroupActivity.class));
                 break;
             case R.id.nav_group_create:
                 startActivity(new Intent(this, CreateGroupActivity.class));

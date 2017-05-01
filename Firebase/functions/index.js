@@ -10,13 +10,47 @@ admin.initializeApp(functions.config().firebase);
 // });
 
 class Transaction {
-  constructor(sender, receiver, amount) {
-    this.sender = sender;
-    this.receiver = receiver;
+  constructor(fromUser, toUser, amount) {
+    this.fromUser = fromUser;
+    this.toUser = toUser;
     this.amount = amount;
+    this.settled = false;
   }
 }
 
+exports.acceptPayment = functions.database.ref('/transactions/{group}/{transNum}').onWrite(event => {
+		var settled = event.data.child('settled').val();
+		if (settled == false){
+			console.log("Payment not accepted");
+			return;
+		}
+				
+		var fromUser = event.data.child('fromUser').val();
+		var toUser = event.data.child('toUser').val();
+		var amount = event.data.child('amount').val();
+		console.log("Transfering " + amount + " from " + fromUser + " to " + toUser);
+		
+		var database = admin.database();
+		database.ref('/GROUPUSER/' + event.params.group + '/' + toUser)
+			.once('value').then(function(snapshot){
+				var user = snapshot.val();
+				
+				var balance = user["BALANCE"] - amount;
+				setBalance(toUser, event.params.group, balance);				
+				console.log("New balance of " + toUser + ":" + balance);
+			});
+			
+		database.ref('/GROUPUSER/' + event.params.group + '/' + fromUser)
+			.once('value').then(function(snapshot){
+				var user = snapshot.val();
+				
+				var balance = user["BALANCE"] + amount;
+				setBalance(fromUser, event.params.group, balance);
+				console.log("New balance of " + fromUser + ":" + balance);
+			});	
+		
+		return;
+});
 
 exports.updadeBalance = functions.database.ref('/GROUPUSER/{groupName}/{userName}/TRANSACTIONS/{transactionId}').onWrite(event =>
 {
@@ -37,6 +71,9 @@ exports.updadeBalance = functions.database.ref('/GROUPUSER/{groupName}/{userName
           for (var i = 0; i < keys.length; i++) {
             var user = userList[keys[i]];     // user = all info about 1 user
             var balance = user["BALANCE"];
+            if (balance == null || isNaN(balance)) {
+              balance = 0;
+            }
             console.log("user = " + keys[i]  + " old balance = " + balance);
 
             if(keys.length == 0){  // 0 check!
@@ -57,12 +94,16 @@ exports.updadeBalance = functions.database.ref('/GROUPUSER/{groupName}/{userName
     }
 });
 
-exports.requestSettlements = functions.https.onRequest((request, response) => {
-    var groupId = request.get('groupId');
-
-    var transactions = solveSettlement(groupId);
-    console.log("transactions = " + transactions);
-    end();
+exports.requestSettlements = functions.database.ref('/updateTransactions').onWrite(event => {
+//exports.requestSettlements = functions.https.onRequest((request, response) => {
+    var groupId = event.data.val();
+    if (groupId == null || groupId == "null" || groupId == "false" || groupId == "none") {
+      return;
+    }
+    if (groupId != null) {
+      solveSettlement(groupId);
+    }
+    admin.database().ref().update({updateTransactions : "none"});
 });
 
 
@@ -74,8 +115,11 @@ function setBalance(userId, groupId, newBalance){
 }
 
 function solveSettlement(groupId){
+//    console.log("starting solveSettlement " + groupId);
     var database = admin.database();
     database.ref('/GROUPUSER/' + groupId).once('value').then(function(snapshot) {
+//        var groupId = events.params.groupId;
+        console.log("group id = " + groupId);
         var userList = snapshot.val();      // userList = all data about this group's users
         var keys = Object.keys(userList);   // keys = list of user names
 
@@ -84,20 +128,21 @@ function solveSettlement(groupId){
         for (var i = 0; i < keys.length; i++) {
             var user = userList[keys[i]];
             var balance = user["BALANCE"];
-            users.push(keys[i]);
-            userBalances.push(balance);
+            if (balance == null || isNaN(balance)) {
+              user["BALANCE"] = 0;
+              balance = 0;
+            }
+            if (Math.abs(balance) > 0.01) {
+                users.push(keys[i]);
+                userBalances.push(balance);
+//                console.log("adding " + keys[i] + " with balance " + balance);
+            }
+            console.log("user = " + user + "  balance = " + balance);
         }
 
         var solvedTransactions = [];
 
-        for (var j = 0; j < userBalances.length; j++) {
-          if (userBalances[j] == 0) {
-            userBalances.splice(j, 1);
-            users.splice(j, 1);
-          }
-        }
-
-        for (var j = 0; j < userBalances.length; j++){    // check for users with same absolute balance to minimize transactions
+/*        for (var j = 0; j < userBalances.length; j++){    // check for users with same absolute balance to minimize transactions
           var jBalance = userBalances[j];
           for(var i = 0; i < userBalances.length; i++){
             var iBalance = userBalances[i];
@@ -119,7 +164,7 @@ function solveSettlement(groupId){
                 }
             }
           }
-        }
+        }*/
         // while not done {
         //   get maximum
         //   get minimum
@@ -127,27 +172,39 @@ function solveSettlement(groupId){
         // }
         var max, min, maxIndex, minIndex;
         while (userBalances.length > 0) {
+          console.log("userBalances.length = " + userBalances.length);
           maxIndex = indexOfMax(userBalances);
           minIndex = indexOfMin(userBalances);
           max = userBalances[maxIndex];
           min = userBalances[minIndex];
+          console.log("max = " + max);
+          console.log("min = " + min);
 
           var transactionAmount = Math.min(max, Math.abs(min));
 
           solvedTransactions.push(new Transaction(users[minIndex], users[maxIndex], transactionAmount));
+          console.log("sender = " + users[minIndex] + " receiver = " + users[maxIndex] + " amount = " + transactionAmount);
+          console.log("solvedTransactions = " + JSON.stringify(solvedTransactions));
           userBalances[minIndex] += transactionAmount;
           userBalances[maxIndex] -= transactionAmount;
 
           if (Math.abs(userBalances[minIndex]) <= 0.01) {
+            console.log("removing user " + users[minIndex]);
             userBalances.splice(minIndex, 1);
             users.splice(minIndex, 1);
           }
           if (Math.abs(userBalances[maxIndex]) <= 0.01) {
+            if (minIndex < maxIndex) {
+              maxIndex--;
+            }
+            console.log("removing user " + users[maxIndex]);
             userBalances.splice(maxIndex, 1);
             users.splice(maxIndex, 1);
           }
+          console.log("userBalances.length = " + userBalances.length);
         }
-        return solvedTransactions;
+        saveTransactions(groupId, solvedTransactions);
+//        return solvedTransactions;
 /*        for (var j = 0; j < userBalances.length; j++){
           if(userBalances[j] == Math.min.apply(Math, userBalances)){
             for (var i = 0; i < userBalances.length; i++){
@@ -160,6 +217,11 @@ function solveSettlement(groupId){
         }
       }*/
     });
+}
+
+function saveTransactions(groupId, transactions) {
+    var database = admin.database();
+    admin.database().ref("/transactions/" + groupId).set(transactions);
 }
 
 function indexOfMax(arr) {
