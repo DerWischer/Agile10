@@ -145,6 +145,9 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_group_join:
                 startActivity(new Intent(this, JoinGroupActivity.class));
                 break;
+            case R.id.nav_group_choose:
+                startActivity(new Intent(this, SelectGroupActivity.class));
+                break;
             case R.id.nav_group_create:
                 startActivity(new Intent(this, CreateGroupActivity.class));
                 break;

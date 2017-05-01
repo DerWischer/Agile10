@@ -8,7 +8,12 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -39,9 +44,12 @@ public class CreateGroupActivity extends AppCompatActivity {
         setContentView(R.layout.activity_create_group);
     }
 
+
+
+
     public void onClick_CreateGroup(View view) {
-        EditText etGroupname = (EditText) findViewById(R.id.etGroupName);
-        EditText etGroupdesc = (EditText) findViewById(R.id.etGroupdesc);
+        final EditText etGroupname = (EditText) findViewById(R.id.etGroupName);
+        final EditText etGroupdesc = (EditText) findViewById(R.id.etGroupdesc);
 
         if (etGroupname.getText().toString().length() == 0) {
             etGroupname.setError("Group name is required");
@@ -49,18 +57,55 @@ public class CreateGroupActivity extends AppCompatActivity {
         } else {
             final FirebaseDatabase database = FirebaseDatabase.getInstance();
 
-            DatabaseReference groupsRef =
+            final DatabaseReference groupsRef =
                     FirebaseDatabase.getInstance().getReference().child("GROUPS");
 
-            Map<String, CreateGroupActivity.Group> GROUPS =
-                    new HashMap<String, CreateGroupActivity.Group>();
 
-            CreateGroupActivity.Group vgroup = new CreateGroupActivity.Group(
-                    etGroupdesc.getText().toString());
-            groupsRef.child(etGroupname.getText().toString()).setValue(vgroup); // TODO This will override an existing group
-            //groupsRef.child(etGroupname.getText().toString()).getValue(vgroup);
+            groupsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
 
-            finish();
+                    if ( dataSnapshot.child(etGroupname.getText().toString()).getValue() != null) {
+
+                        etGroupname.setError(
+                                "Group already exists");
+                    }
+                    else if (etGroupname.getText().toString().length() > 8)
+
+                    {
+                        etGroupname.setError(
+                                "Max length is 8 characters");
+                    }
+
+                    else {
+                        // add the group
+
+
+                        Map<String, CreateGroupActivity.Group> GROUPS =
+                                new HashMap<String, CreateGroupActivity.Group>();
+                        CreateGroupActivity.Group vgroup = new CreateGroupActivity.Group(
+                                etGroupdesc.getText().toString());
+                        groupsRef.child(etGroupname.getText().toString()).setValue(vgroup);
+                        // TODO This will override an existing group
+                        //groupsRef.child(etGroupname.getText().toString()).getValue(vgroup);
+
+                        finish();
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+
+            });
+
+
         }
     }
+
+
+
+
+
 }
