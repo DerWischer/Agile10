@@ -18,6 +18,39 @@ class Transaction {
   }
 }
 
+exports.acceptPayment = functions.database.ref('/transactions/{group}/{transNum}').onWrite(event => {
+		var settled = event.data.child('settled').val();
+		if (settled == false){
+			console.log("Payment not accepted");
+			return;
+		}
+				
+		var fromUser = event.data.child('fromUser').val();
+		var toUser = event.data.child('toUser').val();
+		var amount = event.data.child('amount').val();
+		console.log("Transfering " + amount + " from " + fromUser + " to " + toUser);
+		
+		var database = admin.database();
+		database.ref('/GROUPUSER/' + event.params.group + '/' + toUser)
+			.once('value').then(function(snapshot){
+				var user = snapshot.val();
+				
+				var balance = user["BALANCE"] - amount;
+				setBalance(toUser, event.params.group, balance);				
+				console.log("New balance of " + toUser + ":" + balance);
+			});
+			
+		database.ref('/GROUPUSER/' + event.params.group + '/' + fromUser)
+			.once('value').then(function(snapshot){
+				var user = snapshot.val();
+				
+				var balance = user["BALANCE"] + amount;
+				setBalance(fromUser, event.params.group, balance);
+				console.log("New balance of " + fromUser + ":" + balance);
+			});	
+		
+		return;
+});
 
 exports.updadeBalance = functions.database.ref('/GROUPUSER/{groupName}/{userName}/TRANSACTIONS/{transactionId}').onWrite(event =>
 {
