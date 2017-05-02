@@ -17,11 +17,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.database.DatabaseReference;
@@ -122,6 +120,7 @@ public class ShoppingListFragment extends Fragment implements AbsListView.MultiC
             currentActivity.incrementShoppingCartItem(fbAdapter.getItem(position).getName(), +1);
         } else if (v.getId() == R.id.etAmountMinus) {
             currentActivity.incrementShoppingCartItem(fbAdapter.getItem(position).getName(), -1);
+        } else if (v.getId() == R.id.bAmount) {
         }
     }
 
@@ -238,7 +237,7 @@ public class ShoppingListFragment extends Fragment implements AbsListView.MultiC
             LayoutInflater inflater = getActivity().getLayoutInflater();
             final View dialogView = inflater.inflate(R.layout.dialog_edit_item, null);
             final EditText etName = (EditText) dialogView.findViewById(R.id.etName);
-            final TextView etAmount = (TextView) dialogView.findViewById(R.id.etAmount);
+            final TextView etAmount = (TextView) dialogView.findViewById(R.id.bAmount);
             etName.setText(entry.getName());
             etAmount.setText("" + entry.getAmount());
 
@@ -282,7 +281,7 @@ public class ShoppingListFragment extends Fragment implements AbsListView.MultiC
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                TextView etAmount = (TextView) dialogView.findViewById(R.id.etAmount);
+                TextView etAmount = (TextView) dialogView.findViewById(R.id.bAmount);
                 String strPrice = etAmount.getText().toString().trim();
                 double price = Double.parseDouble(strPrice);
                 DatabaseReference transactionReference =

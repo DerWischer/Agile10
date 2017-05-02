@@ -38,7 +38,7 @@ public class ShoppingListFBAdapter extends FirebaseListAdapter<ShoppingListEntry
     @Override
     protected void populateView(View view, ShoppingListEntry model, final int position) {
         TextView tvName = (TextView) view.findViewById(R.id.etName);
-        TextView etAmount = (TextView) view.findViewById(R.id.etAmount);
+        TextView etAmount = (TextView) view.findViewById(R.id.bAmount);
         TextView tvBlockedBy = (TextView) view.findViewById(R.id.etBlockedBy);
 
         ShoppingListEntry entry = getItem(position);
@@ -68,7 +68,7 @@ public class ShoppingListFBAdapter extends FirebaseListAdapter<ShoppingListEntry
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewGroup viewGroup = (ViewGroup) super.getView(position, convertView, parent);
-        View etAmount = viewGroup.findViewById(R.id.etAmount);
+        View etAmount = viewGroup.findViewById(R.id.bAmount);
         View etPlus = viewGroup.findViewById(R.id.etAmountPlus);
         View etMinus = viewGroup.findViewById(R.id.etAmountMinus);
 
