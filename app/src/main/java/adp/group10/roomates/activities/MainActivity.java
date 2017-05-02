@@ -174,8 +174,8 @@ public class MainActivity extends AppCompatActivity
 
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setView(dialogView);
-        builder.setTitle("Custom Item");
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        builder.setTitle("Add your own item");
+        builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 EditText etNewItem = (EditText) dialogView.findViewById(R.id.etNewItem);
