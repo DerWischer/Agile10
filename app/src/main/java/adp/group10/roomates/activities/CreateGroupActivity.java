@@ -16,9 +16,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import adp.group10.roomates.R;
+import adp.group10.roomates.backend.model.AvailableItem;
 
 public class CreateGroupActivity extends AppCompatActivity {
     public static class Group {
@@ -40,6 +43,8 @@ public class CreateGroupActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_group);
     }
@@ -86,6 +91,16 @@ public class CreateGroupActivity extends AppCompatActivity {
                         CreateGroupActivity.Group vgroup = new CreateGroupActivity.Group(
                                 etGroupdesc.getText().toString());
                         groupsRef.child(etGroupname.getText().toString()).setValue(vgroup);
+
+                        DatabaseReference availableItemsRef = FirebaseDatabase.getInstance().getReference(
+                                "available-items" + "/" + etGroupname.getText());
+
+
+                        for (AvailableItem item : standardItems) {
+                            availableItemsRef.push().setValue(item);
+                        }
+
+
                         // TODO This will override an existing group
                         //groupsRef.child(etGroupname.getText().toString()).getValue(vgroup);
 
@@ -103,6 +118,19 @@ public class CreateGroupActivity extends AppCompatActivity {
 
         }
     }
+
+    private final static AvailableItem[] standardItems = new AvailableItem[]
+            {
+                    new AvailableItem("Bread"),
+                    new AvailableItem("Milk"),
+                    new AvailableItem("Pasta"),
+                    new AvailableItem("Apple"),
+                    new AvailableItem("Cheese"),
+                    new AvailableItem("Eggs"),
+                    new AvailableItem("Corn Flakes"),
+                    new AvailableItem("Chicken"),
+                    new AvailableItem("Tomatoes")
+            };
 
 
 
