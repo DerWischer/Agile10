@@ -49,7 +49,9 @@ exports.acceptPayment = functions.database.ref('/transactions/{group}/{transNum}
 				console.log("New balance of " + fromUser + ":" + balance);
 			});	
 		
-		return;
+		
+		// remove transaction
+		return event.data.ref.set(null);
 });
 
 exports.updadeBalance = functions.database.ref('/GROUPUSER/{groupName}/{userName}/TRANSACTIONS/{transactionId}').onWrite(event =>

@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,6 +19,7 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.database.DatabaseReference;
@@ -45,7 +45,7 @@ import adp.group10.roomates.businesslogic.ShoppingListFBAdapter;
  */
 public class ShoppingListFragment extends Fragment implements AbsListView.MultiChoiceModeListener,
         AddItemsFragment.OnFragmentInterActionListener,
-        AdapterView.OnItemClickListener {
+        AdapterView.OnItemClickListener, View.OnClickListener {
 
     private OnFragmentInteractionListener mListener;
 
@@ -69,15 +69,23 @@ public class ShoppingListFragment extends Fragment implements AbsListView.MultiC
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        updateUI();
+    }
+
+    public void updateUI()
+    {
         gvList = (GridView) getView().findViewById(R.id.gvList);
 
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference(
                 FirebaseHandler.KEY_SHOPPING_LIST + "/" + LoginActivity.currentGroup);
-        fbAdapter = new ShoppingListFBAdapter(getActivity(), ref);
+        fbAdapter = new ShoppingListFBAdapter(getActivity(), ref, this);
         gvList.setAdapter(fbAdapter);
         gvList.setOnItemClickListener(this);
         gvList.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE_MODAL);
         gvList.setMultiChoiceModeListener(this);
+
+
+//        fbAdapter.setItemClickListener(this);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -102,6 +110,18 @@ public class ShoppingListFragment extends Fragment implements AbsListView.MultiC
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onClick(View v) {
+        int position = (int) v.getTag();
+        MainActivity currentActivity = (MainActivity) getActivity();
+        if (v.getId() == R.id.etAmountPlus) {
+            currentActivity.incrementShoppingCartItem(fbAdapter.getItem(position).getName(), +1);
+        } else if (v.getId() == R.id.etAmountMinus) {
+            currentActivity.incrementShoppingCartItem(fbAdapter.getItem(position).getName(), -1);
+        } else if (v.getId() == R.id.bAmount) {
+        }
     }
 
     /**
@@ -217,7 +237,7 @@ public class ShoppingListFragment extends Fragment implements AbsListView.MultiC
             LayoutInflater inflater = getActivity().getLayoutInflater();
             final View dialogView = inflater.inflate(R.layout.dialog_edit_item, null);
             final EditText etName = (EditText) dialogView.findViewById(R.id.etName);
-            final EditText etAmount = (EditText) dialogView.findViewById(R.id.etAmount);
+            final TextView etAmount = (TextView) dialogView.findViewById(R.id.bAmount);
             etName.setText(entry.getName());
             etAmount.setText("" + entry.getAmount());
 
@@ -261,7 +281,7 @@ public class ShoppingListFragment extends Fragment implements AbsListView.MultiC
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                EditText etAmount = (EditText) dialogView.findViewById(R.id.etAmount);
+                TextView etAmount = (TextView) dialogView.findViewById(R.id.bAmount);
                 String strPrice = etAmount.getText().toString().trim();
                 double price = Double.parseDouble(strPrice);
                 DatabaseReference transactionReference =
@@ -301,8 +321,10 @@ public class ShoppingListFragment extends Fragment implements AbsListView.MultiC
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//        Toast toast = Toast.makeText(getActivity(), ""+view.getId(), Toast.LENGTH_SHORT);
+//        toast.show();
         MainActivity currentActivity = (MainActivity) getActivity();
-        currentActivity.incrementShoppingCartItem(fbAdapter.getItem(position).getName(), -1);
+//        currentActivity.incrementShoppingCartItem(fbAdapter.getItem(position).getName(), -1);
         // TODO Decrease amount, if 0 remove item
     }
 

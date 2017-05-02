@@ -13,7 +13,7 @@
         android:maxLines="1"/>
 
     <EditText
-        android:id="@+id/etAmount"
+        android:id="@+id/bAmount"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Item name"

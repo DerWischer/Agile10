@@ -29,12 +29,36 @@
             app:layout_constraintRight_toRightOf="parent" app:layout_constraintTop_toTopOf="parent"/>
 
         <TextView
-            android:id="@+id/etAmount"
+            android:id="@+id/etAmountPlus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="8dp"
-            android:layout_marginTop="8dp" android:text="1"
-            app:layout_constraintRight_toRightOf="parent" app:layout_constraintTop_toTopOf="parent"/>
+            android:layout_marginLeft="32dp"
+            android:padding="16dp"
+            android:text="+"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+        <Button
+            android:minHeight="0dp"
+            android:minWidth="0dp"
+            android:id="@+id/bAmount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="1"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+        <TextView
+            android:id="@+id/etAmountMinus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:layout_marginRight="32dp"
+            android:text="-"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <TextView
             android:id="@+id/etBlockedBy"

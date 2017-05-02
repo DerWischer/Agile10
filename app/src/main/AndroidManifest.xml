@@ -43,7 +43,12 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="adp.group10.roomates.activities.MainActivity"/>
         </activity>
-        <activity android:name=".activities.SelectGroupActivity">
+        <activity
+            android:name=".activities.SelectGroupActivity"
+            android:parentActivityName=".activities.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="adp.group10.roomates.activities.MainActivity"/>
         </activity>
     </application>
 

@@ -1,11 +1,7 @@
 package adp.group10.roomates.activities;
 
-import android.content.Context;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -15,8 +11,6 @@ import android.widget.TextView;
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
-import org.w3c.dom.Text;
 
 import adp.group10.roomates.R;
 import adp.group10.roomates.backend.FirebaseHandler;
@@ -45,7 +39,7 @@ public class SettlementActivity extends AppCompatActivity {
             protected void populateView(View view, Transaction model, final int position) {
                 TextView tvFromUser = (TextView) view.findViewById(R.id.tvFromUser);
                 TextView tvToUser = (TextView) view.findViewById(R.id.tvToUser);
-                TextView tvAmount = (TextView) view.findViewById(R.id.tvAmount);
+                TextView tvAmount = (TextView) view.findViewById(R.id.bAmount);
                 final CheckBox cbSetlled = (CheckBox) view.findViewById(R.id.cbSettled);
 
                 tvFromUser.setText(model.getFromUser());

@@ -20,5 +20,12 @@
         android:gravity="center_horizontal"
         android:text="TextView"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+    <TextView
+        android:id="@+id/tvClickToAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:text="\n(click to add)"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"/>
 </LinearLayout>
 </adp.group10.roomates.CheckableShoppingListItemLayout>
