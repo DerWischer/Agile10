@@ -23,9 +23,9 @@ import java.util.List;
 import java.util.Map;
 
 import adp.group10.roomates.R;
+import adp.group10.roomates.businesslogic.LoginManager;
 
-public class SelectGroupActivity extends AppCompatActivity  {
-    
+public class SelectGroupActivity extends AppCompatActivity {
 
 
     @Override
@@ -35,8 +35,17 @@ public class SelectGroupActivity extends AppCompatActivity  {
 
         Button bSelectgroup = (Button) findViewById(R.id.bChooseGroup);
         final List<String> groups = new ArrayList<String>();
-        groups.add("dummyGroup");
-        DatabaseReference selectGroupRef = FirebaseDatabase.getInstance().getReference("users").child(LoginActivity.currentuser).child("groups");
+        groups.add("");
+        DatabaseReference selectGroupRef = FirebaseDatabase.getInstance().getReference(
+                "users").child(LoginActivity.currentuser).child("groups");
+
+        final ArrayAdapter<String> groupAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, groups);
+        groupAdapter.setDropDownViewResource(android.R.layout.simple_list_item_1);
+        final Spinner groupSpinner = (Spinner) findViewById(R.id.spSelectGroup);
+        groupSpinner.setAdapter(groupAdapter);
+
+
         selectGroupRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -44,9 +53,24 @@ public class SelectGroupActivity extends AppCompatActivity  {
                 // of the iterator returned by dataSnapshot.getChildren() to
                 // initialize the array
 
-                for (DataSnapshot groupSnapShot: dataSnapshot.getChildren()) {
+                for (DataSnapshot groupSnapShot : dataSnapshot.getChildren()) {
                     String groupName = groupSnapShot.child("usergroup").getValue(String.class);
                     groups.add(groupName.trim());
+                    groupAdapter.notifyDataSetChanged();
+                }
+
+                if (LoginActivity.currentGroup != null) {
+                    int pos = -1;
+                    for (int i = 0; i < groups.size(); i++) {
+                        String cgroup = groups.get(i);
+                        if (cgroup.equals(LoginActivity.currentGroup)) {
+                            pos = i ;
+                            break;
+                        }
+
+                    }
+
+                    groupSpinner.setSelection(pos);
                 }
 
 
@@ -57,28 +81,8 @@ public class SelectGroupActivity extends AppCompatActivity  {
 
             }
         });
-        ArrayAdapter<String> groupAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, groups);
-        groupAdapter.setDropDownViewResource(android.R.layout.simple_list_item_1);
-        Spinner groupSpinner = (Spinner) findViewById(R.id.spSelectGroup);
-        groupSpinner.setAdapter(groupAdapter);
 
 
-        groupSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view,
-                    int position, long id) {
-
-                LoginActivity.currentGroup   = (String) parent.getItemAtPosition(position).toString() ;
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                // TODO Auto-generated method stub
-
-            }
-        });
 
 
 
@@ -87,8 +91,10 @@ public class SelectGroupActivity extends AppCompatActivity  {
             @Override
             public void onClick(View v) {
 
-                Intent intent = new Intent(SelectGroupActivity.this, MainActivity.class);
-                startActivity(intent);
+                int pos = groupSpinner.getSelectedItemPosition();
+                LoginActivity.currentGroup = groups.get(pos);
+                //Intent intent = new Intent(SelectGroupActivity.this, MainActivity.class);
+                //startActivity(intent);
                 finish();
 
             }
@@ -97,8 +103,6 @@ public class SelectGroupActivity extends AppCompatActivity  {
         });
 
     }
-
-
 
 
 }

@@ -69,6 +69,11 @@ public class ShoppingListFragment extends Fragment implements AbsListView.MultiC
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        updateUI();
+    }
+
+    public void updateUI()
+    {
         gvList = (GridView) getView().findViewById(R.id.gvList);
 
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference(
@@ -78,6 +83,7 @@ public class ShoppingListFragment extends Fragment implements AbsListView.MultiC
         gvList.setOnItemClickListener(this);
         gvList.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE_MODAL);
         gvList.setMultiChoiceModeListener(this);
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event

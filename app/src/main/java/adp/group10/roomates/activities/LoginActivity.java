@@ -24,7 +24,7 @@ import adp.group10.roomates.R;
 public class LoginActivity extends AppCompatActivity {
 
     public static String currentuser;
-    public static String currentGroup = "dummyGroup";
+    public static String currentGroup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +71,7 @@ public class LoginActivity extends AppCompatActivity {
                                     finish();
                                     startActivity(
                                             new Intent(LoginActivity.this,
-                                                    SelectGroupActivity.class));
+                                                    MainActivity.class));
                                 }
                             }
                         }
