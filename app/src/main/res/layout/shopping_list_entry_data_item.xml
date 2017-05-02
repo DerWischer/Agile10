@@ -32,11 +32,11 @@
             android:id="@+id/etAmountPlus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginLeft="32dp"
+            android:padding="16dp"
             android:text="+"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            android:layout_marginLeft="48dp"
             app:layout_constraintTop_toTopOf="parent"/>
         <TextView
             android:minHeight="0dp"
@@ -44,7 +44,7 @@
             android:id="@+id/etAmount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="0dp" android:text="1"
+            android:layout_marginTop="16dp" android:text="1"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
@@ -52,11 +52,11 @@
             android:id="@+id/etAmountMinus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:padding="16dp"
+            android:layout_marginRight="32dp"
             android:text="-"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            android:layout_marginRight="48dp"
             app:layout_constraintTop_toTopOf="parent"/>
 
         <TextView
