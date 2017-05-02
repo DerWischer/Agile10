@@ -65,21 +65,26 @@ public class AddItemsFragment extends Fragment implements AbsListView.MultiChoic
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        gvList = (GridView) getView().findViewById(R.id.gvList);
+        updateUI();
 
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(FirebaseHandler.KEY_AVAILABLE_LIST + "/" + LoginActivity.currentGroup);
-        fbAdapter = new FirebaseListAdapter<AvailableItem>(getActivity(), AvailableItem.class, R.layout.available_list_item, ref) {
-            @Override
-            protected void populateView(View view, AvailableItem model, int position) {
-                TextView tvItemName = (TextView) view.findViewById(R.id.tvItemName);
-                tvItemName.setText(model.getName());
-            }
-        };
-        gvList.setAdapter(fbAdapter);
-        gvList.setOnItemClickListener(this);
-        gvList.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE_MODAL);
-        gvList.setMultiChoiceModeListener(this);
     }
+   public void updateUI()
+   {
+       gvList = (GridView) getView().findViewById(R.id.gvList);
+
+       DatabaseReference ref = FirebaseDatabase.getInstance().getReference(FirebaseHandler.KEY_AVAILABLE_LIST + "/" + LoginActivity.currentGroup);
+       fbAdapter = new FirebaseListAdapter<AvailableItem>(getActivity(), AvailableItem.class, R.layout.available_list_item, ref) {
+           @Override
+           protected void populateView(View view, AvailableItem model, int position) {
+               TextView tvItemName = (TextView) view.findViewById(R.id.tvItemName);
+               tvItemName.setText(model.getName());
+           }
+       };
+       gvList.setAdapter(fbAdapter);
+       gvList.setOnItemClickListener(this);
+       gvList.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE_MODAL);
+       gvList.setMultiChoiceModeListener(this);
+   }
 
     @Override
     public void onAttach(Context context) {

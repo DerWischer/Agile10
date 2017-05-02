@@ -44,6 +44,91 @@ public class MainActivity extends AppCompatActivity
     public DataSnapshot latestShoppingListSnapshot;
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        if (LoginActivity.currentGroup == null )
+        {
+
+            startActivity(new Intent(this, SelectGroupActivity.class));
+
+        }
+        else
+        {
+            // Navigation View
+             NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+             View header = navigationView.getHeaderView(0);
+
+            TextView tvUserName = (TextView) header.findViewById(R.id.tvUserName);
+            TextView tvGroupName = (TextView) header.findViewById(R.id.tvGroupName);
+            final TextView tvUserBalance = (TextView) header.findViewById(R.id.tvUserBalance);
+            tvUserName.setText(LoginActivity.currentuser);
+            tvGroupName.setText(LoginActivity.currentGroup);
+            DatabaseReference balanceRef = FirebaseDatabase.getInstance().getReference(
+                    FirebaseHandler.KEY_GROUPUSER + "/" + LoginActivity.currentGroup + "/"
+                            + LoginActivity.currentuser + "/" + "BALANCE");
+            balanceRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Object balance = dataSnapshot.getValue();
+                    tvUserBalance.setText("" + balance);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+
+            final FirebaseDatabase database = FirebaseDatabase.getInstance();
+            DatabaseReference availableItemRef = database.getReference(
+                    FirebaseHandler.KEY_AVAILABLE_LIST + "/" + LoginActivity.currentGroup);
+            DatabaseReference shoppingListRef = database.getReference(
+                    FirebaseHandler.KEY_SHOPPING_LIST + "/" + LoginActivity.currentGroup);
+
+            availableItemRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    latestAvailableItemSnapshot = dataSnapshot;
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    System.out.println("The read failed: " + databaseError.getCode());
+                }
+            });
+
+            shoppingListRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    latestShoppingListSnapshot = dataSnapshot;
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    System.out.println("The read failed: " + databaseError.getCode());
+                }
+            });
+
+            ShoppingListFragment fragment =
+                    (ShoppingListFragment) getSupportFragmentManager().findFragmentById(
+                            R.id.fShoppingList);
+            fragment.updateUI();
+
+
+            AddItemsFragment fragment1 =
+                    (AddItemsFragment) getSupportFragmentManager().findFragmentById(
+                            R.id.fAddItemsFragment);
+            fragment1.updateUI();
+
+        }
+
+    }
+
+    @Override
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -64,60 +149,7 @@ public class MainActivity extends AppCompatActivity
         // Navigation View
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        View header = navigationView.getHeaderView(0);
-        TextView tvUserName = (TextView) header.findViewById(R.id.tvUserName);
-        TextView tvGroupName = (TextView) header.findViewById(R.id.tvGroupName);
-        final TextView tvUserBalance = (TextView) header.findViewById(R.id.tvUserBalance);
-        tvUserName.setText(LoginActivity.currentuser);
-        tvGroupName.setText(LoginActivity.currentGroup);
-        DatabaseReference balanceRef = FirebaseDatabase.getInstance().getReference(
-                FirebaseHandler.KEY_GROUPUSER + "/" + LoginActivity.currentGroup + "/"
-                        + LoginActivity.currentuser + "/" + "BALANCE");
-        balanceRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Object balance = dataSnapshot.getValue();
-                tvUserBalance.setText("" + balance);
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-
-        final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference availableItemRef = database.getReference(
-                FirebaseHandler.KEY_AVAILABLE_LIST + "/" + LoginActivity.currentGroup);
-        DatabaseReference shoppingListRef = database.getReference(
-                FirebaseHandler.KEY_SHOPPING_LIST + "/" + LoginActivity.currentGroup);
-
-        availableItemRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                latestAvailableItemSnapshot = dataSnapshot;
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                System.out.println("The read failed: " + databaseError.getCode());
-            }
-        });
-
-        shoppingListRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                latestShoppingListSnapshot = dataSnapshot;
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                System.out.println("The read failed: " + databaseError.getCode());
-            }
-        });
     }
 
     @Override
@@ -174,8 +206,8 @@ public class MainActivity extends AppCompatActivity
 
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setView(dialogView);
-        builder.setTitle("Custom Item");
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        builder.setTitle("Add your own item");
+        builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 EditText etNewItem = (EditText) dialogView.findViewById(R.id.etNewItem);
