@@ -32,11 +32,10 @@
             android:id="@+id/etAmountPlus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="32dp"
-            android:padding="16dp"
+            android:padding="8dp"
+            android:layout_marginTop="8dp"
             android:text="+"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toRightOf="@+id/bAmount"
             app:layout_constraintTop_toTopOf="parent"/>
         <Button
             android:minHeight="0dp"
@@ -53,11 +52,10 @@
             android:id="@+id/etAmountMinus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:layout_marginRight="32dp"
+            android:padding="8dp"
+            android:layout_marginTop="8dp"
             android:text="-"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/bAmount"
             app:layout_constraintTop_toTopOf="parent"/>
 
         <TextView
