@@ -39,7 +39,7 @@ public class SettlementActivity extends AppCompatActivity {
             protected void populateView(View view, Transaction model, final int position) {
                 TextView tvFromUser = (TextView) view.findViewById(R.id.tvFromUser);
                 TextView tvToUser = (TextView) view.findViewById(R.id.tvToUser);
-                TextView tvAmount = (TextView) view.findViewById(R.id.bAmount);
+                TextView tvAmount = (TextView) view.findViewById(R.id.etAmount);
                 final CheckBox cbSetlled = (CheckBox) view.findViewById(R.id.cbSettled);
 
                 tvFromUser.setText(model.getFromUser());

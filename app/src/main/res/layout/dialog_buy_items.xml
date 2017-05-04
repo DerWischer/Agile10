@@ -6,7 +6,7 @@
 android:padding="32dp">
 
     <EditText
-        android:id="@+id/bAmount"
+        android:id="@+id/etAmount"
         android:inputType="numberDecimal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
