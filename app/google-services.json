@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "752489356145-ns17uol6drjdf6087ug45n45lm6vt6f7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "adp.group10.roomates",
+            "certificate_hash": "1f27d04cdd2977b5dc4fe9342281b819dce16da2"
+          }
+        },
+        {
           "client_id": "752489356145-810q1o4jq1st8ibfbabrp83h85hhgm5a.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,8 +37,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "752489356145-810q1o4jq1st8ibfbabrp83h85hhgm5a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2

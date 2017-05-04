@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import adp.group10.roomates.R;
+import adp.group10.roomates.backend.GroupNotificationSubscriber;
 
 public class JoinGroupActivity extends AppCompatActivity {
 
@@ -125,6 +126,7 @@ public class JoinGroupActivity extends AppCompatActivity {
                                         RegisterActivity.User user1 = new RegisterActivity.User(etGroupname.getText().toString());
                                         userExt.child(etUserName.getText().toString()).child("groups").push().setValue(user1);
 
+                                        GroupNotificationSubscriber.Subscribe(etGroupname.getText().toString());
 
                                         finish();
                                     }

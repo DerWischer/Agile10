@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 import adp.group10.roomates.R;
+import adp.group10.roomates.backend.GroupNotificationSubscriber;
 import adp.group10.roomates.businesslogic.LoginManager;
 
 public class SelectGroupActivity extends AppCompatActivity {
@@ -57,6 +58,7 @@ public class SelectGroupActivity extends AppCompatActivity {
                     String groupName = groupSnapShot.child("usergroup").getValue(String.class);
                     groups.add(groupName.trim());
                     groupAdapter.notifyDataSetChanged();
+                    GroupNotificationSubscriber.Subscribe(groupSnapShot.child("usergroup").getValue(String.class));
                 }
 
                 if (LoginActivity.currentGroup != null) {

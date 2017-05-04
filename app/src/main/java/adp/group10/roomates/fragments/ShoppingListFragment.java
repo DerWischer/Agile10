@@ -114,13 +114,34 @@ public class ShoppingListFragment extends Fragment implements AbsListView.MultiC
 
     @Override
     public void onClick(View v) {
-        int position = (int) v.getTag();
+        final int position = (int) v.getTag();
         MainActivity currentActivity = (MainActivity) getActivity();
         if (v.getId() == R.id.etAmountPlus) {
             currentActivity.incrementShoppingCartItem(fbAdapter.getItem(position).getName(), +1);
         } else if (v.getId() == R.id.etAmountMinus) {
             currentActivity.incrementShoppingCartItem(fbAdapter.getItem(position).getName(), -1);
-        } else if (v.getId() == R.id.bAmount) {
+        } else if (v.getId() == R.id.etAmount) {
+            final ShoppingListEntry entry = fbAdapter.getItem(position);
+            LayoutInflater inflater = getActivity().getLayoutInflater();
+            final View dialogView = inflater.inflate(R.layout.dialog_edit_item_amount, null);
+            final EditText etNewAmount= (EditText) dialogView.findViewById(R.id.etNewAmount);
+            int amount = entry.getAmount();
+            etNewAmount.setText("" + amount);
+
+            final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setView(dialogView);
+            builder.setTitle("Change amount of " + entry.getName());
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    int amount = Integer.parseInt(etNewAmount.getText().toString());
+                    entry.setAmount(amount);
+                    fbAdapter.getRef(position).setValue(entry);
+                }
+            });
+            builder.show();
+
         }
     }
 
@@ -237,7 +258,7 @@ public class ShoppingListFragment extends Fragment implements AbsListView.MultiC
             LayoutInflater inflater = getActivity().getLayoutInflater();
             final View dialogView = inflater.inflate(R.layout.dialog_edit_item, null);
             final EditText etName = (EditText) dialogView.findViewById(R.id.etName);
-            final TextView etAmount = (TextView) dialogView.findViewById(R.id.bAmount);
+            final TextView etAmount = (TextView) dialogView.findViewById(R.id.etAmount);
             etName.setText(entry.getName());
             etAmount.setText("" + entry.getAmount());
 
@@ -281,16 +302,21 @@ public class ShoppingListFragment extends Fragment implements AbsListView.MultiC
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                TextView etAmount = (TextView) dialogView.findViewById(R.id.bAmount);
+                TextView etAmount = (TextView) dialogView.findViewById(R.id.etAmount);
                 String strPrice = etAmount.getText().toString().trim();
-                double price = Double.parseDouble(strPrice);
+
                 DatabaseReference transactionReference =
                         FirebaseDatabase.getInstance().getReference(
                                 FirebaseHandler.KEY_GROUPUSER + "/" + LoginActivity.currentGroup
                                         + "/" + LoginActivity.currentuser + "/"
                                         + FirebaseHandler.KEY_GROUPUSER_TRANSACTIONS);
-                transactionReference.push().setValue(price);
-                delete();
+                try {
+                    double price = Double.parseDouble(strPrice);
+                    transactionReference.push().setValue(price);
+                    delete();
+                } catch (NullPointerException | NumberFormatException e){
+                       Snackbar.make(getView(), "No price specified. Could not buy items", Snackbar.LENGTH_LONG).show();
+                }
             }
         });
         builder.show();
