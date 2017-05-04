@@ -18,6 +18,33 @@ class Transaction {
   }
 }
 
+// Cloud Messaging Methods
+// N0
+exports.notifyShoppingListChanged = functions.database.ref('shopping-list/{group}').onWrite(event => {
+	console.log("Notify every member of group " + event.params.group + " that the shopping list has changed");
+	// TODO N0
+});
+// N1
+exports.notifyPendingSettlementRequest = functions.database.ref('/transactions/{group}/{transNum}/{fromUser}').onWrite(event => {
+	console.log("Notify user " + event.params.fromUser + " in group " + event.params.group + " about pending settlement requests");
+	// TODO N1
+});
+// N2 + N3
+exports.notifyNewUserInGroup = functions.database.ref('GROUPUSER/{group}/{user}').onWrite(event => {
+	console.log("Notify group " + event.params.group + " that user " + event.params.user + " has joined the group");
+	// TODO N2
+	
+	console.log("Notify user " + event.params.user + " that he or she was added to group " + event.params.group);
+	// TODO N3
+});
+// N4 Currently, users cannot subscribe to an item, so notifying them is not possible.
+
+// N5 (is called from acceptPayment-function)
+function notifyPaymentAccepted(fromUser, toUser){
+	console.log("Notify user " + fromUser + " that his payment was accepted by " + toUser);
+	// TODO N5
+};
+
 exports.acceptPayment = functions.database.ref('/transactions/{group}/{transNum}').onWrite(event => {
 		var settled = event.data.child('settled').val();
 		if (settled == false){
@@ -49,7 +76,7 @@ exports.acceptPayment = functions.database.ref('/transactions/{group}/{transNum}
 				console.log("New balance of " + fromUser + ":" + balance);
 			});	
 		
-		
+		notifyPaymentAccepted(fromUser, toUser);
 		// remove transaction
 		return event.data.ref.set(null);
 });
