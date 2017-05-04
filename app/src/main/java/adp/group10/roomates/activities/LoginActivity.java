@@ -20,11 +20,13 @@ import com.google.firebase.database.ValueEventListener;
 //import com.google.firebase.database.ValueEventListener;
 
 import adp.group10.roomates.R;
+import adp.group10.roomates.businesslogic.LoginManager;
 
 public class LoginActivity extends AppCompatActivity {
 
     public static String currentuser;
     public static String currentGroup;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,13 +41,17 @@ public class LoginActivity extends AppCompatActivity {
                 final EditText etPassword;
                 etUsername = (EditText) findViewById(R.id.etUserName);
                 etPassword = (EditText) findViewById(R.id.etPassword);
-                if (etUsername.getText().toString().length() == 0) {
+                LoginManager Lgnmgr = new LoginManager();
+                int res= Lgnmgr.loginValidation(etUsername.getText().toString(),etPassword.getText().toString());
+                if ( res   == 0 ){
                     etUsername.setError("User name is required");
                     etUsername.requestFocus();
-                } else if (etPassword.getText().toString().length() == 0) {
+                }
+                else if ( res   == 1 ){
                     etPassword.setError("Password is required");
                     etPassword.requestFocus();
-                } else {
+                }
+                else {
                     //DatabaseReference mTemplateRef= FirebaseDatabase.getInstance().getReference
                     // ().child("users");
                     // TODO Authenticate
