@@ -37,7 +37,7 @@
             android:text="+"
             app:layout_constraintLeft_toRightOf="@+id/etAmount"
             app:layout_constraintTop_toTopOf="parent"/>
-        <Button
+        <TextView
             android:minHeight="0dp"
             android:minWidth="0dp"
             android:id="@+id/etAmount"
