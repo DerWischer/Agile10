@@ -3,6 +3,7 @@ package adp.group10.roomates.activities;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -23,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 import adp.group10.roomates.R;
+import adp.group10.roomates.backend.GroupNotificationSubscriber;
 import adp.group10.roomates.businesslogic.LoginManager;
 
 public class SelectGroupActivity extends AppCompatActivity {
@@ -57,6 +59,7 @@ public class SelectGroupActivity extends AppCompatActivity {
                     String groupName = groupSnapShot.child("usergroup").getValue(String.class);
                     groups.add(groupName.trim());
                     groupAdapter.notifyDataSetChanged();
+                    GroupNotificationSubscriber.Subscribe(groupSnapShot.child("usergroup").getValue(String.class));
                 }
 
                 if (LoginActivity.currentGroup != null) {
