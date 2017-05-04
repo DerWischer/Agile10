@@ -123,8 +123,8 @@ public class ShoppingListFragment extends Fragment implements AbsListView.MultiC
         } else if (v.getId() == R.id.etAmount) {
             final ShoppingListEntry entry = fbAdapter.getItem(position);
             LayoutInflater inflater = getActivity().getLayoutInflater();
-            final View dialogView = inflater.inflate(R.layout.dialog_edit_item, null);
-            final EditText etNewAmount= (EditText) dialogView.findViewById(R.id.etAmount);
+            final View dialogView = inflater.inflate(R.layout.dialog_edit_item_amount, null);
+            final EditText etNewAmount= (EditText) dialogView.findViewById(R.id.etNewAmount);
             int amount = entry.getAmount();
             etNewAmount.setText("" + amount);
 

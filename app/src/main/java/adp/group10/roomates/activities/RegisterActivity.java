@@ -24,6 +24,7 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 import adp.group10.roomates.R;
+import adp.group10.roomates.businesslogic.LoginManager;
 
 public class RegisterActivity extends AppCompatActivity {
     public static class User {
@@ -76,19 +77,19 @@ public class RegisterActivity extends AppCompatActivity {
                 etPassword = (EditText) findViewById(R.id.etPassword);
                 etPassconf = (EditText) findViewById(R.id.etPassConf);
 
+                LoginManager lgmngr = new LoginManager();
                 String emailRegistration = etEmail.getText().toString().trim();
 
                 if (etUsername.getText().toString().length() == 0) {
                     etUsername.setError("User name is required");
                     etUsername.requestFocus();
                 }
-                else if (!emailRegistration.matches("[a-zA-Z0-9._-]+@[a-z]+.[a-z]+")) {
-
+                else if (lgmngr.isValidEmail(emailRegistration) == false) {
                     etEmail.setError("Invalid Email Address");
-
+                    etEmail.requestFocus();
                 }
-                else if (etPassword.getText().toString().length() == 0) {
-                    etPassword.setError("Password is not entered");
+                else if (lgmngr.isValidPassword(etPassword.getText().toString()) == false) {
+                    etPassword.setError("Password is not valid");
                     etPassword.requestFocus();
                 } else if (etPhone.getText().toString().length() == 0) {
                     etPhone.setError("Phone is required");
@@ -100,10 +101,7 @@ public class RegisterActivity extends AppCompatActivity {
                 } else if (etPassconf.getText().toString().length() == 0) {
                     etPassconf.setError("Please confirm password");
                     etPassconf.requestFocus();
-                } else if (etEmail.getText().toString().length() == 0) {
-                    etEmail.setError("Email is required");
-                    etEmail.requestFocus();
-                } else {
+                }  else {
                     final FirebaseDatabase database = FirebaseDatabase.getInstance();
 
                     DatabaseReference usersRef =
