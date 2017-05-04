@@ -23,8 +23,7 @@ public class GroupNotificationSubscriber {
         messager.unsubscribeFromTopic(group);
     }
 
-    public static void UnSubscribeAll()
-    {
+    public static void UnSubscribeAll() {
         for (String group : subscribedTopics) {
             messager.unsubscribeFromTopic(group);
         }
