@@ -17,8 +17,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseListAdapter;
@@ -299,19 +301,17 @@ public class ShoppingListFragment extends Fragment implements AbsListView.MultiC
 
         final View dialogView = getActivity().getLayoutInflater().inflate(R.layout.dialog_buy_items,
                 null);
-        TextView selectedItemsView = (TextView) dialogView.findViewById(R.id.tvSelectedItems);
-        String selectedItemsString = "";
+        ListView lvSelectedItems = (ListView) dialogView.findViewById(R.id.lvSelectedItems);
+        ArrayList<String> items = new ArrayList<>();
+        ArrayAdapter<String> itemAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.support_simple_spinner_dropdown_item, items);
         for (int i = 0; i < selectedPositions.size(); i++) {
-            if (i > 0) {
-                selectedItemsString += ", ";
-            }
             ShoppingListEntry item = fbAdapter.getItem(selectedPositions.get(i));
-            selectedItemsString += item.getName() + " (" + item.getAmount() + ")";
+            items.add(item.getAmount() + "x " + item.getName());
         }
-        selectedItemsView.setText(selectedItemsString);
+        lvSelectedItems.setAdapter(itemAdapter);
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setView(dialogView);
-        builder.setTitle("Buy Items");
+        builder.setTitle("Specify Price");
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
