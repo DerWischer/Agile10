@@ -22,8 +22,11 @@ import android.widget.GridView;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseListAdapter;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -296,6 +299,16 @@ public class ShoppingListFragment extends Fragment implements AbsListView.MultiC
 
         final View dialogView = getActivity().getLayoutInflater().inflate(R.layout.dialog_buy_items,
                 null);
+        TextView selectedItemsView = (TextView) dialogView.findViewById(R.id.tvSelectedItems);
+        String selectedItemsString = "";
+        for (int i = 0; i < selectedPositions.size(); i++) {
+            if (i > 0) {
+                selectedItemsString += ", ";
+            }
+            ShoppingListEntry item = fbAdapter.getItem(selectedPositions.get(i));
+            selectedItemsString += item.getName() + " (" + item.getAmount() + ")";
+        }
+        selectedItemsView.setText(selectedItemsString);
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setView(dialogView);
         builder.setTitle("Buy Items");
