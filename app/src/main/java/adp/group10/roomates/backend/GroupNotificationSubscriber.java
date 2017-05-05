@@ -15,7 +15,7 @@ public class GroupNotificationSubscriber {
 
     public static void Subscribe(String group) {
         subscribedTopics.add(group);
-        messager.subscribeToTopic(group);
+        //messager.subscribeToTopic(group);
     }
 
     public static void UnSubscribe(String group) {
