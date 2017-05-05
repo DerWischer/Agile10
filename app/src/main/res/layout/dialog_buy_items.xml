@@ -3,23 +3,35 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-android:padding="32dp">
+              android:weightSum="100"
+              android:padding="32dp">
 
     <TextView
         android:id="@+id/tvEnterPrice"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Enter price for the following items:"/>
-    <TextView
-        android:id="@+id/tvSelectedItems"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Selected Items"/>
+        android:layout_height="0dp"
+        android:text="Enter price for the following items:"
+        android:layout_weight="20"/>
 
-    <EditText
-        android:id="@+id/etAmount"
-        android:inputType="numberDecimal"
+    <ListView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="0dp"
+        android:id="@+id/lvSelectedItems"
+        android:layout_weight="60">
+
+    </ListView>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:hint="Total Price"
+        android:layout_weight="20">
+        
+        <EditText
+            android:id="@+id/etAmount"
+            android:inputType="numberDecimal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </android.support.design.widget.TextInputLayout>
 
 </LinearLayout>
