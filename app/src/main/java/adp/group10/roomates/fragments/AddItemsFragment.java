@@ -58,8 +58,9 @@ public class AddItemsFragment extends Fragment implements AbsListView.MultiChoic
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-
-        return inflater.inflate(R.layout.fragment_shopping_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_shopping_list, container, false);
+        ((TextView) view.findViewById(R.id.tvTitle)).setText("Available items");
+        return view;
     }
 
     @Override

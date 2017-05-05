@@ -66,7 +66,9 @@ public class ShoppingListFragment extends Fragment implements AbsListView.MultiC
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_shopping_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_shopping_list, container, false);
+        ((TextView) view.findViewById(R.id.tvTitle)).setText("Shopping list");
+        return view;
     }
 
     @Override
