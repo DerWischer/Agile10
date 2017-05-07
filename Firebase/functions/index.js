@@ -20,9 +20,58 @@ class Transaction {
 
 // Cloud Messaging Methods
 // N0
-exports.notifyShoppingListChanged = functions.database.ref('shopping-list/{group}').onWrite(event => {
-	console.log("Notify every member of group " + event.params.group + " that the shopping list has changed");
-	// TODO N0
+exports.notifyShoppingListChanged = functions.database.ref('shopping-list/{group}/{transactionId}').onWrite(event => {
+  console.log("onwrite was triggered");
+  var group = event.params.group;
+  var transactionId = event.params.transactionId;
+  if (event.data.previous.exists()) {
+    var previousEntry = event.data.previous.val();
+    if (previousEntry == null) {
+      console.log("previousEntry is null");
+    }
+    var newEntry = event.data.val();
+    var wasBlocked = (previousEntry.blockedBy == null && newEntry.blockedBy != null);
+    var wasUnblocked = (previousEntry.blockedBy != null && newEntry.blockedBy == null);
+    var changedName = (previousEntry.name != newEntry.name);
+    var changedAmount = (previousEntry.amount != newEntry.amount);
+    var msgTitle = "";
+    var msgBody = "";
+    if (wasBlocked) {
+      msgTitle = "Entry (un)blocked";
+      msgBody = "entry " + newEntry.name + " in group " + group + " was blocked by " + newEntry.blockedBy;
+    }
+    if (wasUnblocked) {
+      msgTitle = "Entry (un)blocked";
+      msgBody = "entry " + newEntry.name + " in group " + group + " was unblocked by " + previousEntry.blockedBy;
+    }
+    if (changedAmount || changedName) {
+      msgTitle = "Entry details changed";
+      msgBody = "" + previousEntry.amount + "x " + previousEntry.name + " was changed to " + newEntry.amount + "x " + newEntry.name;
+    }
+    if (msgTitle != "") {
+      const notification = {
+        notification : {
+          title: msgTitle,
+          body: msgBody,
+          sound: "default"
+        }
+      }
+      return admin.messaging().sendToTopic(group, notification);
+    }
+  } else {
+    var newEntry = event.data.val();
+    var name = newEntry.name;
+    var amount = newEntry.amount;
+
+    const notification = {
+      notification : {
+        title: "New Shopping List Entry",
+        body: "" + amount + "x " + name + " was added to the shopping list of group " + group,
+        sound: "default"
+      }
+    };
+    return admin.messaging().sendToTopic(group, notification);
+  }
 });
 // N1
 exports.notifyPendingSettlementRequest = functions.database.ref('/transactions/{group}/{transNum}/{fromUser}').onWrite(event => {
@@ -31,9 +80,23 @@ exports.notifyPendingSettlementRequest = functions.database.ref('/transactions/{
 });
 // N2 + N3
 exports.notifyNewUserInGroup = functions.database.ref('GROUPUSER/{group}/{user}').onWrite(event => {
+  if (event.data.previous.exists()) {
+    return;
+  } else {
+    var group = event.params.group;
+    var user = event.params.user;
+    const notification = {
+      notification : {
+        title: "New user in group",
+        body: "User " + user + " joined group " + group,
+        sound: "default"
+      }
+    };
+    return admin.messaging().sendToTopic(group, notification);
+  }
 	console.log("Notify group " + event.params.group + " that user " + event.params.user + " has joined the group");
 	// TODO N2
-	
+
 	console.log("Notify user " + event.params.user + " that he or she was added to group " + event.params.group);
 	// TODO N3
 });
@@ -51,31 +114,31 @@ exports.acceptPayment = functions.database.ref('/transactions/{group}/{transNum}
 			console.log("Payment not accepted");
 			return;
 		}
-				
+
 		var fromUser = event.data.child('fromUser').val();
 		var toUser = event.data.child('toUser').val();
 		var amount = event.data.child('amount').val();
 		console.log("Transfering " + amount + " from " + fromUser + " to " + toUser);
-		
+
 		var database = admin.database();
 		database.ref('/GROUPUSER/' + event.params.group + '/' + toUser)
 			.once('value').then(function(snapshot){
 				var user = snapshot.val();
-				
+
 				var balance = user["BALANCE"] - amount;
-				setBalance(toUser, event.params.group, balance);				
+				setBalance(toUser, event.params.group, balance);
 				console.log("New balance of " + toUser + ":" + balance);
 			});
-			
+
 		database.ref('/GROUPUSER/' + event.params.group + '/' + fromUser)
 			.once('value').then(function(snapshot){
 				var user = snapshot.val();
-				
+
 				var balance = user["BALANCE"] + amount;
 				setBalance(fromUser, event.params.group, balance);
 				console.log("New balance of " + fromUser + ":" + balance);
-			});	
-		
+			});
+
 		notifyPaymentAccepted(fromUser, toUser);
 		// remove transaction
 		return event.data.ref.set(null);
