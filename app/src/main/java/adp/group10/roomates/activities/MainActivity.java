@@ -71,8 +71,11 @@ public class MainActivity extends AppCompatActivity
             balanceRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    Object balance = dataSnapshot.getValue();
-                    tvUserBalance.setText("" + balance);
+                    String balance = dataSnapshot.getValue().toString();
+
+                    Float roundedDownBalance = Math.round(Float.parseFloat(balance) * 100.0f) / 100.0f;
+
+                    tvUserBalance.setText("" + roundedDownBalance);
                 }
 
                 @Override
@@ -197,6 +200,9 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.nav_group_create:
                 startActivity(new Intent(this, CreateGroupActivity.class));
+                break;
+            case R.id.nav_account_update:
+                startActivity(new Intent(this, UpdateUserAccountActivity.class));
                 break;
             case R.id.nav_settlement_request:
                 startActivity(new Intent(this, SettlementActivity.class));
