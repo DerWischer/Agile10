@@ -69,8 +69,11 @@ public class MainActivity extends AppCompatActivity
             balanceRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    Object balance = dataSnapshot.getValue();
-                    tvUserBalance.setText("" + balance);
+                    String balance = dataSnapshot.getValue().toString();
+
+                    Float roundedDownBalance = Math.round(Float.parseFloat(balance) * 100.0f) / 100.0f;
+
+                    tvUserBalance.setText("" + roundedDownBalance);
                 }
 
                 @Override
