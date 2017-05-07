@@ -17,8 +17,10 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
@@ -122,6 +124,19 @@ public class MainActivity extends AppCompatActivity
                     (AddItemsFragment) getSupportFragmentManager().findFragmentById(
                             R.id.fAddItemsFragment);
             fragment1.updateUI();
+            // UnitChoice_Ehsan
+            Spinner unit_Choice = (Spinner)findViewById(R.id.Unit_Choice);
+           /* unit_Choice.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    Log.d("Item Selected", String.valueOf(position));
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+                }
+            }); */
+
 
         }
 

@@ -21,6 +21,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseListAdapter;
@@ -52,6 +53,7 @@ public class ShoppingListFragment extends Fragment implements AbsListView.MultiC
         AddItemsFragment.OnFragmentInterActionListener,
         AdapterView.OnItemClickListener, View.OnClickListener {
 
+    Spinner unit_Choice =null;
     private OnFragmentInteractionListener mListener;
 
     private GridView gvList;
@@ -70,6 +72,10 @@ public class ShoppingListFragment extends Fragment implements AbsListView.MultiC
             Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_shopping_list, container, false);
         ((TextView) view.findViewById(R.id.tvTitle)).setText("Shopping list");
+
+        unit_Choice = ((Spinner) view.findViewById(R.id.Unit_Choice));
+
+
         return view;
     }
 
@@ -373,7 +379,7 @@ public class ShoppingListFragment extends Fragment implements AbsListView.MultiC
     public void onClickAvailableItem(AvailableItem item) {
 
         MainActivity currentActivity = (MainActivity) getActivity();
-
+        unit_Choice.performClick();
         if (!currentActivity.isDuplicateName(item.getName(), currentActivity.latestShoppingListSnapshot))
             FirebaseDatabase.getInstance().getReference(
             FirebaseHandler.KEY_SHOPPING_LIST

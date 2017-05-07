@@ -10,4 +10,14 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_settlement">Settlements</string>
+    <string name="unit_prompt">Choose a unit</string>
+
+    <string-array name="unit_arrays">
+        <item>Kg</item>
+        <item>g</item>
+        <item>L</item>
+        <item>mL</item>
+        <item>Pck</item>
+        <item>Pc</item>
+    </string-array>
 </resources>
