@@ -21,7 +21,9 @@ import java.util.List;
 import java.util.Map;
 
 import adp.group10.roomates.R;
+import adp.group10.roomates.backend.FirebaseHandler;
 import adp.group10.roomates.backend.model.AvailableItem;
+import adp.group10.roomates.backend.model.User;
 
 public class CreateGroupActivity extends AppCompatActivity {
     public static class Group {
@@ -92,9 +94,28 @@ public class CreateGroupActivity extends AppCompatActivity {
                                 etGroupdesc.getText().toString());
                         groupsRef.child(etGroupname.getText().toString()).setValue(vgroup);
 
+                        final DatabaseReference groupsRef =
+                                FirebaseDatabase.getInstance().getReference().child("GROUPS");
+
+                        final  DatabaseReference groupList = FirebaseDatabase.getInstance().getReference(
+                                FirebaseHandler.KEY_GROUPUSER + "/" + etGroupname.getText().toString() + "/" + LoginActivity.currentuser);
+
+                        final DatabaseReference userRef = FirebaseDatabase.getInstance().getReference(
+                                "users/" + LoginActivity.currentuser + "/groups");
+
+                        JoinGroupActivity.GROUPUSER newUser = new  JoinGroupActivity.GROUPUSER(
+                                "0", "0");
+
+
+
+                        groupList.setValue(newUser);
+                        userRef.push().setValue(new RegisterActivity.User(etGroupname.getText().toString()));
+
+
                         DatabaseReference availableItemsRef = FirebaseDatabase.getInstance().getReference(
                                 "available-items" + "/" + etGroupname.getText());
 
+                        LoginActivity.currentGroup = etGroupname.getText().toString();
 
                         for (AvailableItem item : standardItems) {
                             availableItemsRef.push().setValue(item);

@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -35,6 +36,7 @@ public class SelectGroupActivity extends AppCompatActivity {
         setContentView(R.layout.activity_select_group);
 
         Button bSelectgroup = (Button) findViewById(R.id.bChooseGroup);
+        Button bCreategroup = (Button) findViewById(R.id.bCreateGroup);
         final List<String> groups = new ArrayList<String>();
         groups.add("");
         DatabaseReference selectGroupRef = FirebaseDatabase.getInstance().getReference(
@@ -92,12 +94,24 @@ public class SelectGroupActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-
                 int pos = groupSpinner.getSelectedItemPosition();
                 LoginActivity.currentGroup = groups.get(pos);
                 //Intent intent = new Intent(SelectGroupActivity.this, MainActivity.class);
                 //startActivity(intent);
                 finish();
+
+            }
+
+
+        });
+
+        bCreategroup.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(v.getContext(), CreateGroupActivity.class));
+
+
 
             }
 

@@ -52,19 +52,27 @@ public class SettlementActivity extends AppCompatActivity {
                 TextView tvAmount = (TextView) view.findViewById(R.id.etAmount);
                 final Button bSetlled = (Button) view.findViewById(R.id.settlement_button);
 
-                tvFromUser.setText(model.getFromUser());
-                tvToUser.setText(model.getToUser());
-                tvAmount.setText("" + model.getAmount());
+                final String fromUser = model.getFromUser();
+                final String toUser = model.getToUser();
+                final String amount = "" + model.getAmount();
+
+                tvFromUser.setText(fromUser);
+                tvToUser.setText(toUser);
+                tvAmount.setText(amount);
+
+
                 //bSetlled.setChecked(model.isSettled());
 
-                final String toUser = model.getToUser();
 
                 bSetlled.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         //
                         final AlertDialog.Builder builder = new AlertDialog.Builder(SettlementActivity.this);
-                        builder.setMessage("Are you sure you want to settle?");
+                        builder.setMessage("Are you sure you want to settle?\n\n"
+                                + "\nFrom: " + fromUser
+                                + "\nTo:" + toUser
+                                + "\nCost:" + amount);
 
 
                         builder.setPositiveButton("Yes.", new DialogInterface.OnClickListener() {
