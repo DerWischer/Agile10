@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity
             balanceRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    double balance = (double)dataSnapshot.getValue();
+                    double balance = Double.parseDouble(dataSnapshot.getValue().toString());
                     String result = String.format("%.2f", balance);
                     tvUserBalance.setText("Balance:" + result + "~");
                 }
