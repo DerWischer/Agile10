@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.internal.ForegroundLinearLayout;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -62,18 +63,16 @@ public class MainActivity extends AppCompatActivity
             TextView tvGroupName = (TextView) header.findViewById(R.id.tvGroupName);
             final TextView tvUserBalance = (TextView) header.findViewById(R.id.tvUserBalance);
             tvUserName.setText(LoginActivity.currentuser);
-            tvGroupName.setText(LoginActivity.currentGroup);
+            tvGroupName.setText("Group: "  + LoginActivity.currentGroup);
             DatabaseReference balanceRef = FirebaseDatabase.getInstance().getReference(
                     FirebaseHandler.KEY_GROUPUSER + "/" + LoginActivity.currentGroup + "/"
                             + LoginActivity.currentuser + "/" + "BALANCE");
             balanceRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    String balance = dataSnapshot.getValue().toString();
-
-                    Float roundedDownBalance = Math.round(Float.parseFloat(balance) * 100.0f) / 100.0f;
-
-                    tvUserBalance.setText("" + roundedDownBalance);
+                    double balance = (double)dataSnapshot.getValue();
+                    String result = String.format("%.2f", balance);
+                    tvUserBalance.setText("Balance:" + result + "~");
                 }
 
                 @Override
