@@ -17,6 +17,8 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"/>
+    <View style="@style/Divider"/>
+    <View style="@style/Divider2"/>
     <fragment
         android:id="@+id/fAddItemsFragment"
         android:name="adp.group10.roomates.fragments.AddItemsFragment"

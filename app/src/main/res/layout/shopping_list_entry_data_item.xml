@@ -50,9 +50,9 @@
             android:padding="6dp"
             android:text="1"
             android:textColor="@color/colorActionModeText"
+            android:textStyle="bold"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintRight_toRightOf="parent" app:layout_constraintTop_toTopOf="parent"/>
         <TextView
             android:id="@+id/etAmountMinus"
             android:layout_width="wrap_content"

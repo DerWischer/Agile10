@@ -5,7 +5,7 @@
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
+        android:label="Swich Group"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -37,7 +37,7 @@
             android:parentActivityName=".activities.LoginActivity"/>
         <activity
             android:name=".activities.SettlementActivity"
-            android:label="@string/title_activity_settlement"
+            android:label="Settlement Request"
             android:parentActivityName=".activities.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -64,7 +64,7 @@
 
         <activity
             android:name=".activities.UpdateUserAccountActivity"
-            android:label="@string/title_activity_settlement"
+            android:label="Update User Account"
             android:parentActivityName=".activities.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
