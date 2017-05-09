@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="@dimen/item_tile_width"
     android:layout_height="@dimen/item_tile_height"
-    android:background="@drawable/selected_shopping_list_item_background">
+    android:background="@drawable/selected_available_list_item_background">
 
 <LinearLayout
               android:layout_width="@dimen/item_tile_width"
