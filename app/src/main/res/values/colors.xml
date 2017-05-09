@@ -3,7 +3,7 @@
     <color name="colorPrimaryLight">#7d97b2</color>
     <color name="colorPrimary">#4f6982</color>
     <color name="colorPrimaryDark">#233f55</color>
-    <color name="colorAccent">#ff004e</color>
-    <color name="colorContextualActionBar">#fd2567</color>
+    <color name="colorAccent">#00bfa5</color>
+    <color name="colorContextualActionBar">@color/colorAccent</color>
     <color name="colorActionModeText">#ffffff</color>
 </resources>
