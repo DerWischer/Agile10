@@ -34,11 +34,12 @@
             android:id="@+id/etAmountPlus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="8dp"
             android:layout_marginTop="0dp"
+            android:padding="8dp"
             android:text="+"
-            app:layout_constraintLeft_toRightOf="@+id/etAmount"
-            app:layout_constraintTop_toTopOf="parent"/>
+            android:textColor="@color/colorActionModeText"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toRightOf="@+id/etAmount" app:layout_constraintTop_toTopOf="parent"/>
         <TextView
             android:id="@+id/etAmount"
             android:layout_width="wrap_content"
@@ -48,7 +49,7 @@
             android:minWidth="0dp"
             android:padding="6dp"
             android:text="1"
-            android:textColor="@color/colorAccent"
+            android:textColor="@color/colorActionModeText"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
@@ -56,11 +57,12 @@
             android:id="@+id/etAmountMinus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="8dp"
             android:layout_marginTop="0dp"
+            android:padding="8dp"
             android:text="-"
-            app:layout_constraintRight_toLeftOf="@+id/etAmount"
-            app:layout_constraintTop_toTopOf="parent"/>
+            android:textColor="@color/colorActionModeText"
+            android:textStyle="bold"
+            app:layout_constraintRight_toLeftOf="@+id/etAmount" app:layout_constraintTop_toTopOf="parent"/>
 
         <TextView
             android:id="@+id/etBlockedBy"
