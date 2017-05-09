@@ -71,8 +71,7 @@ public class SettlementActivity extends AppCompatActivity {
                         final AlertDialog.Builder builder = new AlertDialog.Builder(SettlementActivity.this);
                         builder.setMessage("Are you sure you want to settle?\n\n"
                                 + "\nFrom: " + fromUser
-                                + "\nTo:" + toUser
-                                + "\nCost:" + amount);
+                                + "\n\nCost: " + amount);
 
 
                         builder.setPositiveButton("Yes.", new DialogInterface.OnClickListener() {
