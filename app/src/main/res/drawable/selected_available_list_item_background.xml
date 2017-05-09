@@ -5,14 +5,26 @@
     <item android:state_checked="true" >
         <!-- This applies when the item is checked. -->
         <shape android:shape="rectangle"  >
-            <solid android:color="@color/colorAccent" />
+            <stroke android:width="1dp" android:color="#FFFFFF"/>
+            <corners android:radius="1dp"/>
+            <gradient
+                android:angle="-90"
+                android:centerColor="#1d645b"
+                android:endColor="#44d2b1"
+                android:startColor="#bbd1cf"/>
         </shape>
     </item>
 
     <item>
         <!-- This applies when the item is not checked. -->
         <shape android:shape="rectangle"  >
-            <solid android:color="@android:color/background_light" />
+            <stroke android:width="1dp" android:color="#FFFFFF"/>
+            <corners android:radius="1dp"/>
+            <gradient
+                android:angle="-90"
+                android:centerColor="#1d645b"
+                android:endColor="#44d2b1"
+                android:startColor="#bbd1cf"/>
         </shape>
     </item>
 </selector>
