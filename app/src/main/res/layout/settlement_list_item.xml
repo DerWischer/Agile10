@@ -25,13 +25,12 @@
         android:hint="0.00"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_weight="1.75"
         android:inputType="numberDecimal"/>
-
-    <CheckBox
-        android:id="@+id/cbSettled"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"/>
+    <Button
+        android:id="@+id/settlement_button"
+        android:layout_width="wrap_content"
+        android:layout_height="28dp" android:layout_weight="0.24" android:onClick="onClick_Settlement"
+        android:text="Settle" android:textSize="8sp"/>
 
 </LinearLayout>
