@@ -39,18 +39,16 @@
         android:id="@+id/etPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.50"
-        android:ems="10"
-        android:hint="Password"
-        android:inputType="textPassword"/>
+        android:layout_weight="0.30"
+        android:ems="10" android:hint="Password" android:inputType="textPassword"
+        tools:text="Password"/>
     <EditText
         android:id="@+id/etPassConf"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.50"
-        android:ems="10"
-        android:hint="Confirm Password"
-        android:inputType="textPassword"/>
+        android:layout_weight="0.30"
+        android:ems="10" android:hint="Confirm Password" android:inputType="textPassword"
+        tools:text="Confirm Password"/>
     <Button
         android:id="@+id/bCreateUser"
         style="@style/Widget.AppCompat.Button.Colored"

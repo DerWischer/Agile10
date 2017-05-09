@@ -35,10 +35,11 @@ public class SelectGroupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_group);
 
-        Button bSelectgroup = (Button) findViewById(R.id.bChooseGroup);
+        final Button bSelectgroup = (Button) findViewById(R.id.bChooseGroup);
         Button bCreategroup = (Button) findViewById(R.id.bCreateGroup);
         final List<String> groups = new ArrayList<String>();
-        groups.add("");
+
+        //groups.add("");
         DatabaseReference selectGroupRef = FirebaseDatabase.getInstance().getReference(
                 "users").child(LoginActivity.currentuser).child("groups");
 
@@ -55,13 +56,16 @@ public class SelectGroupActivity extends AppCompatActivity {
                 // Is better to use a List, because you don't know the size
                 // of the iterator returned by dataSnapshot.getChildren() to
                 // initialize the array
+                if  ( dataSnapshot.hasChildren() )
+                {   bSelectgroup.setEnabled(true);
+                    for (DataSnapshot groupSnapShot : dataSnapshot.getChildren()) {
 
-                for (DataSnapshot groupSnapShot : dataSnapshot.getChildren()) {
                     String groupName = groupSnapShot.child("usergroup").getValue(String.class);
                     groups.add(groupName.trim());
                     groupAdapter.notifyDataSetChanged();
                     GroupNotificationSubscriber.Subscribe(groupSnapShot.child("usergroup").getValue(String.class));
                 }
+
 
                 if (LoginActivity.currentGroup != null) {
                     int pos = -1;
@@ -76,7 +80,9 @@ public class SelectGroupActivity extends AppCompatActivity {
 
                     groupSpinner.setSelection(pos);
                 }
-
+                }
+               else
+                {bSelectgroup.setEnabled(false);}
 
             }
 
@@ -98,6 +104,7 @@ public class SelectGroupActivity extends AppCompatActivity {
                 LoginActivity.currentGroup = groups.get(pos);
                 //Intent intent = new Intent(SelectGroupActivity.this, MainActivity.class);
                 //startActivity(intent);
+                //groups.clear();
                 finish();
 
             }
@@ -109,6 +116,7 @@ public class SelectGroupActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
+                groups.clear();
                 startActivity(new Intent(v.getContext(), CreateGroupActivity.class));
 
 
