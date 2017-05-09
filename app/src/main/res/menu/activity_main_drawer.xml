@@ -3,34 +3,31 @@
 
     <item android:title="Groups">
         <menu>
-            <!-- TODO remove and load dynamically -->
-            <item
-                android:id="@+id/nav_group_choose"
-                android:icon="@android:drawable/sym_def_app_icon"
-                android:title="Sign in new Group"/>
             <item
                 android:id="@+id/nav_group_join"
-                android:icon="@android:drawable/sym_def_app_icon"
-                android:title="Join Group"/>
+                android:icon="@drawable/ic_person_add_black_24dp"
+                android:title="Add member"/>
             <item
                 android:id="@+id/nav_group_create"
-                android:icon="@android:drawable/sym_def_app_icon"
+                android:icon="@drawable/ic_group_add_black_24dp"
                 android:title="Create Group"/>
             <item
-                android:id="@+id/nav_account_update"
-                android:icon="@android:drawable/sym_def_app_icon"
-                android:title="Update User Account"/>
+                android:id="@+id/nav_group_choose"
+                android:icon="@drawable/ic_group_black_24dp"
+                android:title="Switch group"/>
             <item
                 android:id="@+id/nav_settlement_request"
+                android:icon="@drawable/ic_monetization_on_black_24dp"
                 android:title="Settlement Request"/>
         </menu>
     </item>
 
-    <group android:checkableBehavior="single">
+    <item android:title="Account">
+        <menu>
         <item
-            android:id="@+id/nav_settings"
-            android:icon="@android:drawable/ic_menu_preferences" android:title="Settings"/>
-    </group>
-
-
+            android:id="@+id/nav_account_update"
+            android:icon="@drawable/ic_person_black_24dp"
+            android:title="Update User Account"/>
+        </menu>
+    </item>
 </menu>

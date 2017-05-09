@@ -152,6 +152,7 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        getSupportActionBar().setTitle(R.string.app_name);
     }
 
     @Override
@@ -171,11 +172,6 @@ public class MainActivity extends AppCompatActivity
 
         int id = item.getItemId();
         switch (item.getItemId()) {
-            case R.id.nav_settings:
-                // TODO Open setting
-                Snackbar.make(drawer, "Open Settings", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-                break;
             case R.id.nav_group_join:
                 startActivity(new Intent(this, JoinGroupActivity.class));
                 break;

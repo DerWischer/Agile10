@@ -10,10 +10,11 @@
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="windowActionBarOverlay">false</item>
+        <item name="windowActionBarOverlay">true</item>
         <item name="windowActionModeOverlay">true</item>
         <item name="actionModeStyle">@style/ActionModeTheme</item>
         <item name="actionModeCloseButtonStyle">@style/ActionModeText</item>
+        <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
     </style>
 
     <style name="ActionModeTheme" parent="@style/Widget.AppCompat.ActionMode">
@@ -25,10 +26,16 @@
     <style name="ActionModeText" parent="Widget.AppCompat.ActionMode">
         <item name="android:tint">@color/colorActionModeText</item>
     </style>
+
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Light">
     </style>
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+    </style>
+
+    <style name="DrawerArrowStyle" parent="@style/Widget.AppCompat.DrawerArrowToggle">
+        <item name="spinBars">true</item>
+        <item name="color">#ffffff</item>
     </style>
 
 </resources>
