@@ -24,7 +24,7 @@
             android:parentActivityName=".activities.MainActivity"/>
         <activity
             android:name=".activities.JoinGroupActivity"
-            android:label="Join Group"
+            android:label="Add memeber"
             android:parentActivityName=".activities.MainActivity"/>
         <activity
             android:name=".activities.MainActivity"
