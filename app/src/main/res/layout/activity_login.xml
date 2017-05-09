@@ -10,7 +10,9 @@
     android:padding="32dp"
     tools:context="adp.group10.roomates.activities.LoginActivity"
     tools:layout_editor_absoluteX="8dp"
-    tools:layout_editor_absoluteY="8dp">
+    tools:layout_editor_absoluteY="8dp"
+    >
+
     <EditText
         android:id="@+id/etUserName"
         android:layout_width="match_parent"
@@ -37,4 +39,6 @@
         android:layout_width="match_parent" android:layout_height="wrap_content"
         android:layout_weight="1" android:onClick="onClick_Register"
         android:text="Sign Up"/>
+
+
 </LinearLayout>
