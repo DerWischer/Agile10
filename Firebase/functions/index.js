@@ -6,7 +6,7 @@ admin.initializeApp(functions.config().firebase);
 // // https://firebase.google.com/docs/functions/write-firebase-functionshttps://codepad.remoteinterview.io/UCRXYNWFGM
 //
 // exports.helloWorld = functions.https.onRequest((request, response) => {
-//  response.send("Hello from Firebase!");
+//  response.send('Hello from Firebase!');
 // });
 
 class Transaction {
@@ -21,39 +21,38 @@ class Transaction {
 // Cloud Messaging Methods
 // N0
 exports.notifyShoppingListChanged = functions.database.ref('shopping-list/{group}/{transactionId}').onWrite(event => {
-  console.log("onwrite was triggered");
   var group = event.params.group;
   var transactionId = event.params.transactionId;
   if (event.data.previous.exists()) {
     var previousEntry = event.data.previous.val();
     if (previousEntry == null) {
-      console.log("previousEntry is null");
+      console.log('previousEntry is null');
     }
     var newEntry = event.data.val();
     var wasBlocked = (previousEntry.blockedBy == null && newEntry.blockedBy != null);
     var wasUnblocked = (previousEntry.blockedBy != null && newEntry.blockedBy == null);
     var changedName = (previousEntry.name != newEntry.name);
     var changedAmount = (previousEntry.amount != newEntry.amount);
-    var msgTitle = "";
-    var msgBody = "";
+    var msgTitle = '';
+    var msgBody = '';
     if (wasBlocked) {
-      msgTitle = "Entry (un)blocked";
-      msgBody = "entry " + newEntry.name + " in group " + group + " was blocked by " + newEntry.blockedBy;
+      msgTitle = 'Entry (un)blocked';
+      msgBody = 'entry ' + newEntry.name + ' in group ' + group + ' was blocked by ' + newEntry.blockedBy;
     }
     if (wasUnblocked) {
-      msgTitle = "Entry (un)blocked";
-      msgBody = "entry " + newEntry.name + " in group " + group + " was unblocked by " + previousEntry.blockedBy;
+      msgTitle = 'Entry (un)blocked';
+      msgBody = 'entry ' + newEntry.name + ' in group ' + group + ' was unblocked by ' + previousEntry.blockedBy;
     }
     if (changedAmount || changedName) {
-      msgTitle = "Entry details changed";
-      msgBody = "" + previousEntry.amount + "x " + previousEntry.name + " was changed to " + newEntry.amount + "x " + newEntry.name;
+      msgTitle = 'Entry details changed';
+      msgBody = '' + previousEntry.amount + 'x ' + previousEntry.name + ' was changed to ' + newEntry.amount + 'x ' + newEntry.name;
     }
-    if (msgTitle != "") {
+    if (msgTitle != '') {
       const notification = {
         notification : {
           title: msgTitle,
           body: msgBody,
-          sound: "default"
+          sound: 'default'
         }
       }
       return admin.messaging().sendToTopic(group, notification);
@@ -65,9 +64,9 @@ exports.notifyShoppingListChanged = functions.database.ref('shopping-list/{group
 
     const notification = {
       notification : {
-        title: "New Shopping List Entry",
-        body: "" + amount + "x " + name + " was added to the shopping list of group " + group,
-        sound: "default"
+        title: 'New Shopping List Entry',
+        body: '' + amount + 'x ' + name + ' was added to the shopping list of group ' + group,
+        sound: 'default'
       }
     };
     return admin.messaging().sendToTopic(group, notification);
@@ -75,7 +74,7 @@ exports.notifyShoppingListChanged = functions.database.ref('shopping-list/{group
 });
 // N1
 exports.notifyPendingSettlementRequest = functions.database.ref('/transactions/{group}/{transNum}/{fromUser}').onWrite(event => {
-	console.log("Notify user " + event.params.fromUser + " in group " + event.params.group + " about pending settlement requests");
+	console.log('Notify user ' + event.params.fromUser + ' in group ' + event.params.group + ' about pending settlement requests');
 	// TODO N1
 });
 // N2 + N3
@@ -87,56 +86,56 @@ exports.notifyNewUserInGroup = functions.database.ref('GROUPUSER/{group}/{user}'
     var user = event.params.user;
     const notification = {
       notification : {
-        title: "New user in group",
-        body: "User " + user + " joined group " + group,
-        sound: "default"
+        title: 'New user in group',
+        body: 'User ' + user + ' joined group ' + group,
+        sound: 'default'
       }
     };
     return admin.messaging().sendToTopic(group, notification);
   }
-	console.log("Notify group " + event.params.group + " that user " + event.params.user + " has joined the group");
+	console.log('Notify group ' + event.params.group + ' that user ' + event.params.user + ' has joined the group');
 	// TODO N2
 
-	console.log("Notify user " + event.params.user + " that he or she was added to group " + event.params.group);
+	console.log('Notify user ' + event.params.user + ' that he or she was added to group ' + event.params.group);
 	// TODO N3
 });
 // N4 Currently, users cannot subscribe to an item, so notifying them is not possible.
 
 // N5 (is called from acceptPayment-function)
 function notifyPaymentAccepted(fromUser, toUser){
-	console.log("Notify user " + fromUser + " that his payment was accepted by " + toUser);
+	console.log('Notify user ' + fromUser + ' that his payment was accepted by ' + toUser);
 	// TODO N5
 };
 
 exports.acceptPayment = functions.database.ref('/transactions/{group}/{transNum}').onWrite(event => {
 		var settled = event.data.child('settled').val();
 		if (settled == false){
-			console.log("Payment not accepted");
+			console.log('Payment not accepted');
 			return;
 		}
 
 		var fromUser = event.data.child('fromUser').val();
 		var toUser = event.data.child('toUser').val();
 		var amount = event.data.child('amount').val();
-		console.log("Transfering " + amount + " from " + fromUser + " to " + toUser);
+		console.log('Transfering ' + amount + ' from ' + fromUser + ' to ' + toUser);
 
 		var database = admin.database();
 		database.ref('/GROUPUSER/' + event.params.group + '/' + toUser)
 			.once('value').then(function(snapshot){
 				var user = snapshot.val();
 
-				var balance = user["BALANCE"] - amount;
+				var balance = user['BALANCE'] - amount;
 				setBalance(toUser, event.params.group, balance);
-				console.log("New balance of " + toUser + ":" + balance);
+				console.log('New balance of ' + toUser + ':' + balance);
 			});
 
 		database.ref('/GROUPUSER/' + event.params.group + '/' + fromUser)
 			.once('value').then(function(snapshot){
 				var user = snapshot.val();
 
-				var balance = user["BALANCE"] + amount;
+				var balance = user['BALANCE'] + amount;
 				setBalance(fromUser, event.params.group, balance);
-				console.log("New balance of " + fromUser + ":" + balance);
+				console.log('New balance of ' + fromUser + ':' + balance);
 			});
 
 		notifyPaymentAccepted(fromUser, toUser);
@@ -152,7 +151,7 @@ exports.updadeBalance = functions.database.ref('/GROUPUSER/{groupName}/{userName
     var price = event.data.val();
     var changeInPrice;
 
-    console.log(groupId + " " + userId + " " + transactionId + " " + price);
+    console.log(groupId + ' ' + userId + ' ' + transactionId + ' ' + price);
     if (price != null) {
       var database = admin.database();
 
@@ -162,25 +161,25 @@ exports.updadeBalance = functions.database.ref('/GROUPUSER/{groupName}/{userName
           var keys = Object.keys(userList);   // keys = list of user names
           for (var i = 0; i < keys.length; i++) {
             var user = userList[keys[i]];     // user = all info about 1 user
-            var balance = user["BALANCE"];
+            var balance = user['BALANCE'];
             if (balance == null || isNaN(balance)) {
               balance = 0;
             }
-            console.log("user = " + keys[i]  + " old balance = " + balance);
+            console.log('user = ' + keys[i]  + ' old balance = ' + balance);
 
             if(keys.length == 0){  // 0 check!
                 changeInPrice = 0;
             } else {
                 changeInPrice = (price/keys.length);
             }
-            console.log("user = " + keys[i] + " userId = " + userId);
+            console.log('user = ' + keys[i] + ' userId = ' + userId);
             if (keys[i] == userId) {
               balance = balance - changeInPrice + price;
             } else {
               balance = balance - changeInPrice;
             }
             setBalance(keys[i], groupId, balance);
-            console.log("user = " + keys[i] + " new balance = " + balance);
+            console.log('user = ' + keys[i] + ' new balance = ' + balance);
           }
       });
     }
@@ -189,29 +188,29 @@ exports.updadeBalance = functions.database.ref('/GROUPUSER/{groupName}/{userName
 exports.requestSettlements = functions.database.ref('/updateTransactions').onWrite(event => {
 //exports.requestSettlements = functions.https.onRequest((request, response) => {
     var groupId = event.data.val();
-    if (groupId == null || groupId == "null" || groupId == "false" || groupId == "none") {
+    if (groupId == null || groupId == 'null' || groupId == 'false' || groupId == 'none') {
       return;
     }
     if (groupId != null) {
       solveSettlement(groupId);
     }
-    admin.database().ref().update({updateTransactions : "none"});
+    admin.database().ref().update({updateTransactions : 'none'});
 });
 
 
 function setBalance(userId, groupId, newBalance){
-    admin.database().ref("/GROUPUSER/" + groupId + "/" + userId).update({
+    admin.database().ref('/GROUPUSER/' + groupId + '/' + userId).update({
       BALANCE : newBalance
     });
     //set the balance of the user in the group to newBalance
 }
 
 function solveSettlement(groupId){
-//    console.log("starting solveSettlement " + groupId);
+    console.log('starting solveSettlement ' + groupId);
     var database = admin.database();
     database.ref('/GROUPUSER/' + groupId).once('value').then(function(snapshot) {
 //        var groupId = events.params.groupId;
-        console.log("group id = " + groupId);
+        console.log('group id = ' + groupId);
         var userList = snapshot.val();      // userList = all data about this group's users
         var keys = Object.keys(userList);   // keys = list of user names
 
@@ -219,17 +218,17 @@ function solveSettlement(groupId){
         var userBalances = [];
         for (var i = 0; i < keys.length; i++) {
             var user = userList[keys[i]];
-            var balance = user["BALANCE"];
+            var balance = user['BALANCE'];
             if (balance == null || isNaN(balance)) {
-              user["BALANCE"] = 0;
+              user['BALANCE'] = 0;
               balance = 0;
             }
             if (Math.abs(balance) > 0.01) {
                 users.push(keys[i]);
                 userBalances.push(balance);
-//                console.log("adding " + keys[i] + " with balance " + balance);
+//                console.log('adding ' + keys[i] + ' with balance ' + balance);
             }
-            console.log("user = " + user + "  balance = " + balance);
+            console.log('user = ' + user + '  balance = ' + balance);
         }
 
         var solvedTransactions = [];
@@ -264,24 +263,24 @@ function solveSettlement(groupId){
         // }
         var max, min, maxIndex, minIndex;
         while (userBalances.length > 0) {
-          console.log("userBalances.length = " + userBalances.length);
+          console.log('userBalances.length = ' + userBalances.length);
           maxIndex = indexOfMax(userBalances);
           minIndex = indexOfMin(userBalances);
           max = userBalances[maxIndex];
           min = userBalances[minIndex];
-          console.log("max = " + max);
-          console.log("min = " + min);
+          console.log('max = ' + max);
+          console.log('min = ' + min);
 
           var transactionAmount = Math.min(max, Math.abs(min));
 
           solvedTransactions.push(new Transaction(users[minIndex], users[maxIndex], transactionAmount));
-          console.log("sender = " + users[minIndex] + " receiver = " + users[maxIndex] + " amount = " + transactionAmount);
-          console.log("solvedTransactions = " + JSON.stringify(solvedTransactions));
+          console.log('sender = ' + users[minIndex] + ' receiver = ' + users[maxIndex] + ' amount = ' + transactionAmount);
+          console.log('solvedTransactions = ' + JSON.stringify(solvedTransactions));
           userBalances[minIndex] += transactionAmount;
           userBalances[maxIndex] -= transactionAmount;
 
           if (Math.abs(userBalances[minIndex]) <= 0.01) {
-            console.log("removing user " + users[minIndex]);
+            console.log('removing user ' + users[minIndex]);
             userBalances.splice(minIndex, 1);
             users.splice(minIndex, 1);
           }
@@ -289,11 +288,11 @@ function solveSettlement(groupId){
             if (minIndex < maxIndex) {
               maxIndex--;
             }
-            console.log("removing user " + users[maxIndex]);
+            console.log('removing user ' + users[maxIndex]);
             userBalances.splice(maxIndex, 1);
             users.splice(maxIndex, 1);
           }
-          console.log("userBalances.length = " + userBalances.length);
+          console.log('userBalances.length = ' + userBalances.length);
         }
         saveTransactions(groupId, solvedTransactions);
 //        return solvedTransactions;
@@ -313,7 +312,8 @@ function solveSettlement(groupId){
 
 function saveTransactions(groupId, transactions) {
     var database = admin.database();
-    admin.database().ref("/transactions/" + groupId).set(transactions);
+    admin.database().ref('/transactions/' + groupId).set(null);
+    admin.database().ref('/transactions/' + groupId).set(transactions);
 }
 
 function indexOfMax(arr) {
