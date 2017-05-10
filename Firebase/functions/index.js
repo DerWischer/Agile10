@@ -29,6 +29,16 @@ exports.notifyShoppingListChanged = functions.database.ref('shopping-list/{group
       console.log('previousEntry is null');
     }
     var newEntry = event.data.val();
+    if (newEntry == null) {
+      const notification = {
+        notification : {
+          title: 'Removed or bought Shopping List Entry',
+          body: name + ' was bought or removed from the shopping list of group ' + group,
+          sound: 'default'
+        }
+      };
+      return admin.messaging().sendToTopic(group, notification);
+    }
     var wasBlocked = (previousEntry.blockedBy == null && newEntry.blockedBy != null);
     var wasUnblocked = (previousEntry.blockedBy != null && newEntry.blockedBy == null);
     var changedName = (previousEntry.name != newEntry.name);
@@ -206,19 +216,27 @@ function setBalance(userId, groupId, newBalance){
 }
 
 function solveSettlement(groupId){
-    console.log('starting solveSettlement ' + groupId);
+//    console.log('starting solveSettlement ' + groupId);
     var database = admin.database();
     database.ref('/GROUPUSER/' + groupId).once('value').then(function(snapshot) {
-//        var groupId = events.params.groupId;
-        console.log('group id = ' + groupId);
+/*      console.log('/GROUPUSER/' + 'groupId');
+      console.log('console.log');
+      console.log(snapshot);
+      console.log(snapshot.toString());
+      console.log(snapshot.val());*/
         var userList = snapshot.val();      // userList = all data about this group's users
         var keys = Object.keys(userList);   // keys = list of user names
 
         var users = [];
         var userBalances = [];
+        var sum = 0;
+        console.log('hello');
+        console.log('keys.length = ' + keys.length);
         for (var i = 0; i < keys.length; i++) {
             var user = userList[keys[i]];
             var balance = user['BALANCE'];
+            sum += balance;
+            console.log('user = ' + keys[i] + '  balance = ' + balance);
             if (balance == null || isNaN(balance)) {
               user['BALANCE'] = 0;
               balance = 0;
@@ -226,12 +244,15 @@ function solveSettlement(groupId){
             if (Math.abs(balance) > 0.01) {
                 users.push(keys[i]);
                 userBalances.push(balance);
-//                console.log('adding ' + keys[i] + ' with balance ' + balance);
             }
-            console.log('user = ' + user + '  balance = ' + balance);
+        }
+        if (Math.abs(sum) > 0.01 * keys.length) {
+          console.error("sum is not zero");
+          return;
         }
 
-        var solvedTransactions = [];
+        var solvedTransactions = null;
+        solvedTransactions = [];
 
 /*        for (var j = 0; j < userBalances.length; j++){    // check for users with same absolute balance to minimize transactions
           var jBalance = userBalances[j];
@@ -263,24 +284,26 @@ function solveSettlement(groupId){
         // }
         var max, min, maxIndex, minIndex;
         while (userBalances.length > 0) {
-          console.log('userBalances.length = ' + userBalances.length);
+//          console.log('userBalances.length = ' + userBalances.length);
           maxIndex = indexOfMax(userBalances);
           minIndex = indexOfMin(userBalances);
           max = userBalances[maxIndex];
           min = userBalances[minIndex];
-          console.log('max = ' + max);
-          console.log('min = ' + min);
+//          console.log('max = ' + max);
+//          console.log('min = ' + min);
 
           var transactionAmount = Math.min(max, Math.abs(min));
 
-          solvedTransactions.push(new Transaction(users[minIndex], users[maxIndex], transactionAmount));
-          console.log('sender = ' + users[minIndex] + ' receiver = ' + users[maxIndex] + ' amount = ' + transactionAmount);
-          console.log('solvedTransactions = ' + JSON.stringify(solvedTransactions));
+          if (transactionAmount != 0.0) {
+            solvedTransactions.push(new Transaction(users[minIndex], users[maxIndex], transactionAmount));
+          }
+//          console.log('sender = ' + users[minIndex] + ' receiver = ' + users[maxIndex] + ' amount = ' + transactionAmount);
+//          console.log('solvedTransactions = ' + JSON.stringify(solvedTransactions));
           userBalances[minIndex] += transactionAmount;
           userBalances[maxIndex] -= transactionAmount;
 
           if (Math.abs(userBalances[minIndex]) <= 0.01) {
-            console.log('removing user ' + users[minIndex]);
+//            console.log('removing user ' + users[minIndex]);
             userBalances.splice(minIndex, 1);
             users.splice(minIndex, 1);
           }
@@ -288,11 +311,11 @@ function solveSettlement(groupId){
             if (minIndex < maxIndex) {
               maxIndex--;
             }
-            console.log('removing user ' + users[maxIndex]);
+//            console.log('removing user ' + users[maxIndex]);
             userBalances.splice(maxIndex, 1);
             users.splice(maxIndex, 1);
           }
-          console.log('userBalances.length = ' + userBalances.length);
+//          console.log('userBalances.length = ' + userBalances.length);
         }
         saveTransactions(groupId, solvedTransactions);
 //        return solvedTransactions;
